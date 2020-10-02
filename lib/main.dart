@@ -1,7 +1,9 @@
 import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
+import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -74,7 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: ChangeNotifierProvider(
+        create: (context) => MyRecipesService(),
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
