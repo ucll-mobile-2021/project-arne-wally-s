@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/models/ingredient.dart';
+import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
 
@@ -27,11 +28,11 @@ class MyRecipesService extends ChangeNotifier {
             1,
             1,
             [
-              IngredientAmount(
+              Ingredientamount(
                   Ingredient('Tomato', '', 'vegetable', 0.5, ''), 2),
-              IngredientAmount(
+              Ingredientamount(
                   Ingredient('Carrot', '', 'vegetable', 0.5, ''), 1),
-              IngredientAmount(
+              Ingredientamount(
                   Ingredient('Minced meat', 'kg', 'meat', 2, ''), .3),
             ],
             'https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg',

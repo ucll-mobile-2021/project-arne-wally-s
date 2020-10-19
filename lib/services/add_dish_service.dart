@@ -51,11 +51,28 @@ class AddDishService {
   }
 
   Future<List<Recipe>> getRecipesForDish(Dish dish) async {
-    // TODO
     final response =
         await http.get('https://jsonplaceholder.typicode.com/albums/');
+    //var json = response.body;
+    var json = '''[
+    {
+      "name": "Spaghetti Jeroen Meus",
+    "price": 2,
+    "veggie": false,
+    "healthy": 3,
+    "prepTime": 1,
+    "difficulty": 2,
+    "ingredients": [
+    ],
+    "pictureUrl": "https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg",
+    "dish": null,
+    "id": "1"
+    }
+    ]''';
     if (response.statusCode == 200) {
-      return [];
+      return List.from(jsonDecode(json))
+          .map((e) => Recipe.fromJson(e))
+          .toList();
     }
     throw Exception('Failed to get recipes');
   }

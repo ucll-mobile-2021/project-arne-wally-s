@@ -1,6 +1,11 @@
 import 'package:abc_cooking/models/dish.dart';
-import 'package:abc_cooking/models/ingredient.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+import 'ingredient_amount.dart';
+
+part 'recipe.g.dart';
+
+@JsonSerializable()
 class Recipe {
   /*
   This class stores all the basic information about a recipe
@@ -12,7 +17,7 @@ class Recipe {
   final int healthy;
   final int prepTime;
   final int difficulty;
-  final List<IngredientAmount> ingredients;
+  final List<Ingredientamount> ingredients;
   final String pictureUrl;
 
   final Dish dish;
@@ -20,8 +25,12 @@ class Recipe {
   final String id;
 
   Recipe(this.id, this.dish, this.name, this.price, this.veggie, this.healthy,
-      this.prepTime,
-      this.difficulty, this.ingredients, this.pictureUrl) : super();
+      this.prepTime, this.difficulty, this.ingredients, this.pictureUrl)
+      : super();
+
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
 }
 
 class RecipeInstance {

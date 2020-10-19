@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'ingredient.g.dart';
+
+@JsonSerializable()
 class Ingredient {
   final String name;
   final String measurementUnit;
@@ -8,11 +13,8 @@ class Ingredient {
   Ingredient(
       this.name, this.measurementUnit, this.type, this.price, this.pictureUrl)
       : super();
-}
 
-class IngredientAmount {
-  final Ingredient ingredient;
-  final double amount;
+  factory Ingredient.fromJson(Map<String, dynamic> json) => _$IngredientFromJson(json);
 
-  IngredientAmount(this.ingredient, this.amount) : super();
+  Map<String, dynamic> toJson() => _$IngredientToJson(this);
 }
