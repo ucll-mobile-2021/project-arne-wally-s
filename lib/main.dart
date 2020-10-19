@@ -84,17 +84,18 @@ class _MyHomePageState extends State<MyHomePage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.cake),
-            title: Text('Appetite'),
+            label: 'Appetite',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            title: Text('Buy'),
+            label: 'Buy',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fastfood),
-            title: Text('Cook'),
+            label: 'Cook',
           ),
         ],
+        selectedItemColor: Theme.of(context).accentColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),

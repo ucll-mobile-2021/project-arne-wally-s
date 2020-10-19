@@ -19,7 +19,8 @@ class Recipe {
 
   final String id;
 
-  Recipe(this.id, this.dish, this.name, this.price, this.veggie, this.healthy, this.prepTime,
+  Recipe(this.id, this.dish, this.name, this.price, this.veggie, this.healthy,
+      this.prepTime,
       this.difficulty, this.ingredients, this.pictureUrl) : super();
 }
 
@@ -27,5 +28,5 @@ class RecipeInstance {
   final Recipe recipe;
   final int persons;
 
-  RecipeInstance(this.recipe, this.persons): super();
+  RecipeInstance(this.recipe, this.persons) : super();
 }

@@ -6,6 +6,9 @@ import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
 
 class MyRecipesService extends ChangeNotifier {
+  /*
+  This service should save things to the database and is available everywhere
+   */
   List<RecipeInstance> _myRecipes;
 
   UnmodifiableListView<RecipeInstance> get myRecipes =>
@@ -24,9 +27,12 @@ class MyRecipesService extends ChangeNotifier {
             1,
             1,
             [
-              IngredientAmount(Ingredient('Tomato', '', 'vegetable', 0.5, ''), 2),
-              IngredientAmount(Ingredient('Carrot', '', 'vegetable', 0.5, ''), 1),
-              IngredientAmount(Ingredient('Minced meat', 'kg', 'meat', 2, ''), .3),
+              IngredientAmount(
+                  Ingredient('Tomato', '', 'vegetable', 0.5, ''), 2),
+              IngredientAmount(
+                  Ingredient('Carrot', '', 'vegetable', 0.5, ''), 1),
+              IngredientAmount(
+                  Ingredient('Minced meat', 'kg', 'meat', 2, ''), .3),
             ],
             'https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg',
           ),
