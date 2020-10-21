@@ -8,14 +8,14 @@ class Dish {
   final int price;
   final bool veggie;
   final int healthy;
-  final int prepTime;
+  final int prep_time;
   final int difficulty;
-  final String pictureUrl;
+  final String picture;
 
   final String id;
 
-  Dish(this.id, this.name, this.price, this.veggie, this.healthy, this.prepTime,
-      this.difficulty, this.pictureUrl)
+  Dish(this.id, this.name, this.price, this.veggie, this.healthy, this.prep_time,
+      this.difficulty, this.picture)
       : super();
 
   factory Dish.fromJson(Map<String, dynamic> json) => _$DishFromJson(json);

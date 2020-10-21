@@ -31,32 +31,47 @@ class SearchDish extends SearchDelegate<Dish> {
   @override
   Widget buildResults(BuildContext context) {
     var results = service.getSearchDishResults(query);
-    return ListView.builder(
-        itemCount: results.length,
-        itemBuilder: (context, index) {
-          return DishWidget.tap(results[index], () {
-            close(context, results[index]);
-          });
+    return FutureBuilder(
+        future: results,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return DishWidget.tap(snapshot.data[index], () {
+                    close(context, snapshot.data[index]);
+                  });
+                });
+          }
+          return CircularProgressIndicator();
         });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions;
+    Future<List<String>> suggestions;
     // If we haven't put anything in yet, we suggest recent or popular searches
     query.isEmpty
         ? suggestions = service.getSearchSuggestions(query)
         : suggestions = service.getSearchSuggestionsEmpty();
-    return ListView.builder(
-        itemCount: suggestions.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(suggestions[index]),
-            onTap: () {
-              query = suggestions[index];
-              showResults(context);
-            },
-          );
-        });
+    return FutureBuilder(
+      future: suggestions,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+        return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(snapshot.data[index]),
+                onTap: () {
+                  query = snapshot.data[index];
+                  showResults(context);
+                },
+              );
+            });
+        }
+        return CircularProgressIndicator();
+      }
+    );
   }
 }

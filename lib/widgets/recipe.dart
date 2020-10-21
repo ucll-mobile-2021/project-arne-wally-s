@@ -14,7 +14,7 @@ class RecipeWidget extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            Image.network(recipe.pictureUrl),
+            Image.network(recipe.picture),
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(

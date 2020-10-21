@@ -19,24 +19,24 @@ class MyRecipesService extends ChangeNotifier {
     this._myRecipes = [
       RecipeInstance(
           Recipe(
-            '1',
-            Dish('1', 'Spaghetti', 1, false, 3, 1, 1, ''),
-            'Jeroen Meus',
-            1,
-            false,
-            3,
-            1,
-            1,
-            [
-              Ingredientamount(
-                  Ingredient('Tomato', '', 'vegetable', 0.5, ''), 2),
-              Ingredientamount(
-                  Ingredient('Carrot', '', 'vegetable', 0.5, ''), 1),
-              Ingredientamount(
-                  Ingredient('Minced meat', 'kg', 'meat', 2, ''), .3),
-            ],
-            'https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg',
-          ),
+              '1',
+              '1',
+              'Jeroen Meus',
+              1,
+              false,
+              3,
+              1,
+              1,
+              [
+                Ingredientamount(
+                    Ingredient('Tomato', '', 'vegetable', 0.5, ''), 2),
+                Ingredientamount(
+                    Ingredient('Carrot', '', 'vegetable', 0.5, ''), 1),
+                Ingredientamount(
+                    Ingredient('Minced meat', 'kg', 'meat', 2, ''), .3),
+              ],
+              'https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg',
+              Dish('1', 'Spaghetti', 1, false, 3, 1, 1, '')),
           1),
     ];
   }

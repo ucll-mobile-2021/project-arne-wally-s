@@ -13,9 +13,9 @@ Dish _$DishFromJson(Map<String, dynamic> json) {
     json['price'] as int,
     json['veggie'] as bool,
     json['healthy'] as int,
-    json['prepTime'] as int,
+    json['prep_time'] as int,
     json['difficulty'] as int,
-    json['pictureUrl'] as String,
+    json['picture'] as String,
   );
 }
 
@@ -24,8 +24,8 @@ Map<String, dynamic> _$DishToJson(Dish instance) => <String, dynamic>{
       'price': instance.price,
       'veggie': instance.veggie,
       'healthy': instance.healthy,
-      'prepTime': instance.prepTime,
+      'prep_time': instance.prep_time,
       'difficulty': instance.difficulty,
-      'pictureUrl': instance.pictureUrl,
+      'picture': instance.picture,
       'id': instance.id,
     };

@@ -46,20 +46,28 @@ class AppetiteWidget extends StatelessWidget {
 
   Widget buildRecommended(BuildContext context) {
     var recommended = service.getRecommended();
-    if (recommended.length > 0) {
-      return ListView.builder(
-        itemCount: recommended.length,
-        itemBuilder: (context, index) {
-          return DishWidget.tap(recommended[index], () {
-            _selectRecipe(context, recommended[index], service.getPeople());
-          });
-        },
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text('No recommendations'),
-    );
+    return FutureBuilder(
+        future: recommended,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return DishWidget.tap(snapshot.data[index], () {
+                    _selectRecipe(
+                        context, snapshot.data[index], service.getPeople());
+                  });
+                },
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('No recommendations'),
+            );
+          }
+          return CircularProgressIndicator();
+        });
   }
 
   void _selectRecipe(BuildContext context, Dish dish, int people) async {

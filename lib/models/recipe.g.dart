@@ -9,21 +9,22 @@ part of 'recipe.dart';
 Recipe _$RecipeFromJson(Map<String, dynamic> json) {
   return Recipe(
     json['id'] as String,
-    json['dish'] == null
-        ? null
-        : Dish.fromJson(json['dish'] as Map<String, dynamic>),
+    json['dish'] as String,
     json['name'] as String,
     json['price'] as int,
     json['veggie'] as bool,
     json['healthy'] as int,
-    json['prepTime'] as int,
+    json['prep_time'] as int,
     json['difficulty'] as int,
     (json['ingredients'] as List)
         ?.map((e) => e == null
             ? null
             : Ingredientamount.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    json['pictureUrl'] as String,
+    json['picture'] as String,
+    json['dishObject'] == null
+        ? null
+        : Dish.fromJson(json['dishObject'] as Map<String, dynamic>),
   );
 }
 
@@ -32,10 +33,11 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'price': instance.price,
       'veggie': instance.veggie,
       'healthy': instance.healthy,
-      'prepTime': instance.prepTime,
+      'prep_time': instance.prep_time,
       'difficulty': instance.difficulty,
       'ingredients': instance.ingredients,
-      'pictureUrl': instance.pictureUrl,
+      'picture': instance.picture,
       'dish': instance.dish,
+      'dishObject': instance.dishObject,
       'id': instance.id,
     };

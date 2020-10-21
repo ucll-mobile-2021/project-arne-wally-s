@@ -13,13 +13,13 @@ class AddDishService {
 
   AddDishService._internal();
 
-  List<Dish> getRecommended() {
+  Future<List<Dish>> getRecommended() async {
     // TODO
     // Returns a list of recommended dishes
     return [];
   }
 
-  List<String> getSearchSuggestions(String query) {
+  Future<List<String>> getSearchSuggestions(String query) async {
     // TODO
     // Returns a list of suggestions while searching
     // Example: query = 's' -> return ['Spaghetti', 'Salad']
@@ -27,14 +27,14 @@ class AddDishService {
     return suggestions;
   }
 
-  List<String> getSearchSuggestionsEmpty() {
+  Future<List<String>> getSearchSuggestionsEmpty() async {
     // TODO
     // Returns a list of search suggestions when nothing is typed yet
     // Could be popular items or recent searches
     return ['Caesar salad', 'Balletjes in tomatensaus'];
   }
 
-  List<Dish> getSearchDishResults(String query) {
+  Future<List<Dish>> getSearchDishResults(String query) async {
     // TODO
     // Returns dishes that match your search
     List<Dish> results = [
@@ -72,23 +72,9 @@ class AddDishService {
 
   Future<List<Recipe>> getRecipesForDish(Dish dish) async {
     final response =
-        await http.get('https://jsonplaceholder.typicode.com/albums/');
-    //var json = response.body;
-    var json = '''[
-    {
-      "name": "Spaghetti Jeroen Meus",
-    "price": 2,
-    "veggie": false,
-    "healthy": 3,
-    "prepTime": 1,
-    "difficulty": 2,
-    "ingredients": [
-    ],
-    "pictureUrl": "https://www.okokorecepten.nl/i/recepten/kookboeken/2014/new-york-recepten-big-apple/spaghetti-meatballs-500.jpg",
-    "dish": null,
-    "id": "1"
-    }
-    ]''';
+        await http.get('https://abc-cooking.andreasmilants.com/recipes');
+    var json = response.body;
+    print(json);
     if (response.statusCode == 200) {
       return List.from(jsonDecode(json))
           .map((e) => Recipe.fromJson(e))

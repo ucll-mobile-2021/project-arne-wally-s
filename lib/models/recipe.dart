@@ -15,17 +15,18 @@ class Recipe {
   final int price;
   final bool veggie;
   final int healthy;
-  final int prepTime;
+  final int prep_time;
   final int difficulty;
   final List<Ingredientamount> ingredients;
-  final String pictureUrl;
+  final String picture;
 
-  final Dish dish;
+  final String dish;
+  final Dish dishObject;
 
   final String id;
 
   Recipe(this.id, this.dish, this.name, this.price, this.veggie, this.healthy,
-      this.prepTime, this.difficulty, this.ingredients, this.pictureUrl)
+      this.prep_time, this.difficulty, this.ingredients, this.picture, this.dishObject)
       : super();
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

@@ -29,25 +29,35 @@ class _SelectRecipeState extends State<SelectRecipeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO
     return Scaffold(
       appBar: AppBar(
         title: Text('Select recipe'),
       ),
-      body: FutureBuilder<List<Recipe>>(
-        future: futureRecipes,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data.length,itemBuilder: (context, index) {
-                  return RecipeWidget(snapshot.data[index]);
-            });
-          }
-          else if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
-          }
-          return Center(child:CircularProgressIndicator());
-        },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('${widget.dish.name} recipes', style: Theme.of(context).textTheme.headline4,),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Recipe>>(
+              future: futureRecipes,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,itemBuilder: (context, index) {
+                        return RecipeWidget(snapshot.data[index]);
+                  });
+                }
+                else if (snapshot.hasError) {
+                  return Center(child: Text("${snapshot.error}"));
+                }
+                return Center(child:CircularProgressIndicator());
+              },
+            ),
+          ),
+        ],
       )
     );
   }

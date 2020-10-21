@@ -14,7 +14,7 @@ class DishWidget extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            Image.network(dish.pictureUrl),
+            Image.network(dish.picture),
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
