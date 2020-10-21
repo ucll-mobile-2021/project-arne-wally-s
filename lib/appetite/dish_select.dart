@@ -26,19 +26,6 @@ class DishSelectWidget extends StatelessWidget {
                 );
               }).toList().cast<Widget>(),
             );
-            return GridView.builder(
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4,
-                    childAspectRatio: .8),
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: DishWidget.tap(snapshot.data[index], () {
-                      Navigator.pop(context, snapshot.data[index]);
-                    }),
-                  );
-                });
           }
           return Center(child: CircularProgressIndicator());
         });

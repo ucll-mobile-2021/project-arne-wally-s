@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 class AppetiteWidget extends StatelessWidget {
   final AddDishService service = AddDishService();
+  final Future<List<Dish>> futureDishes;
+
+  AppetiteWidget() : futureDishes = AddDishService().getSearchDishResults('');
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,28 +49,24 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   Widget buildRecommended(BuildContext context) {
-    var recommended = service.getRecommended();
     return FutureBuilder(
-        future: recommended,
+        future: futureDishes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return DishWidget.tap(snapshot.data[index], () {
-                    _selectRecipe(
-                        context, snapshot.data[index], service.getPeople());
-                  });
-                },
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('No recommendations'),
+            return Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              children: snapshot.data.map((item) {
+                return Container(
+                  width: MediaQuery.of(context).size.width * 0.5 - 2.5,
+                  child: DishWidget.tap(item, () {
+                    _selectRecipe(context, item, service.getPeople());
+                  }),
+                );
+              }).toList().cast<Widget>(),
             );
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 
