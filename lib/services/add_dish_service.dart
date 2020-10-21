@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AddDishService {
   static final AddDishService _singleton = AddDishService._internal();
+  int _people = 1;
 
   factory AddDishService() {
     return _singleton;
@@ -54,7 +55,11 @@ class AddDishService {
   int getPeople() {
     // Returns the default amount of people that should be filled in, if not yet specified
     // Probably makes the most sense to use the value of the last addition
-    return 1;
+    return _people;
+  }
+
+  void setPeople(int people) {
+    _people = people;
   }
 
   Future<Map<String, dynamic>> watsonCall(String query) async {

@@ -90,9 +90,9 @@ class AppetiteWidget extends StatelessWidget {
     var result = await Navigator.push(context,
         MaterialPageRoute(builder: (context) => SearchDishSpeechWidget()));
     if (result != null) {
-      var r = result as ReturnTypeSpeechSearch;
+      var r = result as Dish;
       _selectDish(
-          context, r.dish, r.people > 0 ? r.people : service.getPeople());
+          context, r, service.getPeople());
     }
   }
 

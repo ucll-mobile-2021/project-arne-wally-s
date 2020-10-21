@@ -1,7 +1,6 @@
 import 'package:abc_cooking/appetite/dish_select.dart';
 import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/services/add_dish_service.dart';
-import 'package:abc_cooking/widgets/dish.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -24,7 +23,7 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
   String lastStatus = "";
   String _currentLocaleId = "en";
   Map<String, dynamic> response = Map();
-  bool searching = false;
+  Future<List<Dish>> futureDishes;
 
   @override
   void initState() {
@@ -71,11 +70,28 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                listening ? Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Center(
+                      child: Text(
+                        'Listening...',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      )),
+                ) : SizedBox(),
+                lastWords == '' && !listening
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Center(
+                            child: Text(
+                          'Tap to start speaking',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        )),
+                      )
+                    : SizedBox(),
                 lastWords == ''
                     ? SizedBox()
                     : Container(
@@ -110,33 +126,15 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
                       ),
               ],
             ),
-            searching ? Text('Searching dishes...') : SizedBox(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    width: 90.0,
-                    height: 90.0,
-                    child: new RawMaterialButton(
-                      shape: new CircleBorder(),
-                      elevation: 0.0,
-                      child: Icon(
-                        Icons.mic,
-                        color: Colors.white,
-                        size: 50,
-                      ),
-                      onPressed: toggleListening,
-                      fillColor: Theme.of(context).accentColor,
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(listening ? 'Listening' : ''),
-                ),
-              ],
-            ),
+            responseText == '' || futureDishes == null
+                ? SizedBox()
+                : DishSelectWidget(futureDishes),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.mic),
+        onPressed: toggleListening,
       ),
     );
   }
@@ -207,27 +205,9 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
         for (var food in response['food']) {
           foods.add(food['value']);
         }
-        var dishResults = AddDishService().getDishResultsFromFoodList(foods);
         setState(() {
-          searching = true;
+          futureDishes = AddDishService().getDishResultsFromFoodList(foods);
         });
-        await sleep();
-        setState(() {
-          searching = false;
-        });
-        var result =
-            await Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return DishSelect(dishResults);
-        }));
-        if (result != null) {
-          Navigator.pop(
-              context,
-              ReturnTypeSpeechSearch(
-                  result as Dish,
-                  response['people'] == null
-                      ? 0
-                      : int.parse(response['people'])));
-        }
       }
     }
   }
@@ -249,28 +229,5 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
     setState(() {
       lastStatus = "$status";
     });
-  }
-}
-
-class ReturnTypeSpeechSearch {
-  final Dish dish;
-  final int people;
-
-  ReturnTypeSpeechSearch(this.dish, this.people);
-}
-
-class DishSelect extends StatelessWidget {
-  final Future<List<Dish>> futureResults;
-
-  DishSelect(this.futureResults);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Select dish'),
-      ),
-      body: DishSelectWidget(futureResults)
-    );
   }
 }
