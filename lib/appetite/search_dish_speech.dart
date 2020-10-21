@@ -1,3 +1,4 @@
+import 'package:abc_cooking/appetite/dish_select.dart';
 import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/services/add_dish_service.dart';
 import 'package:abc_cooking/widgets/dish.dart';
@@ -269,20 +270,7 @@ class DishSelect extends StatelessWidget {
       appBar: AppBar(
         title: Text('Select dish'),
       ),
-      body: FutureBuilder(
-          future: futureResults,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return DishWidget.tap(snapshot.data[index], () {
-                      Navigator.pop(context, snapshot.data[index]);
-                    });
-                  });
-            }
-            return Center(child: CircularProgressIndicator());
-          }),
+      body: DishSelectWidget(futureResults)
     );
   }
 }

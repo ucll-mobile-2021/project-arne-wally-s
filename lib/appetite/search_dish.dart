@@ -1,6 +1,6 @@
+import 'package:abc_cooking/appetite/dish_select.dart';
 import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/services/add_dish_service.dart';
-import 'package:abc_cooking/widgets/dish.dart';
 import 'package:flutter/material.dart';
 
 class SearchDish extends SearchDelegate<Dish> {
@@ -31,20 +31,7 @@ class SearchDish extends SearchDelegate<Dish> {
   @override
   Widget buildResults(BuildContext context) {
     var results = service.getSearchDishResults(query);
-    return FutureBuilder(
-        future: results,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return DishWidget.tap(snapshot.data[index], () {
-                    close(context, snapshot.data[index]);
-                  });
-                });
-          }
-          return CircularProgressIndicator();
-        });
+    return DishSelectWidget(results);
   }
 
   @override
@@ -55,23 +42,22 @@ class SearchDish extends SearchDelegate<Dish> {
         ? suggestions = service.getSearchSuggestions(query)
         : suggestions = service.getSearchSuggestionsEmpty();
     return FutureBuilder(
-      future: suggestions,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-        return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(snapshot.data[index]),
-                onTap: () {
-                  query = snapshot.data[index];
-                  showResults(context);
-                },
-              );
-            });
-        }
-        return CircularProgressIndicator();
-      }
-    );
+        future: suggestions,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(snapshot.data[index]),
+                    onTap: () {
+                      query = snapshot.data[index];
+                      showResults(context);
+                    },
+                  );
+                });
+          }
+          return Center(child: CircularProgressIndicator());
+        });
   }
 }

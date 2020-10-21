@@ -37,11 +37,7 @@ class AddDishService {
   Future<List<Dish>> getSearchDishResults(String query) async {
     // TODO
     // Returns dishes that match your search
-    List<Dish> results = [
-      Dish('id', 'Spaghetti', 1, false, 3, 10, 1,
-          'https://www.leukerecepten.nl/wp-content/uploads/2019/06/spaghetti-bolognese_v.jpg'),
-    ];
-    return results;
+    return getDishResultsFromFoodList([]);
   }
 
   Future<List<Dish>> getDishResultsFromFoodList(List<String> food) async {
