@@ -14,6 +14,18 @@ class DishSelectWidget extends StatelessWidget {
         future: futureDishes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            return Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              children: snapshot.data.map((item) {
+                return Container(
+                  width: MediaQuery.of(context).size.width * 0.5 - 2.5,
+                  child: DishWidget.tap(item, () {
+                    Navigator.pop(context, item);
+                  }),
+                );
+              }).toList().cast<Widget>(),
+            );
             return GridView.builder(
                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
