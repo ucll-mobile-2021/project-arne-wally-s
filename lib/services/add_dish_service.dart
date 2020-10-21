@@ -44,10 +44,30 @@ class AddDishService {
     return results;
   }
 
+  Future<List<Dish>> getDishResultsFromFoodList(List<String> food) async {
+    var response =
+        await http.get('https://abc-cooking.andreasmilants.com/dishes');
+    if (response.statusCode == 200) {
+      return List.from(jsonDecode(response.body))
+          .map((e) => Dish.fromJson(e))
+          .toList();
+    }
+    throw Exception('Failed to get recipes');
+  }
+
   int getPeople() {
     // Returns the default amount of people that should be filled in, if not yet specified
     // Probably makes the most sense to use the value of the last addition
     return 1;
+  }
+
+  Future<Map<String, dynamic>> watsonCall(String query) async {
+    final response = await http
+        .get('https://abc-cooking.andreasmilants.com/watson?question=$query');
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    throw Exception("Failed to connect to server");
   }
 
   Future<List<Recipe>> getRecipesForDish(Dish dish) async {
