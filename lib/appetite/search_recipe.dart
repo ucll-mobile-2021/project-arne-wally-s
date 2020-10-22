@@ -4,9 +4,9 @@ import 'package:abc_cooking/services/appetite_service.dart';
 import 'package:flutter/material.dart';
 
 class SearchRecipe extends SearchDelegate<Recipe> {
-  final AppetiteService service;
+  final AppetiteService _service;
 
-  SearchRecipe(this.service);
+  SearchRecipe(this._service);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -30,7 +30,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
 
   @override
   Widget buildResults(BuildContext context) {
-    var results = service.getSearchResultsRecipes(query);
+    var results = _service.getSearchResultsRecipes(query);
     return SelectRecipeWidget(results);
   }
 
@@ -39,8 +39,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
     Future<List<String>> suggestions;
     // If we haven't put anything in yet, we suggest recent or popular searches
     query.isEmpty
-        ? suggestions = service.getSearchSuggestions(query)
-        : suggestions = service.getSearchSuggestionsEmpty();
+        ? suggestions = _service.getSearchSuggestions(query)
+        : suggestions = _service.getSearchSuggestionsEmpty();
     return FutureBuilder(
         future: suggestions,
         builder: (context, snapshot) {

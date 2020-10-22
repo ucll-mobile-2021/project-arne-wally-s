@@ -6,11 +6,11 @@ import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
 
 class AppetiteWidget extends StatelessWidget {
-  final AppetiteService service = AppetiteService();
-  final Future<List<Recipe>> futureRecipes;
+  final AppetiteService _service = AppetiteService();
+  final Future<List<Recipe>> _futureRecipes;
 
-  AppetiteWidget() : futureRecipes = AppetiteService().getSearchResultsRecipes('');
-
+  AppetiteWidget()
+      : _futureRecipes = AppetiteService().getSearchResultsRecipes('');
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +49,23 @@ class AppetiteWidget extends StatelessWidget {
 
   Widget buildRecommended(BuildContext context) {
     return FutureBuilder(
-        future: futureRecipes,
+        future: _futureRecipes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Wrap(
               spacing: 5,
               runSpacing: 5,
-              children: snapshot.data.map((item) {
-                return Container(
-                  width: MediaQuery.of(context).size.width * 0.5 - 2.5,
-                  child: RecipeWidget.tap(item, () {
-                    _selectRecipe(context, item, service.getPeople());
-                  }),
-                );
-              }).toList().cast<Widget>(),
+              children: snapshot.data
+                  .map((item) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.5 - 2.5,
+                      child: RecipeWidget.tap(item, () {
+                        _selectRecipe(context, item, _service.getPeople());
+                      }),
+                    );
+                  })
+                  .toList()
+                  .cast<Widget>(),
             );
           }
           return Center(child: CircularProgressIndicator());
@@ -70,8 +73,7 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   void _selectRecipe(BuildContext context, Recipe recipe, int people) async {
-    if (recipe != null) {
-    }
+    if (recipe != null) {}
   }
 
   void _listenSpeech(BuildContext context) async {
@@ -79,15 +81,14 @@ class AppetiteWidget extends StatelessWidget {
         MaterialPageRoute(builder: (context) => SearchRecipeSpeechWidget()));
     if (result != null) {
       var r = result as Recipe;
-      _selectRecipe(
-          context, r, service.getPeople());
+      _selectRecipe(context, r, _service.getPeople());
     }
   }
 
   void _searchManually(BuildContext context) async {
     _selectRecipe(
         context,
-        await showSearch(context: context, delegate: SearchRecipe(service)),
-        service.getPeople());
+        await showSearch(context: context, delegate: SearchRecipe(_service)),
+        _service.getPeople());
   }
 }

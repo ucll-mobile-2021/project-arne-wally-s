@@ -2,11 +2,11 @@ import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
 
 class RecipeWidget extends StatelessWidget {
-  Recipe recipe;
-  Function tapAction;
+  Recipe _recipe;
+  Function _tapAction;
 
-  RecipeWidget(this.recipe);
-  RecipeWidget.tap(this.recipe, this.tapAction);
+  RecipeWidget(this._recipe);
+  RecipeWidget.tap(this._recipe, this._tapAction);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,14 @@ class RecipeWidget extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            Image.network(recipe.picture),
+            Image.network(_recipe.picture),
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    recipe.name,
+                    _recipe.name,
                     style: Theme.of(context).textTheme.headline,
                   ),
                 ],
@@ -31,8 +31,8 @@ class RecipeWidget extends StatelessWidget {
         ),
       ),
       onTap: () {
-        if (tapAction != null) {
-          tapAction();
+        if (_tapAction != null) {
+          _tapAction();
         }
       },
     );
