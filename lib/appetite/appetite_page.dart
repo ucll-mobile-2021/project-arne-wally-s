@@ -2,6 +2,7 @@ import 'package:abc_cooking/appetite/search_recipe.dart';
 import 'package:abc_cooking/appetite/search_speech_recipe.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -50,28 +51,7 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   Widget buildRecommended(BuildContext context) {
-    return FutureBuilder(
-        future: _futureRecipes,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              children: snapshot.data
-                  .map((item) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.5 - 2.5,
-                      child: RecipeWidget.tap(item, () {
-                        _selectRecipe(context, item, _service.getPeople());
-                      }),
-                    );
-                  })
-                  .toList()
-                  .cast<Widget>(),
-            );
-          }
-          return Center(child: CircularProgressIndicator());
-        });
+    return RecipeList(_futureRecipes, false);
   }
 
   void _selectRecipe(BuildContext context, Recipe recipe, int people) async {

@@ -1,6 +1,6 @@
-import 'package:abc_cooking/appetite/select_recipe.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -167,7 +167,7 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
             )),
         _foodRecognized.isEmpty
             ? SizedBox()
-            : SelectRecipeWidget(_futureSearchResults),
+            : RecipeList(_futureSearchResults, true),
       ],
     );
   }

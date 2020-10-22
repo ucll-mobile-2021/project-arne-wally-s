@@ -1,6 +1,6 @@
-import 'package:abc_cooking/appetite/select_recipe.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/material.dart';
 
 class SearchRecipe extends SearchDelegate<Recipe> {
@@ -31,7 +31,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
   @override
   Widget buildResults(BuildContext context) {
     var results = _service.getSearchResultsRecipes(query);
-    return SingleChildScrollView(child: SelectRecipeWidget(results));
+    return SingleChildScrollView(child: RecipeList(results, true));
   }
 
   @override

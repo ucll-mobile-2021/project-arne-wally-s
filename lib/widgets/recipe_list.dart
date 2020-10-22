@@ -5,10 +5,11 @@ import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SelectRecipeWidget extends StatelessWidget {
+class RecipeList extends StatelessWidget {
   final Future<List<Recipe>> _futureRecipes;
+  final bool _returnRecipe;
 
-  SelectRecipeWidget(this._futureRecipes);
+  RecipeList(this._futureRecipes, this._returnRecipe);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,14 @@ class SelectRecipeWidget extends StatelessWidget {
                   .map((item) {
                     return Container(
                       width: w,
-                      child: RecipeWidget.tap(item, () {
-                        Navigator.pop(context, item);
-                      }),
+                      child: RecipeWidget.width(
+                          item,
+                          _returnRecipe
+                              ? () {
+                                  Navigator.pop(context, item);
+                                }
+                              : null,
+                          w),
                     );
                   })
                   .toList()
