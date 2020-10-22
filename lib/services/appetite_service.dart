@@ -1,22 +1,21 @@
 import 'dart:convert';
 
-import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:http/http.dart' as http;
 
-class AddDishService {
-  static final AddDishService _singleton = AddDishService._internal();
+class AppetiteService {
+  static final AppetiteService _singleton = AppetiteService._internal();
   int _people = 1;
 
-  factory AddDishService() {
+  factory AppetiteService() {
     return _singleton;
   }
 
-  AddDishService._internal();
+  AppetiteService._internal();
 
-  Future<List<Dish>> getRecommended() async {
+  Future<List<Recipe>> getRecommendedServices() async {
     // TODO
-    // Returns a list of recommended dishes
+    // Returns a list of recommended recipes
     return [];
   }
 
@@ -35,18 +34,18 @@ class AddDishService {
     return ['Caesar salad', 'Balletjes in tomatensaus'];
   }
 
-  Future<List<Dish>> getSearchDishResults(String query) async {
+  Future<List<Recipe>> getSearchResultsRecipes(String query) async {
     // TODO
-    // Returns dishes that match your search
-    return getDishResultsFromFoodList([]);
+    // Returns recipes that match your search
+    return getSearchFoodListResultsRecipes([]);
   }
 
-  Future<List<Dish>> getDishResultsFromFoodList(List<String> food) async {
+  Future<List<Recipe>> getSearchFoodListResultsRecipes(List<String> food) async {
     var response =
         await http.get('https://abc-cooking.andreasmilants.com/dishes');
     if (response.statusCode == 200) {
       return List.from(jsonDecode(response.body))
-          .map((e) => Dish.fromJson(e))
+          .map((e) => Recipe.fromJson(e))
           .toList();
     }
     throw Exception('Failed to get recipes');
@@ -69,18 +68,5 @@ class AddDishService {
       return jsonDecode(response.body);
     }
     throw Exception("Failed to connect to server");
-  }
-
-  Future<List<Recipe>> getRecipesForDish(Dish dish) async {
-    final response =
-        await http.get('https://abc-cooking.andreasmilants.com/recipes');
-    var json = response.body;
-    print(json);
-    if (response.statusCode == 200) {
-      return List.from(jsonDecode(json))
-          .map((e) => Recipe.fromJson(e))
-          .toList();
-    }
-    throw Exception('Failed to get recipes');
   }
 }

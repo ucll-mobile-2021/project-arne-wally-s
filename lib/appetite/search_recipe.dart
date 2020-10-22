@@ -1,12 +1,12 @@
-import 'package:abc_cooking/appetite/dish_select.dart';
-import 'package:abc_cooking/models/dish.dart';
-import 'package:abc_cooking/services/add_dish_service.dart';
+import 'package:abc_cooking/appetite/select_recipe.dart';
+import 'package:abc_cooking/models/recipe.dart';
+import 'package:abc_cooking/services/appetite_service.dart';
 import 'package:flutter/material.dart';
 
-class SearchDish extends SearchDelegate<Dish> {
-  final AddDishService service;
+class SearchRecipe extends SearchDelegate<Recipe> {
+  final AppetiteService service;
 
-  SearchDish(this.service);
+  SearchRecipe(this.service);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -30,8 +30,8 @@ class SearchDish extends SearchDelegate<Dish> {
 
   @override
   Widget buildResults(BuildContext context) {
-    var results = service.getSearchDishResults(query);
-    return DishSelectWidget(results);
+    var results = service.getSearchResultsRecipes(query);
+    return SelectRecipeWidget(results);
   }
 
   @override

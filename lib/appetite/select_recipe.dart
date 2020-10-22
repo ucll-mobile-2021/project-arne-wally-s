@@ -1,64 +1,33 @@
-import 'package:abc_cooking/models/dish.dart';
 import 'package:abc_cooking/models/recipe.dart';
-import 'package:abc_cooking/services/add_dish_service.dart';
-import 'package:abc_cooking/widgets/recipe.dart';
+import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SelectRecipeWidget extends StatefulWidget {
-  final Dish dish;
-  final int people;
-  final AddDishService service = AddDishService();
+class SelectRecipeWidget extends StatelessWidget {
+  final Future<List<Recipe>> _futureRecipes;
 
-  SelectRecipeWidget(this.dish, this.people);
-
-  @override
-  _SelectRecipeState createState() {
-    return _SelectRecipeState();
-  }
-}
-
-class _SelectRecipeState extends State<SelectRecipeWidget> {
-  Future<List<Recipe>> futureRecipes;
-
-  @override
-  void initState() {
-    super.initState();
-    futureRecipes = widget.service.getRecipesForDish(widget.dish);
-  }
+  SelectRecipeWidget(this._futureRecipes);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Select recipe'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('${widget.dish.name} recipes', style: Theme.of(context).textTheme.headline4,),
-          ),
-          Expanded(
-            child: FutureBuilder<List<Recipe>>(
-              future: futureRecipes,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,itemBuilder: (context, index) {
-                        return RecipeWidget(snapshot.data[index]);
-                  });
-                }
-                else if (snapshot.hasError) {
-                  return Center(child: Text("${snapshot.error}"));
-                }
-                return Center(child:CircularProgressIndicator());
-              },
-            ),
-          ),
-        ],
-      )
-    );
+    return FutureBuilder(
+        future: _futureRecipes,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              children: snapshot.data.map((item) {
+                return Container(
+                  width: MediaQuery.of(context).size.width * 0.5 - 2.5,
+                  child: RecipeWidget.tap(item, () {
+                    Navigator.pop(context, item);
+                  }),
+                );
+              }).toList().cast<Widget>(),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
+        });
   }
 }

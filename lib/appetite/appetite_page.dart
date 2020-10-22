@@ -1,16 +1,15 @@
-import 'package:abc_cooking/appetite/search_dish.dart';
-import 'package:abc_cooking/appetite/search_dish_speech.dart';
-import 'package:abc_cooking/appetite/select_recipe.dart';
-import 'package:abc_cooking/models/dish.dart';
-import 'package:abc_cooking/services/add_dish_service.dart';
-import 'package:abc_cooking/widgets/dish.dart';
+import 'package:abc_cooking/appetite/search_recipe.dart';
+import 'package:abc_cooking/appetite/search_speech_recipe.dart';
+import 'package:abc_cooking/models/recipe.dart';
+import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
 
 class AppetiteWidget extends StatelessWidget {
-  final AddDishService service = AddDishService();
-  final Future<List<Dish>> futureDishes;
+  final AppetiteService service = AppetiteService();
+  final Future<List<Recipe>> futureRecipes;
 
-  AppetiteWidget() : futureDishes = AddDishService().getSearchDishResults('');
+  AppetiteWidget() : futureRecipes = AppetiteService().getSearchResultsRecipes('');
 
 
   @override
@@ -50,7 +49,7 @@ class AppetiteWidget extends StatelessWidget {
 
   Widget buildRecommended(BuildContext context) {
     return FutureBuilder(
-        future: futureDishes,
+        future: futureRecipes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Wrap(
@@ -59,7 +58,7 @@ class AppetiteWidget extends StatelessWidget {
               children: snapshot.data.map((item) {
                 return Container(
                   width: MediaQuery.of(context).size.width * 0.5 - 2.5,
-                  child: DishWidget.tap(item, () {
+                  child: RecipeWidget.tap(item, () {
                     _selectRecipe(context, item, service.getPeople());
                   }),
                 );
@@ -70,36 +69,25 @@ class AppetiteWidget extends StatelessWidget {
         });
   }
 
-  void _selectRecipe(BuildContext context, Dish dish, int people) async {
-    var recipeInstance = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SelectRecipeWidget(dish, people)));
-    if (recipeInstance != null) {
-      // TODO
-    }
-  }
-
-  void _selectDish(BuildContext context, Dish dish, int people) async {
-    if (dish != null) {
-      _selectRecipe(context, dish, people);
+  void _selectRecipe(BuildContext context, Recipe recipe, int people) async {
+    if (recipe != null) {
     }
   }
 
   void _listenSpeech(BuildContext context) async {
     var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => SearchDishSpeechWidget()));
+        MaterialPageRoute(builder: (context) => SearchRecipeSpeechWidget()));
     if (result != null) {
-      var r = result as Dish;
-      _selectDish(
+      var r = result as Recipe;
+      _selectRecipe(
           context, r, service.getPeople());
     }
   }
 
   void _searchManually(BuildContext context) async {
-    _selectDish(
+    _selectRecipe(
         context,
-        await showSearch(context: context, delegate: SearchDish(service)),
+        await showSearch(context: context, delegate: SearchRecipe(service)),
         service.getPeople());
   }
 }

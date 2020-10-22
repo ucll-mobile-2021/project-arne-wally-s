@@ -1,6 +1,6 @@
-import 'package:abc_cooking/appetite/dish_select.dart';
-import 'package:abc_cooking/models/dish.dart';
-import 'package:abc_cooking/services/add_dish_service.dart';
+import 'package:abc_cooking/appetite/select_recipe.dart';
+import 'package:abc_cooking/models/recipe.dart';
+import 'package:abc_cooking/services/appetite_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -8,14 +8,14 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'dart:async';
 
-class SearchDishSpeechWidget extends StatefulWidget {
+class SearchRecipeSpeechWidget extends StatefulWidget {
   @override
-  _SearchDishSpeechWidget createState() {
-    return _SearchDishSpeechWidget();
+  _SearchRecipeSpeechState createState() {
+    return _SearchRecipeSpeechState();
   }
 }
 
-class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
+class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
   final SpeechToText speech = SpeechToText();
   bool listening = false;
   String lastWords = "";
@@ -23,7 +23,7 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
   String lastStatus = "";
   String _currentLocaleId = "en";
   Map<String, dynamic> response = Map();
-  Future<List<Dish>> futureDishes;
+  Future<List<Recipe>> futureRecipes;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search dish'),
+        title: Text('Search Recipe'),
       ),
       body: Center(
         child: Column(
@@ -126,9 +126,9 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
                       ),
               ],
             ),
-            responseText == '' || futureDishes == null
+            responseText == '' || futureRecipes == null
                 ? SizedBox()
-                : DishSelectWidget(futureDishes),
+                : SelectRecipeWidget(futureRecipes),
           ],
         ),
       ),
@@ -195,7 +195,7 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
     });
     if (result.finalResult) {
       listeningEnded();
-      var r = await AddDishService().watsonCall(result.recognizedWords);
+      var r = await AppetiteService().watsonCall(result.recognizedWords);
       setState(() {
         response = r;
       });
@@ -206,7 +206,7 @@ class _SearchDishSpeechWidget extends State<SearchDishSpeechWidget> {
           foods.add(food['value']);
         }
         setState(() {
-          futureDishes = AddDishService().getDishResultsFromFoodList(foods);
+          futureRecipes = AppetiteService().getSearchFoodListResultsRecipes(foods);
         });
       }
     }

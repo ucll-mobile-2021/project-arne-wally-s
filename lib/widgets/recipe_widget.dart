@@ -1,12 +1,12 @@
-import 'package:abc_cooking/models/dish.dart';
+import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
 
-class DishWidget extends StatelessWidget {
-  Dish dish;
+class RecipeWidget extends StatelessWidget {
+  Recipe recipe;
   Function tapAction;
 
-  DishWidget(this.dish);
-  DishWidget.tap(this.dish, this.tapAction);
+  RecipeWidget(this.recipe);
+  RecipeWidget.tap(this.recipe, this.tapAction);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,14 @@ class DishWidget extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            Image.network(dish.picture),
+            Image.network(recipe.picture),
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    dish.name,
+                    recipe.name,
                     style: Theme.of(context).textTheme.headline,
                   ),
                 ],
