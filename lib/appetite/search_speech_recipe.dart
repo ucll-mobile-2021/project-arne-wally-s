@@ -4,6 +4,7 @@ import 'package:abc_cooking/widgets/jumping_dots.dart';
 import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -84,8 +85,15 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.mic),
+        child: _state == SpeechState.listening
+            ? JumpingDots(
+                alignment: MainAxisAlignment.center,
+              )
+            : Icon(Icons.mic),
         onPressed: toggleListening,
+        backgroundColor: _state == SpeechState.listening
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).accentColor,
       ),
     );
   }

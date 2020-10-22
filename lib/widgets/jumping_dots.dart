@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class JumpingDots extends StatefulWidget {
   final int numberOfDots;
+  final MainAxisAlignment alignment;
 
-  const JumpingDots({Key key, this.numberOfDots = 3}) : super(key: key);
+  const JumpingDots(
+      {Key key,
+      this.numberOfDots = 3,
+      this.alignment = MainAxisAlignment.start})
+      : super(key: key);
 
   @override
   _JumpingDotsState createState() => _JumpingDotsState();
@@ -32,27 +37,27 @@ class _JumpingDotsState extends State<JumpingDots>
   @override
   Widget build(BuildContext context) {
     return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: List.generate(widget.numberOfDots, (index) {
-            //AnimatedBuilder widget will rebuild it self when
-            //_animationControllers[index] value changes.
-            return AnimatedBuilder(
-              animation: _animationControllers[index],
-              builder: (context, child) {
-                return Container(
-                  padding: EdgeInsets.all(2.5),
-                  //Transform widget's translate constructor will help us to move the dot
-                  //in upward direction by changing the offset of the dot.
-                  //X-axis position of dot will not change.
-                  //Only Y-axis position will change.
-                  child: Transform.translate(
-                    offset: Offset(0, _animations[index].value),
-                    child: DotWidget(),
-                  ),
-                );
-              },
+      mainAxisAlignment: widget.alignment,
+      children: List.generate(widget.numberOfDots, (index) {
+        //AnimatedBuilder widget will rebuild it self when
+        //_animationControllers[index] value changes.
+        return AnimatedBuilder(
+          animation: _animationControllers[index],
+          builder: (context, child) {
+            return Container(
+              padding: EdgeInsets.all(2.5),
+              //Transform widget's translate constructor will help us to move the dot
+              //in upward direction by changing the offset of the dot.
+              //X-axis position of dot will not change.
+              //Only Y-axis position will change.
+              child: Transform.translate(
+                offset: Offset(0, _animations[index].value),
+                child: DotWidget(),
+              ),
             );
-          }).toList(),
+          },
+        );
+      }).toList(),
     );
   }
 
@@ -103,11 +108,11 @@ class DotWidget extends StatelessWidget {
   const DotWidget({
     Key key,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          shape: BoxShape.circle, color: Colors.white),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
       height: 4,
       width: 4,
     );
