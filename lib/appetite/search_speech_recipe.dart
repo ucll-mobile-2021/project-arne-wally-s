@@ -16,14 +16,19 @@ class SearchRecipeSpeechWidget extends StatefulWidget {
 }
 
 class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
-  final SpeechToText speech = SpeechToText();
-  bool listening = false;
-  String lastWords = "";
-  String lastError = "";
-  String lastStatus = "";
+  final SpeechToText _speech = SpeechToText();
   String _currentLocaleId = "en";
-  Map<String, dynamic> response = Map();
-  Future<List<Recipe>> futureRecipes;
+
+  SpeechState _state = SpeechState.init;
+
+  String _spokenWords = "";
+
+  String _responseWords = "";
+  List<Map<String, dynamic>> _foodRecognized = [];
+
+  Future<List<Recipe>> _futureSearchResults;
+
+  TextStyle _textStyle = TextStyle(fontSize: 18);
 
   @override
   void initState() {
@@ -33,102 +38,47 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String responseText = response.isNotEmpty ? response['response'] : '';
-    List<TextSpan> myText = List();
-    TextStyle style = TextStyle(fontSize: 18);
-    if (response.isNotEmpty) {
-      var lastIndex = 0;
-      for (var food in response['food']) {
-        var startIndex = food['location'][0];
-        var endIndex = food['location'][1];
+    Widget body;
 
-        myText.add(TextSpan(
-          text: lastWords.substring(lastIndex, startIndex),
-          style: style.merge(TextStyle(color: Colors.black)),
+    switch (_state) {
+      case SpeechState.init:
+        body = Center(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Tap to start speaking',
+            style: _textStyle,
+          ),
         ));
-        myText.add(TextSpan(
-          text: lastWords.substring(startIndex, endIndex),
-          style: style.merge(TextStyle(color: Colors.deepOrange)),
-        ));
-
-        lastIndex = endIndex;
-      }
-      myText.add(TextSpan(
-        text: lastWords.substring(lastIndex),
-        style: style.merge(TextStyle(color: Colors.black)),
-      ));
-    } else {
-      myText.add(TextSpan(
-        text: lastWords,
-        style: style.merge(TextStyle(color: Colors.black)),
-      ));
+        break;
+      case SpeechState.listening:
+        body = buildListeningWidget(context);
+        break;
+      case SpeechState.finishedListening:
+        body = buildFinishedListeningWidget(context);
+        break;
+      case SpeechState.watsonResponded:
+        body = buildWatsonResponded(context);
+        break;
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Search Recipe'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                listening ? Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Center(
-                      child: Text(
-                        'Listening...',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      )),
-                ) : SizedBox(),
-                lastWords == '' && !listening
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: Center(
-                            child: Text(
-                          'Tap to start speaking',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        )),
-                      )
-                    : SizedBox(),
-                lastWords == ''
-                    ? SizedBox()
-                    : Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[300],
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(
-                            right: 80, left: 10, bottom: 10, top: 10),
-                        child: RichText(
-                          text: TextSpan(children: myText),
-                        ),
-                      ),
-                responseText == ''
-                    ? SizedBox()
-                    : Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrange,
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(
-                            left: 80, right: 10, bottom: 10),
-                        child: Text(
-                          responseText,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                          ),
-                        ),
-                      ),
-              ],
+            AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              height: _state == SpeechState.listening ? 30 : 0,
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Listening...'),
+              )),
             ),
-            responseText == '' || futureRecipes == null
-                ? SizedBox()
-                : SelectRecipeWidget(futureRecipes),
+            body,
           ],
         ),
       ),
@@ -139,15 +89,129 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
     );
   }
 
+  Widget buildListeningWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _spokenWords == '' // Don't show dialogue if nothing said yet
+            ? SizedBox()
+            : buildMyText(context, [
+                TextSpan(
+                  text: _spokenWords,
+                  style: _textStyle.merge(TextStyle(color: Colors.black)),
+                )
+              ])
+      ],
+    );
+  }
+
+  Widget buildFinishedListeningWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        buildMyText(context, [
+          TextSpan(
+            text: _spokenWords,
+            style: _textStyle.merge(TextStyle(color: Colors.black)),
+          )
+        ]),
+        buildResponseText(
+            context,
+            Text(
+              '...',
+              style: _textStyle.merge(TextStyle(color: Colors.white)),
+            ))
+      ],
+    );
+  }
+
+  Widget buildWatsonResponded(BuildContext context) {
+    List<TextSpan> myText = List();
+    if (_responseWords != '') {
+      var lastIndex = 0;
+      for (var food in _foodRecognized) {
+        var startIndex = food['location'][0];
+        var endIndex = food['location'][1];
+
+        myText.add(TextSpan(
+          text: _spokenWords.substring(lastIndex, startIndex),
+          style: _textStyle.merge(TextStyle(color: Colors.black)),
+        ));
+        myText.add(TextSpan(
+          text: _spokenWords.substring(startIndex, endIndex),
+          style: _textStyle.merge(TextStyle(color: Colors.deepOrange)),
+        ));
+
+        lastIndex = endIndex;
+      }
+      myText.add(TextSpan(
+        text: _spokenWords.substring(lastIndex),
+        style: _textStyle.merge(TextStyle(color: Colors.black)),
+      ));
+    } else {
+      myText.add(TextSpan(
+        text: _spokenWords,
+        style: _textStyle.merge(TextStyle(color: Colors.black)),
+      ));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        buildMyText(context, myText),
+        buildResponseText(
+            context,
+            Text(
+              _responseWords,
+              style: _textStyle.merge(TextStyle(color: Colors.white)),
+            )),
+        _foodRecognized.isEmpty
+            ? SizedBox()
+            : SelectRecipeWidget(_futureSearchResults),
+      ],
+    );
+  }
+
+  Widget buildMyText(BuildContext context, List<TextSpan> myWords) {
+    /*
+    This takes a List of TextSpans so that we can pass differently coloured words
+     */
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[300],
+      ),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(right: 80, left: 10, bottom: 10, top: 10),
+      child: RichText(
+        text: TextSpan(children: myWords),
+      ),
+    );
+  }
+
+  Widget buildResponseText(BuildContext context, Widget responseWidget) {
+    /*
+    This takes a widget so that we can pass a typing animation
+    */
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.deepOrange,
+      ),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(left: 80, right: 10, bottom: 10),
+      child: responseWidget,
+    );
+  }
+
   Future<void> initSpeechState() async {
-    bool hasSpeech = await speech.initialize(
-        onError: errorListener, onStatus: statusListener);
+    await _speech.initialize(onError: errorListener);
 
     if (!mounted) return;
   }
 
   void toggleListening() {
-    if (!listening) {
+    if (_state != SpeechState.listening) {
       startListening();
     } else {
       stopListening();
@@ -155,58 +219,55 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
   }
 
   void startListening() {
-    lastWords = "";
-    lastError = "";
-    response = Map();
-    speech.listen(
+    _speech.listen(
         onResult: resultListener,
         localeId: _currentLocaleId,
         onSoundLevelChange: soundLevelListener,
         cancelOnError: true,
         listenMode: ListenMode.confirmation);
-    setState(() {
-      listening = true;
-    });
-  }
 
-  void listeningEnded() {
     setState(() {
-      listening = false;
+      _state = SpeechState.listening;
+      _spokenWords = "";
     });
   }
 
   void stopListening() {
-    speech.stop();
-    listeningEnded();
-  }
-
-  void cancelListening() {
-    speech.cancel();
-    listeningEnded();
-  }
-
-  Future sleep() {
-    return new Future.delayed(const Duration(seconds: 1), () => "1");
+    _speech.stop();
+    setState(() {
+      _state = SpeechState.init;
+      _spokenWords = "";
+    });
   }
 
   void resultListener(SpeechRecognitionResult result) async {
     setState(() {
-      lastWords = "${result.recognizedWords}";
+      _spokenWords = result.recognizedWords;
     });
+
     if (result.finalResult) {
-      listeningEnded();
-      var r = await AppetiteService().watsonCall(result.recognizedWords);
       setState(() {
-        response = r;
+        _state = SpeechState.finishedListening;
       });
 
-      if (response['food'].isNotEmpty) {
+      var r = await AppetiteService().watsonCall(result.recognizedWords);
+
+      setState(() {
+        _state = SpeechState.watsonResponded;
+      });
+
+      _responseWords = r['response'];
+      _foodRecognized = List<Map<String, dynamic>>.from(r['food']);
+
+      if (_foodRecognized.isNotEmpty) {
         List<String> foods = [];
-        for (var food in response['food']) {
+        for (var food in _foodRecognized) {
           foods.add(food['value']);
         }
+
         setState(() {
-          futureRecipes = AppetiteService().getSearchFoodListResultsRecipes(foods);
+          _futureSearchResults =
+              AppetiteService().getSearchFoodListResultsRecipes(foods);
         });
       }
     }
@@ -218,16 +279,12 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
 
   void errorListener(SpeechRecognitionError error) {
     // print("Received error status: $error, listening: ${speech.isListening}");
-    setState(() {
-      lastError = "${error.errorMsg} - ${error.permanent}";
-    });
   }
+}
 
-  void statusListener(String status) {
-    // print(
-    // "Received listener status: $status, listening: ${speech.isListening}");
-    setState(() {
-      lastStatus = "$status";
-    });
-  }
+enum SpeechState {
+  init,
+  listening,
+  finishedListening,
+  watsonResponded,
 }

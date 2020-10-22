@@ -25,18 +25,20 @@ class AppetiteWidget extends StatelessWidget {
               })
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Recommended for you',
-              style: Theme.of(context).textTheme.headline5,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Recommended for you',
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ),
-          ),
-          buildRecommended(context),
-        ],
-        crossAxisAlignment: CrossAxisAlignment.start,
+            buildRecommended(context),
+          ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.mic),

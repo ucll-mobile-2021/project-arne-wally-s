@@ -31,7 +31,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
   @override
   Widget buildResults(BuildContext context) {
     var results = _service.getSearchResultsRecipes(query);
-    return SelectRecipeWidget(results);
+    return SingleChildScrollView(child: SelectRecipeWidget(results));
   }
 
   @override

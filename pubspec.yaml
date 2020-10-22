@@ -27,6 +27,7 @@ dependencies:
   speech_to_text: ^2.7.0
   http: ^0.12.2
   json_annotation: ^3.1.0
+  shimmer: ^1.1.2
 
 
 dev_dependencies:
