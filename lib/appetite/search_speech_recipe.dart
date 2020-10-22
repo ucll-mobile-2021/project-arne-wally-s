@@ -17,7 +17,8 @@ class SearchRecipeSpeechWidget extends StatefulWidget {
   }
 }
 
-class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
+class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget>
+    with SingleTickerProviderStateMixin {
   final SpeechToText _speech = SpeechToText();
   String _currentLocaleId = "en";
 
@@ -32,9 +33,22 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
 
   TextStyle _textStyle = TextStyle(fontSize: 18);
 
+  Animation<double> animation;
+  AnimationController controller;
+
   @override
   void initState() {
     super.initState();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    animation = Tween<double>(begin: 26, end: 30).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // The state that has changed here is the animation object’s value.
+        });
+      });
+    controller.forward();
+    controller.repeat(reverse: true);
     initSpeechState();
   }
 
@@ -86,8 +100,9 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         child: _state == SpeechState.listening
-            ? JumpingDots(
-                alignment: MainAxisAlignment.center,
+            ? Icon(
+                Icons.mic,
+                size: animation.value,
               )
             : Icon(Icons.mic),
         onPressed: toggleListening,
@@ -126,7 +141,10 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
         ]),
         buildResponseText(
           context,
-          JumpingDots(),
+          SizedBox(
+            height: 20,
+            child: Center(child: JumpingDots()),
+          ),
         ),
       ],
     );
@@ -286,6 +304,12 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
 
   void errorListener(SpeechRecognitionError error) {
     // print("Received error status: $error, listening: ${speech.isListening}");
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
