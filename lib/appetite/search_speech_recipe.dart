@@ -1,5 +1,6 @@
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/jumping_dots.dart';
 import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,11 +117,9 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
           )
         ]),
         buildResponseText(
-            context,
-            Text(
-              '...',
-              style: _textStyle.merge(TextStyle(color: Colors.white)),
-            ))
+          context,
+          JumpingDots(),
+        ),
       ],
     );
   }
@@ -182,7 +181,7 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
         color: Colors.grey[300],
       ),
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(right: 80, left: 10, bottom: 10, top: 10),
+      margin: const EdgeInsets.only(right: 10, left: 80, bottom: 10, top: 10),
       child: RichText(
         text: TextSpan(children: myWords),
       ),
@@ -199,7 +198,7 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
         color: Colors.deepOrange,
       ),
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(left: 80, right: 10, bottom: 10),
+      margin: const EdgeInsets.only(left: 10, right: 80, bottom: 10),
       child: responseWidget,
     );
   }

@@ -28,6 +28,7 @@ dependencies:
   http: ^0.12.2
   json_annotation: ^3.1.0
   shimmer: ^1.1.2
+  animated_text_kit: ^2.4.1
 
 
 dev_dependencies:
