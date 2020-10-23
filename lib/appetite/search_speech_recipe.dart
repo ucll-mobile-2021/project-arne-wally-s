@@ -1,6 +1,7 @@
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
 import 'package:abc_cooking/widgets/jumping_dots.dart';
+import 'package:abc_cooking/widgets/pulsing_icon.dart';
 import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,7 @@ class SearchRecipeSpeechWidget extends StatefulWidget {
   }
 }
 
-class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget>
-    with SingleTickerProviderStateMixin {
+class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
   final SpeechToText _speech = SpeechToText();
   String _currentLocaleId = "en";
 
@@ -33,22 +33,9 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget>
 
   TextStyle _textStyle = TextStyle(fontSize: 18);
 
-  Animation<double> animation;
-  AnimationController controller;
-
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
-    animation = Tween<double>(begin: 26, end: 30).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      });
-    controller.forward();
-    controller.repeat(reverse: true);
     initSpeechState();
   }
 
@@ -100,10 +87,7 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget>
       ),
       floatingActionButton: FloatingActionButton(
         child: _state == SpeechState.listening
-            ? Icon(
-                Icons.mic,
-                size: animation.value,
-              )
+            ? PulsingIconWidget()
             : Icon(Icons.mic),
         onPressed: toggleListening,
         backgroundColor: _state == SpeechState.listening
@@ -305,12 +289,6 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget>
   void errorListener(SpeechRecognitionError error) {
     // print("Received error status: $error, listening: ${speech.isListening}");
   }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 }
 
 enum SpeechState {
@@ -319,3 +297,4 @@ enum SpeechState {
   finishedListening,
   watsonResponded,
 }
+
