@@ -6,7 +6,7 @@ class MyRecipesService extends ChangeNotifier {
   /*
   This service should save things to the database and is available everywhere
    */
-  List<RecipeInstance> _myRecipes;
+  List<RecipeInstance> _myRecipes = [];
 
   UnmodifiableListView<RecipeInstance> get myRecipes =>
       UnmodifiableListView(_myRecipes);
@@ -15,6 +15,7 @@ class MyRecipesService extends ChangeNotifier {
 
   void addRecipe(RecipeInstance recipe) {
     _myRecipes.add(recipe);
+    print(_myRecipes);
     notifyListeners();
   }
 

@@ -7,9 +7,17 @@ import 'package:flutter/material.dart';
 
 class RecipeList extends StatelessWidget {
   final Future<List<Recipe>> _futureRecipes;
-  final bool _returnRecipe;
+  Function _function;
 
-  RecipeList(this._futureRecipes, this._returnRecipe);
+  RecipeList(this._futureRecipes, bool shouldReturnRecipe) {
+    if (shouldReturnRecipe) {
+      this._function = returnRecipe;
+    } else {
+      _function = null;
+    }
+  }
+
+  RecipeList.function(this._futureRecipes, this._function);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +35,9 @@ class RecipeList extends StatelessWidget {
                       width: w,
                       child: RecipeWidget.width(
                           item,
-                          _returnRecipe
+                          _function != null
                               ? () {
-                                  Navigator.pop(context, item);
+                                  Function.apply(_function, [context, item]);
                                 }
                               : null,
                           w),
@@ -87,5 +95,9 @@ class RecipeList extends StatelessWidget {
                 .cast<Widget>(),
           );
         });
+  }
+
+  void returnRecipe(context, recipe) {
+    Navigator.pop(context, recipe);
   }
 }

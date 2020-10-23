@@ -172,7 +172,8 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
             context,
             Text(
               _responseWords,
-              style: _textStyle.merge(TextStyle(color: Colors.white)),
+              style: _textStyle.merge(
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
             )),
         _foodRecognized.isEmpty
             ? SizedBox()
@@ -297,4 +298,3 @@ enum SpeechState {
   finishedListening,
   watsonResponded,
 }
-

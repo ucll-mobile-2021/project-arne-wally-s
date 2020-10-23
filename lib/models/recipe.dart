@@ -36,4 +36,9 @@ class RecipeInstance {
   final int persons;
 
   RecipeInstance(this.recipe, this.persons) : super();
+
+  @override
+  String toString() {
+    return '${recipe.name} - $persons';
+  }
 }

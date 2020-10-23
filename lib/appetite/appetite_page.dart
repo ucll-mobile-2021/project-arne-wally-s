@@ -1,10 +1,13 @@
 import 'package:abc_cooking/appetite/search_recipe.dart';
 import 'package:abc_cooking/appetite/search_speech_recipe.dart';
+import 'package:abc_cooking/appetite/select_people.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/services/service.dart';
 import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppetiteWidget extends StatelessWidget {
   final AppetiteService _service = AppetiteService();
@@ -51,11 +54,18 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   Widget buildRecommended(BuildContext context) {
-    return RecipeList(_futureRecipes, false);
+    return RecipeList.function(_futureRecipes, selectRecipe);
+  }
+
+  void selectRecipe(BuildContext context, Recipe recipe) {
+    _selectRecipe(context, recipe, _service.getPeople());
   }
 
   void _selectRecipe(BuildContext context, Recipe recipe, int people) async {
-    if (recipe != null) {}
+    if (recipe != null) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => SelectPeopleWidget(recipe)));
+    }
   }
 
   void _listenSpeech(BuildContext context) async {
