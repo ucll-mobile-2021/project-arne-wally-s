@@ -14,10 +14,10 @@ class AppetiteService {
 
   AppetiteService._internal();
 
-  Future<List<Recipe>> getRecommendedServices() async {
+  Future<List<Recipe>> getRecommendedRecipes() async {
     // TODO
     // Returns a list of recommended recipes
-    return [];
+    return getSearchResultsRecipes('');
   }
 
   Future<List<String>> getSearchSuggestions(String query) async {
@@ -36,20 +36,20 @@ class AppetiteService {
   }
 
   Future<List<Recipe>> getSearchResultsRecipes(String query) async {
-    // TODO
-    // Returns recipes that match your search
-    return getSearchFoodListResultsRecipes([]);
-  }
-
-  Future<List<Recipe>> getSearchFoodListResultsRecipes(List<String> food) async {
-    var response =
-        await http.get('https://abc-cooking.andreasmilants.com/dishes');
+    var response = await http
+        .get('https://abc-cooking.andreasmilants.com/recipes?search=$query');
     if (response.statusCode == 200) {
       return List.from(jsonDecode(response.body))
           .map((e) => Recipe.fromJson(e))
           .toList();
     }
     throw Exception('Failed to get recipes');
+  }
+
+  Future<List<Recipe>> getSearchFoodListResultsRecipes(
+      List<String> food) async {
+    var query = food.join(' ');
+    return getSearchResultsRecipes(query);
   }
 
   int getPeople() {

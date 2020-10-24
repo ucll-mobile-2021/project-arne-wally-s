@@ -11,10 +11,10 @@ import 'package:provider/provider.dart';
 
 class AppetiteWidget extends StatelessWidget {
   final AppetiteService _service = AppetiteService();
-  final Future<List<Recipe>> _futureRecipes;
+  final Future<List<Recipe>> _futureRecommendedRecipes;
 
   AppetiteWidget()
-      : _futureRecipes = AppetiteService().getSearchResultsRecipes('');
+      : _futureRecommendedRecipes = AppetiteService().getRecommendedRecipes();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   Widget buildRecommended(BuildContext context) {
-    return RecipeList.function(_futureRecipes, selectRecipe);
+    return RecipeList.function(_futureRecommendedRecipes, selectRecipe);
   }
 
   void selectRecipe(BuildContext context, Recipe recipe) {
