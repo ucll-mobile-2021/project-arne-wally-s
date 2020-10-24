@@ -70,13 +70,13 @@ class AppetiteWidget extends StatelessWidget {
         service.addRecipe(instance as RecipeInstance);
 
         final snackBar = SnackBar(
-          content: Text('Recipe added to shopping cart!'),
+          content: Text('Recipe added to shopping list'),
           action: SnackBarAction(
             label: 'Undo',
             onPressed: () {
               service.removeRecipe(instance);
               final snack = SnackBar(
-                content: Text('Recipe removed from shopping cart!'),
+                content: Text('Recipe removed from shopping list'),
               );
               Scaffold.of(context).showSnackBar(snack);
             },
