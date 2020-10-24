@@ -21,10 +21,16 @@ class AppetiteService {
   }
 
   Future<List<String>> getSearchSuggestions(String query) async {
-    // TODO
     // Returns a list of suggestions while searching
-    // Example: query = 's' -> return ['Spaghetti', 'Salad']
-    List<String> suggestions = ['Spaghetti', 'Pizza', 'Lasagne'];
+    var response = await http.get('https://abc-cooking.andreasmilants.com/autocomplete?search=$query');
+    if (response.statusCode == 200) {
+      return List.from(jsonDecode(response.body))
+          .map((e) => e.toString())
+          .toList();
+    }
+    print('error');
+    print(response.body);
+    List<String> suggestions = [];
     return suggestions;
   }
 
@@ -32,7 +38,7 @@ class AppetiteService {
     // TODO
     // Returns a list of search suggestions when nothing is typed yet
     // Could be popular items or recent searches
-    return ['Caesar salad', 'Balletjes in tomatensaus'];
+    return [];
   }
 
   Future<List<Recipe>> getSearchResultsRecipes(String query) async {

@@ -39,8 +39,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
     Future<List<String>> suggestions;
     // If we haven't put anything in yet, we suggest recent or popular searches
     query.isEmpty
-        ? suggestions = _service.getSearchSuggestions(query)
-        : suggestions = _service.getSearchSuggestionsEmpty();
+        ? suggestions = _service.getSearchSuggestionsEmpty()
+        : suggestions = _service.getSearchSuggestions(query);
     return FutureBuilder(
         future: suggestions,
         builder: (context, snapshot) {
