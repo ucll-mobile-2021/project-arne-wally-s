@@ -268,6 +268,10 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
 
       _responseWords = r['response'];
       _foodRecognized = List<Map<String, dynamic>>.from(r['food']);
+      var p = r['people'];
+      if (p != null) {
+        AppetiteService().setPeople(int.parse(p));
+      }
 
       if (_foodRecognized.isNotEmpty) {
         List<String> foods = [];
