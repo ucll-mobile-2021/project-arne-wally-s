@@ -63,8 +63,27 @@ class AppetiteWidget extends StatelessWidget {
 
   void _selectRecipe(BuildContext context, Recipe recipe, int people) async {
     if (recipe != null) {
-      Navigator.push(context,
+      var instance = await Navigator.push(context,
           MaterialPageRoute(builder: (context) => SelectPeopleWidget(recipe)));
+      if (instance != null) {
+        var service = Provider.of<MyRecipesService>(context, listen: false);
+        service.addRecipe(instance as RecipeInstance);
+
+        final snackBar = SnackBar(
+          content: Text('Recipe added to shopping cart!'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              service.removeRecipe(instance);
+              final snack = SnackBar(
+                content: Text('Recipe removed from shopping cart!'),
+              );
+              Scaffold.of(context).showSnackBar(snack);
+            },
+          ),
+        );
+        Scaffold.of(context).showSnackBar(snackBar);
+      }
     }
   }
 

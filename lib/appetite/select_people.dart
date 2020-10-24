@@ -87,9 +87,7 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
         onPressed: () {
           // Set default people to latest used value
           AppetiteService().setPeople(people);
-          var service = Provider.of<MyRecipesService>(context, listen: false);
-          service.addRecipe(RecipeInstance(widget.recipe, people));
-          Navigator.pop(context);
+          Navigator.pop(context, RecipeInstance(widget.recipe, people));
         },
         padding: EdgeInsets.all(15),
         color: Theme.of(context).accentColor,
