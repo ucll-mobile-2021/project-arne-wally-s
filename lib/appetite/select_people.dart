@@ -87,7 +87,7 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
               ),
               OutlineButton(
                 child: Icon(Icons.add),
-                onPressed: people < 30
+                onPressed: people < 15
                     ? () {
                         setState(() {
                           people += 1;
@@ -160,6 +160,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   AnimationController controller;
   Animation<double> _radiusPlate;
   Animation<double> _radiusTable;
+  Random random = Random();
 
   int _amountPlates;
 
@@ -208,15 +209,31 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       children: [
         Transform(
           alignment: Alignment.center,
-          transform: Matrix4.skew(0, 0)..rotateX(pi/2.75),
-          child: CustomPaint(
-            foregroundPainter:
-                PlatePainter(_radiusTable, _radiusPlate, plates: plates),
-            child: Container(
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.black54),
-              width: 300,
-              height: 300,
+          transform: Matrix4.skew(0, 0)..rotateX(pi / 2.75),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, 180),
+                  blurRadius: 50,
+                  spreadRadius: -10,
+                  color: Colors.black87
+                )
+              ],
+            ),
+            child: CustomPaint(
+              painter: TablePainter(),
+              foregroundPainter:
+                  PlatePainter(_radiusTable, _radiusPlate, plates: plates),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.brown,
+                ),
+                width: 300,
+                height: 300,
+              ),
             ),
           ),
         )
@@ -238,7 +255,6 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
         setState(() {});
       });
     setState(() {});
-    print(_radiusTable);
   }
 
   void addPlate() {
@@ -279,6 +295,9 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 400),
     );
     _amountPlates -= 1;
+
+    plates.removeAt(random.nextInt(plates.length));
+
     var arcSize = 2 * pi / _amountPlates;
     var startTheta = 0.0;
     for (var plate in plates) {
@@ -291,7 +310,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       plate.animationTheta = animationTheta;
       startTheta += arcSize;
     }
-    plates.removeAt(plates.length - 1);
+    //plates.removeAt(plates.length - 1);
     setRadius(controller);
     setState(() {});
     controller.forward();
@@ -321,12 +340,12 @@ class PlatePainter extends CustomPainter {
     var radius = radiusPlate.value * size.width / 2;
 
     var paintCenter = Paint()
-      ..color = Colors.grey[300]
+      ..color = Color.fromARGB(255, 220, 220, 205)
       ..strokeWidth = 5
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
     var paintRim = Paint()
-      ..color = Colors.white
+      ..color = Color.fromARGB(255, 247, 247, 235)
       ..strokeWidth = 5
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
@@ -363,4 +382,21 @@ class Plate {
   Animation<double> animationTheta;
 
   Plate(this.animationTheta);
+}
+
+class TablePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.brown[800]
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2 + 20), size.width / 2, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
 }
