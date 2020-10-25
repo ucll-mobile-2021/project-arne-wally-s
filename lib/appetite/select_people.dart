@@ -338,20 +338,22 @@ class PlatePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var distanceFromCenter = radiusTable.value;
     var radius = radiusPlate.value * size.width / 2;
-
-    var paintCenter = Paint()
-      ..color = Color.fromARGB(255, 220, 220, 205)
-      ..strokeWidth = 5
-      ..style = PaintingStyle.fill
-      ..strokeCap = StrokeCap.round;
+    var paintBottom = Paint()
+      .. color = Color.fromARGB(255, 220, 220, 205)
+      ..style = PaintingStyle.fill;
     var paintRim = Paint()
-      ..color = Color.fromARGB(255, 247, 247, 235)
+      ..color = Color.fromARGB(255, 240, 240, 230)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = radius * .2;
+
+    var paintRimRim = Paint()
+      ..color = Color.fromARGB(255, 170, 170, 170)
       ..strokeWidth = 5
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
 
     for (var plate in plates) {
-      Offset center = Offset(
+      Offset downCenter = Offset(
           size.width / 2 +
               size.width *
                   distanceFromCenter /
@@ -362,8 +364,11 @@ class PlatePainter extends CustomPainter {
                   distanceFromCenter /
                   2 *
                   sin(plate.animationTheta.value - pi / 2));
-      canvas.drawCircle(center, radius, paintRim);
-      canvas.drawCircle(center, radius * .75, paintCenter);
+      canvas.drawCircle(downCenter, radius * .88, paintRimRim);
+      var center = Offset(downCenter.dx, downCenter.dy - radius * .05);
+      canvas.drawCircle(center, radius * .6, paintBottom);
+      center = Offset(center.dx, center.dy - radius * .13);
+      canvas.drawCircle(center, radius - paintRim.strokeWidth, paintRim);
     }
   }
 
