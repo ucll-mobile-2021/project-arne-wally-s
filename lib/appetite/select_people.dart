@@ -1,9 +1,7 @@
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
-import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'dart:math';
 
 class SelectPeopleWidget extends StatefulWidget {
@@ -41,10 +39,7 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
         children: [
           platesWidget,
           SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: 30,
+            height: 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -158,6 +153,8 @@ class PlatesWidget extends StatefulWidget {
 class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   List<Plate> plates = [];
   AnimationController controller;
+  AnimationController _vibrateController;
+  Animation<double> _vibrateAnimation;
   Animation<double> _radiusPlate;
   Animation<double> _radiusTable;
   Random random = Random();
@@ -200,6 +197,12 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
         setState(() {});
       });
 
+    _vibrateAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.elasticInOut)
+          ..addListener(() {
+            setState(() {});
+          });
+
     setState(() {});
   }
 
@@ -209,30 +212,48 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       children: [
         Transform(
           alignment: Alignment.center,
-          transform: Matrix4.skew(0, 0)..rotateX(pi / 2.75),
+          transform: Matrix4.skew(getRotation(_vibrateAnimation.value),
+              getRotation(_vibrateAnimation.value))
+            ..rotateX(pi / 2.75 + getRotation(_vibrateAnimation.value)),
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  offset: Offset(0, 180),
-                  blurRadius: 50,
-                  spreadRadius: -10,
-                  color: Colors.black87
-                )
+                    offset: Offset(0, 180),
+                    blurRadius: 50,
+                    spreadRadius: -10,
+                    color: Colors.black87)
               ],
             ),
             child: CustomPaint(
-              painter: TablePainter(),
-              foregroundPainter:
-                  PlatePainter(_radiusTable, _radiusPlate, plates: plates),
+              painter: PlatePainter(_radiusTable, _radiusPlate, plates: plates),
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.brown,
                 ),
                 width: 300,
                 height: 300,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return ScaleTransition(child: child, scale: animation);
+                  },
+                  child: _amountPlates == 2
+                      ? Transform.translate(
+                          offset: Offset(0, -65),
+                          child: SizedBox(
+                              child: Image(
+                            image: AssetImage('assets/candle.png'),
+                            width: 20,
+                            height: 120,
+                            fit: BoxFit.fill,
+                          )),
+                          key: ValueKey<int>(2),
+                        )
+                      : null,
+                ),
               ),
             ),
           ),
@@ -241,14 +262,18 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
     );
   }
 
+  double getRotation(double value) {
+    return sin(value * 1 * pi) / 40;
+  }
+
   void setRadius(AnimationController controller) {
-    var r = .7 + .006 * _amountPlates;
+    var r = .65 + .012 * _amountPlates;
     Tween<double> tweenTable = Tween(begin: _radiusTable.value, end: r);
     _radiusTable = tweenTable.animate(controller)
       ..addListener(() {
         setState(() {});
       });
-    var radius = min(r * pi / _amountPlates * .75, .2);
+    var radius = min(r * pi / _amountPlates * .75, .28);
     Tween<double> tweenPlate = Tween(begin: _radiusPlate.value, end: radius);
     _radiusPlate = tweenPlate.animate(controller)
       ..addListener(() {
@@ -285,6 +310,11 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
     plates.add(Plate(animationTheta));
     setRadius(controller);
     setState(() {});
+
+    _vibrateAnimation = CurvedAnimation(parent: controller, curve: Curves.ease)
+      ..addListener(() {
+        setState(() {});
+      });
     controller.forward();
   }
 
@@ -310,7 +340,11 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       plate.animationTheta = animationTheta;
       startTheta += arcSize;
     }
-    //plates.removeAt(plates.length - 1);
+
+    _vibrateAnimation = CurvedAnimation(parent: controller, curve: Curves.ease)
+      ..addListener(() {
+        setState(() {});
+      });
     setRadius(controller);
     setState(() {});
     controller.forward();
@@ -336,10 +370,23 @@ class PlatePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    var paint1 = Paint()
+      ..color = Colors.brown[800]
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2 + 20), size.width / 2, paint1);
+    var paint2 = Paint()
+      ..color = Colors.brown
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height / 2), size.width / 2, paint2);
+
     var distanceFromCenter = radiusTable.value;
     var radius = radiusPlate.value * size.width / 2;
     var paintBottom = Paint()
-      .. color = Color.fromARGB(255, 220, 220, 205)
+      ..color = Color.fromARGB(255, 220, 220, 205)
       ..style = PaintingStyle.fill;
     var paintRim = Paint()
       ..color = Color.fromARGB(255, 240, 240, 230)
@@ -387,21 +434,4 @@ class Plate {
   Animation<double> animationTheta;
 
   Plate(this.animationTheta);
-}
-
-class TablePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = Colors.brown[800]
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(
-        Offset(size.width / 2, size.height / 2 + 20), size.width / 2, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
 }
