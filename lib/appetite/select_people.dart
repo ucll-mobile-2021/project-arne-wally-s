@@ -35,63 +35,63 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
         title: Text(widget.recipe.name),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           platesWidget,
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              OutlineButton(
-                child: Icon(Icons.remove),
-                onPressed: people > 1
-                    ? () {
-                        setState(() {
-                          people -= 1;
-                          platesWidget.removePlate();
-                        });
-                      }
-                    : null,
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).primaryColor,
-                  boxShadow: [BoxShadow(color: Colors.black, blurRadius: 2)],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 60.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                OutlineButton(
+                  child: Icon(Icons.remove),
+                  onPressed: people > 1
+                      ? () {
+                          setState(() {
+                            people -= 1;
+                            platesWidget.removePlate();
+                          });
+                        }
+                      : null,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    people.toString().padLeft(2, '0'),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
+                const SizedBox(
+                  width: 12,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).primaryColor,
+                    boxShadow: [BoxShadow(color: Colors.black, blurRadius: 2)],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      people.toString().padLeft(2, '0'),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              OutlineButton(
-                child: Icon(Icons.add),
-                onPressed: people < 15
-                    ? () {
-                        setState(() {
-                          people += 1;
-                          platesWidget.addPlate();
-                        });
-                      }
-                    : null,
-              ),
-            ],
+                const SizedBox(
+                  width: 12,
+                ),
+                OutlineButton(
+                  child: Icon(Icons.add),
+                  onPressed: people < 15
+                      ? () {
+                          setState(() {
+                            people += 1;
+                            platesWidget.addPlate();
+                          });
+                        }
+                      : null,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -153,7 +153,6 @@ class PlatesWidget extends StatefulWidget {
 class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   List<Plate> plates = [];
   AnimationController controller;
-  AnimationController _vibrateController;
   Animation<double> _vibrateAnimation;
   Animation<double> _radiusPlate;
   Animation<double> _radiusTable;
@@ -214,13 +213,13 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
           alignment: Alignment.center,
           transform: Matrix4.skew(getRotation(_vibrateAnimation.value),
               getRotation(_vibrateAnimation.value))
-            ..rotateX(pi / 2.75 + getRotation(_vibrateAnimation.value)),
+            ..rotateX(pi / 4.5 + getRotation(_vibrateAnimation.value)),
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                    offset: Offset(0, 180),
+                    offset: Offset(0, 150),
                     blurRadius: 50,
                     spreadRadius: -10,
                     color: Colors.black87)
@@ -235,19 +234,19 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
                 width: 300,
                 height: 300,
                 child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200),
+                  duration: Duration(milliseconds: 400),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
                     return ScaleTransition(child: child, scale: animation);
                   },
                   child: _amountPlates == 2
                       ? Transform.translate(
-                          offset: Offset(0, -65),
+                          offset: Offset(0, -35),
                           child: SizedBox(
                               child: Image(
                             image: AssetImage('assets/candle.png'),
                             width: 20,
-                            height: 120,
+                            height: 80,
                             fit: BoxFit.fill,
                           )),
                           key: ValueKey<int>(2),

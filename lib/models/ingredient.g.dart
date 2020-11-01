@@ -9,18 +9,18 @@ part of 'ingredient.dart';
 Ingredient _$IngredientFromJson(Map<String, dynamic> json) {
   return Ingredient(
     json['name'] as String,
-    json['measurementUnit'] as String,
+    json['measurement_unit'] as String,
     json['type'] as String,
     (json['price'] as num)?.toDouble(),
-    json['pictureUrl'] as String,
+    json['picture'] as String,
   );
 }
 
 Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'measurementUnit': instance.measurementUnit,
+      'measurement_unit': instance.measurement_unit,
       'type': instance.type,
       'price': instance.price,
-      'pictureUrl': instance.pictureUrl,
+      'picture': instance.picture,
     };

@@ -5,13 +5,13 @@ part 'ingredient.g.dart';
 @JsonSerializable()
 class Ingredient {
   final String name;
-  final String measurementUnit;
+  final String measurement_unit;
   final String type; // Vegetable, meat, dairy,...
   final double price; // Price in euro for 1 measurementUnit
-  final String pictureUrl;
+  final String picture;
 
   Ingredient(
-      this.name, this.measurementUnit, this.type, this.price, this.pictureUrl)
+      this.name, this.measurement_unit, this.type, this.price, this.picture)
       : super();
 
   factory Ingredient.fromJson(Map<String, dynamic> json) => _$IngredientFromJson(json);
