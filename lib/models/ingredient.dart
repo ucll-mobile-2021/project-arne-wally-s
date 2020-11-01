@@ -14,7 +14,8 @@ class Ingredient {
       this.name, this.measurement_unit, this.type, this.price, this.picture)
       : super();
 
-  factory Ingredient.fromJson(Map<String, dynamic> json) => _$IngredientFromJson(json);
+  factory Ingredient.fromJson(Map<String, dynamic> json) =>
+      _$IngredientFromJson(json);
 
   Map<String, dynamic> toJson() => _$IngredientToJson(this);
 }

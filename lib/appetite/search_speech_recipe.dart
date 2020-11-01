@@ -177,7 +177,8 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
             )),
         _foodRecognized.isEmpty
             ? SizedBox()
-            : RecipeList(_futureSearchResults, true),
+            : SingleChildScrollView(
+                child: RecipeList(_futureSearchResults, true)),
       ],
     );
   }

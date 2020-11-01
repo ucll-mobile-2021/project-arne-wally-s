@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:abc_cooking/widgets/recipe_detail.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/recipe_widget.dart';
@@ -9,8 +10,8 @@ class RecipeList extends StatelessWidget {
   final Future<List<Recipe>> _futureRecipes;
   Function _function;
 
-  RecipeList(this._futureRecipes, bool shouldReturnRecipe) {
-    if (shouldReturnRecipe) {
+  RecipeList(this._futureRecipes, bool shouldReturnRecipeInstance) {
+    if (shouldReturnRecipeInstance) {
       this._function = returnRecipe;
     } else {
       _function = null;
@@ -97,7 +98,13 @@ class RecipeList extends StatelessWidget {
         });
   }
 
-  void returnRecipe(context, recipe) {
-    Navigator.pop(context, recipe);
+  void returnRecipe(BuildContext context, Recipe recipe) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RecipeDetailWidget.select(recipe, true)));
+    if (result != null) {
+      Navigator.pop(context, result);
+    }
   }
 }
