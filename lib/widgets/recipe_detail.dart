@@ -58,51 +58,54 @@ class RecipeDetailWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  buildInfoWidget(context, '${_recipe.price}', Icons.euro),
+                  buildInfoWidget(context, '${_recipe.price}', Icons.euro, 'Price'),
                   buildInfoWidget(
-                      context, '${_recipe.prep_time}', Icons.timelapse),
-                  buildInfoWidget(context, '${_recipe.price}', Icons.build),
+                      context, '${_recipe.prep_time}', Icons.timelapse, 'Time'),
+                  buildInfoWidget(context, '${_recipe.price}', Icons.build, 'Difficulty'),
                   buildInfoWidget(context, '${_recipe.healthy}',
-                      Icons.pregnant_woman_rounded),
+                      Icons.pregnant_woman_rounded, 'Healthy'),
                 ],
               ),
-              _recipe.ingredients.length > 0 ?
-              DataTable(
-                columns: [
-                  DataColumn(label: Text('Ingredient')),
-                  DataColumn(label: Text('Amount')),
-                ],
-                rows:
-                    List<DataRow>.generate(_recipe.ingredients.length, (index) {
-                  var ingredient = _recipe.ingredients[index];
-                  return DataRow(
-                    color: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                      // All rows will have the same selected color.
-                      if (states.contains(MaterialState.selected))
-                        return Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.08);
-                      // Even rows will have a grey color.
-                      if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
-                      return null; // Use default value for other states and odd rows.
-                    }),
-                    cells: [
-                      DataCell(Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(ingredient.ingredient.picture),
-                          ),
-                          Text(ingredient.ingredient.name),
-                        ],
-                      )),
-                      DataCell(Text(getAmount(ingredient))),
-                    ],
-                  );
-                }),
-              ) : SizedBox(),
+              _recipe.ingredients.length > 0
+                  ? DataTable(
+                      columns: [
+                        DataColumn(label: Text('Ingredient')),
+                        DataColumn(label: Text('Amount')),
+                      ],
+                      rows: List<DataRow>.generate(_recipe.ingredients.length,
+                          (index) {
+                        var ingredient = _recipe.ingredients[index];
+                        return DataRow(
+                          color: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            // All rows will have the same selected color.
+                            if (states.contains(MaterialState.selected))
+                              return Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.08);
+                            // Even rows will have a grey color.
+                            if (index % 2 == 0)
+                              return Colors.grey.withOpacity(0.3);
+                            return null; // Use default value for other states and odd rows.
+                          }),
+                          cells: [
+                            DataCell(Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                      ingredient.ingredient.picture),
+                                ),
+                                Text(ingredient.ingredient.name),
+                              ],
+                            )),
+                            DataCell(Text(getAmount(ingredient))),
+                          ],
+                        );
+                      }),
+                    )
+                  : SizedBox(),
               SizedBox(
                 height: 70,
               )
@@ -122,7 +125,7 @@ class RecipeDetailWidget extends StatelessWidget {
   }
 
   String getAmount(Ingredientamount ingredientamount) {
-    switch(ingredientamount.ingredient.measurement_unit) {
+    switch (ingredientamount.ingredient.measurement_unit) {
       case 'g':
         return '${getNumberAndPrefix(ingredientamount.amount)}g';
       case 'l':
@@ -141,7 +144,8 @@ class RecipeDetailWidget extends StatelessWidget {
     }
     if (number > 1) {
       return '${(number)} ';
-    }/*
+    }
+    /*
     if (number > 0.1) {
       return '${(number * 10)} d';
     }
@@ -153,13 +157,17 @@ class RecipeDetailWidget extends StatelessWidget {
     return '${(number * 1000)} m';
   }
 
-  Widget buildInfoWidget(BuildContext context, String string, IconData icon) {
+  Widget buildInfoWidget(
+      BuildContext context, String string, IconData icon, String tooltip) {
     return Column(
       children: [
-        Icon(
-          icon,
-          color: Theme.of(context).accentColor,
-          size: 30,
+        Tooltip(
+          message: tooltip,
+          child: Icon(
+            icon,
+            color: Theme.of(context).accentColor,
+            size: 30,
+          ),
         ),
         SizedBox(
           height: 10,
