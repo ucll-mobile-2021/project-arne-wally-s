@@ -140,7 +140,6 @@ class RecipeDetailWidget extends StatelessWidget {
   }
 
   String getNumberAndPrefix(double number) {
-    print(number);
     if (number >= 1000) {
       return '${(number / 1000)} k';
     }

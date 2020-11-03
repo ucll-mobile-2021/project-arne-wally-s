@@ -234,7 +234,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
                 width: 300,
                 height: 300,
                 child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
+                  duration: Duration(milliseconds: 200),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
                     return ScaleTransition(child: child, scale: animation);
@@ -262,7 +262,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   }
 
   double getRotation(double value) {
-    return sin(value * 1 * pi) / 40;
+    return sin(value * 4 * pi) / 30;
   }
 
   void setRadius(AnimationController controller) {

@@ -32,9 +32,25 @@ class SearchRecipe extends SearchDelegate<Recipe> {
   Widget buildResults(BuildContext context) {
     var results = _service.getSearchResultsRecipes(query);
     return SingleChildScrollView(
-        child: RecipeList.function(results, (context, recipe) {
+        child: Column(
+      children: [
+        ButtonBar(
+          children: [
+            RaisedButton(
+              onPressed: () {},
+              child: Icon(Icons.add_shopping_cart),
+            ),RaisedButton(
+              onPressed: () {},
+              child: Icon(Icons.add_shopping_cart),
+              color: Theme.of(context).accentColor,
+            ),
+          ],
+        ),
+        RecipeList.function(results, (context, recipe) {
           close(context, recipe);
-        }));
+        }),
+      ],
+    ));
   }
 
   @override
