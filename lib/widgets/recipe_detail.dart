@@ -141,10 +141,10 @@ class RecipeDetailWidget extends StatelessWidget {
 
   String getNumberAndPrefix(double number) {
     if (number >= 1000) {
-      return '${(number / 1000)} k';
+      return '${(number / 1000).toStringAsPrecision(3)} k';
     }
     if (number >= 1) {
-      return '${(number)} ';
+      return '${(number).toStringAsPrecision(3)} ';
     }
     /*
     if (number > 0.1) {
@@ -152,10 +152,10 @@ class RecipeDetailWidget extends StatelessWidget {
     }
     */
     if (number >= 0.01) {
-      return '${(number * 100)} c';
+      return '${(number * 100).toStringAsPrecision(3)} c';
     }
 
-    return '${(number * 1000)} m';
+    return '${(number * 1000).toStringAsPrecision(3)} m';
   }
 
   Widget buildInfoWidget(

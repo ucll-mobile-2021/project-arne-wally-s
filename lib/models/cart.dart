@@ -10,7 +10,9 @@ class Cart {
     return _singleton;
   }
 
-  Cart._internal();
+  Cart._internal() {
+    // TODO Load cart from database
+  }
 
   void setRecipes(List<RecipeInstance> newRecipes) {
     List<RecipeSelected> newNew = [];
@@ -45,6 +47,7 @@ class Cart {
             amount: ingredient.amount * recipe.persons));
       }
     }
+    saveCart();
   }
 
   void unselectRecipe(RecipeInstance recipe) {
@@ -62,6 +65,11 @@ class Cart {
       }
     }
     ingredients = newNew;
+    saveCart();
+  }
+
+  void saveCart() async {
+    // TODO save cart to database
   }
 }
 

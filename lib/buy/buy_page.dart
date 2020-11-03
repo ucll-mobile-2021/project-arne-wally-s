@@ -40,8 +40,9 @@ class BuyWidgetState extends State<BuyWidget> {
                         value: cart.recipes[index].selected,
                       )),
                       DataCell(Text(cart.recipes[index].recipe.recipe.name)),
-                      DataCell(
-                          Text(cart.recipes[index].recipe.persons.toString())),
+                      DataCell(Center(
+                          child: Text(
+                              cart.recipes[index].recipe.persons.toString()))),
                     ]);
                   }));
             },

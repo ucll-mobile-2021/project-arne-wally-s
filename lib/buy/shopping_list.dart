@@ -100,5 +100,4 @@ class ShoppingListState extends State<ShoppingList> {
 
     return '${(number * 1000).toStringAsPrecision(3)} m';
   }
-
 }
