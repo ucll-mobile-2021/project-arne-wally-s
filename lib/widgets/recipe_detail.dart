@@ -58,10 +58,12 @@ class RecipeDetailWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  buildInfoWidget(context, '${_recipe.price}', Icons.euro, 'Price'),
+                  buildInfoWidget(
+                      context, '${_recipe.price}', Icons.euro, 'Price'),
                   buildInfoWidget(
                       context, '${_recipe.prep_time}', Icons.timelapse, 'Time'),
-                  buildInfoWidget(context, '${_recipe.price}', Icons.build, 'Difficulty'),
+                  buildInfoWidget(
+                      context, '${_recipe.price}', Icons.build, 'Difficulty'),
                   buildInfoWidget(context, '${_recipe.healthy}',
                       Icons.pregnant_woman_rounded, 'Healthy'),
                 ],
@@ -93,7 +95,7 @@ class RecipeDetailWidget extends StatelessWidget {
                             DataCell(Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                                   child: Image.network(
                                       ingredient.ingredient.picture),
                                 ),
@@ -139,10 +141,10 @@ class RecipeDetailWidget extends StatelessWidget {
 
   String getNumberAndPrefix(double number) {
     print(number);
-    if (number > 1000) {
+    if (number >= 1000) {
       return '${(number / 1000)} k';
     }
-    if (number > 1) {
+    if (number >= 1) {
       return '${(number)} ';
     }
     /*
@@ -150,7 +152,7 @@ class RecipeDetailWidget extends StatelessWidget {
       return '${(number * 10)} d';
     }
     */
-    if (number > 0.01) {
+    if (number >= 0.01) {
       return '${(number * 100)} c';
     }
 
