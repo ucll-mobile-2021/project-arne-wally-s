@@ -34,58 +34,70 @@ class SearchRecipe extends SearchDelegate<Recipe> {
 
   @override
   Widget buildResults(BuildContext context) {
-    var results = _service.getSearchResultsRecipes(query,
-        fish: fish, meat: meat, veggie: veggie, vegan: vegan);
     return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ButtonBar(
-          children: [
-            RaisedButton(
-              onPressed: () {
-                fish = !fish;
-                refreshResults(context);
-              },
-              child: Icon(Icons.waves),
-              color: fish ? Colors.blue : null,
-            ),
-            RaisedButton(
-              onPressed: () {
-                meat = !meat;
-                refreshResults(context);
-              },
-              child: Icon(Icons.lunch_dining),
-              color: meat ? Colors.red[900] : null,
-            ),
-            RaisedButton(
-              onPressed: () {
-                veggie = !veggie;
-                refreshResults(context);
-              },
-              child: Icon(Icons.eco),
-              color: veggie ? Colors.green : null,
-            ),
-            RaisedButton(
-              onPressed: () {
-                vegan = !vegan;
-                refreshResults(context);
-              },
-              child: Icon(Icons.grass),
-              color: vegan ? Colors.green : null,
-            ),
-          ],
-        ),
-        RecipeList.function(results, (context, recipe) {
-          close(context, recipe);
-        }),
-      ],
-    ));
-  }
-
-  refreshResults(BuildContext context) {
-    showSuggestions(context);
-    showResults(context);
+        child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              var results = _service.getSearchResultsRecipes(query,
+                  fish: fish, meat: meat, veggie: veggie, vegan: vegan);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ButtonBar(
+                    children: [
+                      Tooltip(
+                        message: 'Fish',
+                        child: RaisedButton(
+                          onPressed: () {
+                          },
+                          child: Icon(Icons.waves),
+                          color: fish ? Colors.blue : null,
+                        ),
+                      ),
+                      Tooltip(
+                        message: 'Meat',
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              meat = !meat;
+                            });
+                          },
+                          child: Icon(Icons.lunch_dining),
+                          color: meat ? Colors.red[900] : null,
+                        ),
+                      ),
+                      Tooltip(
+                        message: 'Vegetarian',
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              veggie = !veggie;
+                            });
+                          },
+                          child: Icon(Icons.eco),
+                          color: veggie ? Colors.green : null,
+                        ),
+                      ),
+                      Tooltip(
+                        message: 'Vegan',
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              vegan = !vegan;
+                            });
+                          },
+                          child: Icon(Icons.grass),
+                          color: vegan ? Colors.green : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                  RecipeList.function(results, (context, recipe) {
+                    close(context, recipe);
+                  }),
+                ],
+              );
+            }
+        ));
   }
 
   @override
