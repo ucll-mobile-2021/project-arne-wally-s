@@ -24,6 +24,12 @@ class BuyWidgetState extends State<BuyWidget> {
             builder: (context, service, child) {
               var cart = Cart();
               cart.setRecipes(service.myRecipes);
+              if (cart.recipes.length == 0) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text('You should add recipes first')),
+                );
+              }
               return DataTable(
                   columns: [
                     DataColumn(label: Text('Selected')),
@@ -51,9 +57,11 @@ class BuyWidgetState extends State<BuyWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.shopping_cart),
-        onPressed: () {
-          shop(context);
-        },
+        onPressed: Cart().recipes.length > 0
+            ? () {
+                shop(context);
+              }
+            : null,
       ),
     );
   }
