@@ -12,10 +12,6 @@ import 'package:provider/provider.dart';
 
 class AppetiteWidget extends StatelessWidget {
   final AppetiteService _service = AppetiteService();
-  final Future<List<Recipe>> _futureRecommendedRecipes;
-
-  AppetiteWidget()
-      : _futureRecommendedRecipes = AppetiteService().getRecommendedRecipes();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class AppetiteWidget extends StatelessWidget {
         children: [
           getButton(
               context,
-              _service.getRecommendedRecipes(),
+              () => _service.getRecommendedRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -53,7 +49,7 @@ class AppetiteWidget extends StatelessWidget {
               'Recommended'),
           getButton(
               context,
-              _service.getPopularRecipes(),
+              () => _service.getPopularRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -71,7 +67,7 @@ class AppetiteWidget extends StatelessWidget {
               'Popular'),
           getButton(
               context,
-              _service.getFavoriteRecipes(),
+              () => _service.getFavoriteRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -86,7 +82,7 @@ class AppetiteWidget extends StatelessWidget {
               'Favorites'),
           getButton(
               context,
-              _service.getSurpriseRecipes(),
+              () => _service.getSurpriseRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -101,7 +97,7 @@ class AppetiteWidget extends StatelessWidget {
               'Surprises'),
           getButton(
               context,
-              _service.getBudgetRecipes(),
+              () => _service.getBudgetRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -116,7 +112,7 @@ class AppetiteWidget extends StatelessWidget {
               'Budget recipes'),
           getButton(
               context,
-              _service.getTipRecipes(),
+              () => _service.getTipRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -131,7 +127,7 @@ class AppetiteWidget extends StatelessWidget {
               'Tip from us'),
           getButton(
               context,
-              _service.getVegetarianRecipes(),
+              () => _service.getVegetarianRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -146,7 +142,7 @@ class AppetiteWidget extends StatelessWidget {
               'Popular vegetarian'),
           getButton(
               context,
-              _service.getFishRecipes(),
+              () => _service.getFishRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -161,7 +157,7 @@ class AppetiteWidget extends StatelessWidget {
               'Popular fish'),
           getButton(
               context,
-              _service.getMeatRecipes(),
+              () => _service.getMeatRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -176,7 +172,7 @@ class AppetiteWidget extends StatelessWidget {
               'Popular meat'),
           getButton(
               context,
-              _service.getVeganRecipes(),
+              () => _service.getVeganRecipes(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -200,8 +196,8 @@ class AppetiteWidget extends StatelessWidget {
     );
   }
 
-  Widget getButton(BuildContext context, Future<List<Recipe>> recipes,
-      Widget child, String title) {
+  Widget getButton(
+      BuildContext context, Function func, Widget child, String title) {
     return OutlineButton(
       color: Colors.blue,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -209,7 +205,7 @@ class AppetiteWidget extends StatelessWidget {
         var result = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SelectRecipeWidget(title, recipes)));
+                builder: (context) => SelectRecipeWidget(title, func())));
         _selectRecipe(context, result);
       },
       child: child,

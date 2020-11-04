@@ -47,27 +47,28 @@ class AppetiteService {
 
   Future<List<Recipe>> getVegetarianRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getSearchResultsRecipes('', veggie: true);
   }
 
   Future<List<Recipe>> getFishRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getSearchResultsRecipes('', fish: true);
   }
 
   Future<List<Recipe>> getMeatRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getSearchResultsRecipes('', meat: true);
   }
 
   Future<List<Recipe>> getVeganRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getSearchResultsRecipes('', vegan: true);
   }
 
   Future<List<String>> getSearchSuggestions(String query) async {
     // Returns a list of suggestions while searching
-    var response = await http.get('https://abc-cooking.andreasmilants.com/autocomplete?search=$query');
+    var response = await http.get(
+        'https://abc-cooking.andreasmilants.com/autocomplete?search=$query');
     if (response.statusCode == 200) {
       return List.from(jsonDecode(response.body))
           .map((e) => e.toString())
@@ -86,9 +87,15 @@ class AppetiteService {
     return [];
   }
 
-  Future<List<Recipe>> getSearchResultsRecipes(String query) async {
-    var response = await http
-        .get('https://abc-cooking.andreasmilants.com/recipes?search=$query');
+  Future<List<Recipe>> getSearchResultsRecipes(String query,
+      {bool vegan: false,
+      bool veggie: false,
+      bool meat: false,
+      bool fish: false}) async {
+    var qS =
+        '?search=$query&vegan=$vegan&veggie=$veggie&meat=$meat&fish=$fish';
+    var response =
+        await http.get('https://abc-cooking.andreasmilants.com/recipes$qS');
     if (response.statusCode == 200) {
       return List.from(jsonDecode(response.body))
           .map((e) => Recipe.fromJson(e))
