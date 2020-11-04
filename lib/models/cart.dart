@@ -14,6 +14,15 @@ class Cart {
     // TODO Load cart from database
   }
 
+  bool isEmpty() {
+    for (var recipe in recipes) {
+      if (recipe.selected) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void setRecipes(List<RecipeInstance> newRecipes) {
     List<RecipeSelected> newNew = [];
     for (var recipe in newRecipes) {

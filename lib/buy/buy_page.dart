@@ -57,11 +57,16 @@ class BuyWidgetState extends State<BuyWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.shopping_cart),
-        onPressed: Cart().recipes.length > 0
+        onPressed: !Cart().isEmpty()
             ? () {
                 shop(context);
               }
-            : null,
+            : () {
+          final snackBar = SnackBar(
+            content: Text('Your shopping cart is empty'),
+          );
+          Scaffold.of(context).showSnackBar(snackBar);
+        },
       ),
     );
   }
