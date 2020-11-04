@@ -32,159 +32,26 @@ class AppetiteWidget extends StatelessWidget {
         mainAxisSpacing: 15,
         padding: EdgeInsets.all(15),
         children: [
-          getButton(
-              context,
-              () => _service.getRecommendedRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.thumb_up,
-                    color: Colors.green,
-                    size: 70,
-                  ),
-                  Text('Recommended for me'),
-                ],
-              ),
-              'Recommended'),
-          getButton(
-              context,
-              () => _service.getPopularRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Transform.rotate(
-                    angle: -pi / 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 70,
-                      color: Color.fromARGB(255, 218, 165, 32),
-                    ),
-                  ),
-                  Text('Popular'),
-                ],
-              ),
-              'Popular'),
-          getButton(
-              context,
-              () => _service.getFavoriteRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                    size: 70,
-                  ),
-                  Text('My Favorites'),
-                ],
-              ),
-              'Favorites'),
-          getButton(
-              context,
-              () => _service.getSurpriseRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.redeem,
-                    size: 70,
-                    color: Colors.deepPurple,
-                  ),
-                  Text('Surprise me'),
-                ],
-              ),
-              'Surprises'),
-          getButton(
-              context,
-              () => _service.getBudgetRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.local_atm,
-                    size: 70,
-                    color: Colors.green[900],
-                  ),
-                  Text('Budget'),
-                ],
-              ),
-              'Budget recipes'),
-          getButton(
-              context,
-              () => _service.getTipRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.emoji_objects_outlined,
-                    size: 70,
-                    color: Colors.deepOrange,
-                  ),
-                  Text('Tip from us'),
-                ],
-              ),
-              'Tip from us'),
-          getButton(
-              context,
-              () => _service.getVegetarianRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.eco,
-                    size: 70,
-                    color: Colors.green,
-                  ),
-                  Text('Popular vegetarian'),
-                ],
-              ),
-              'Popular vegetarian'),
-          getButton(
-              context,
-              () => _service.getFishRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.waves,
-                    size: 70,
-                    color: Colors.blue,
-                  ),
-                  Text('Popular fish'),
-                ],
-              ),
-              'Popular fish'),
-          getButton(
-              context,
-              () => _service.getMeatRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.lunch_dining,
-                    size: 70,
-                    color: Colors.red[900],
-                  ),
-                  Text('Popular meat'),
-                ],
-              ),
-              'Popular meat'),
-          getButton(
-              context,
-              () => _service.getVeganRecipes(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.grass,
-                    size: 70,
-                    color: Colors.green,
-                  ),
-                  Text('Popular vegan'),
-                ],
-              ),
-              'Popular vegan'),
+          getButton(context, () => _service.getRecommendedRecipes(),
+              'Recommended', Icons.thumb_up, 'Recommended', Colors.green),
+          getButton(context, () => _service.getPopularRecipes(), 'Popular',
+              Icons.star, 'Popular', Color.fromARGB(255, 218, 165, 32)),
+          getButton(context, () => _service.getFavoriteRecipes(), 'Favorites',
+              Icons.favorite, 'My favorites', Colors.red),
+          getButton(context, () => _service.getSurpriseRecipes(), 'Surprises',
+              Icons.redeem, 'Surprise me', Colors.deepPurple),
+          getButton(context, () => _service.getBudgetRecipes(),
+              'Budget recipes', Icons.local_atm, 'Budget', Colors.green[900]),
+          getButton(context, () => _service.getTipRecipes(), 'Tip from us',
+              Icons.emoji_objects_outlined, 'Tip from us', Colors.deepOrange),
+          getButton(context, () => _service.getVegetarianRecipes(),
+              'Popular vegetarian', Icons.eco, 'Vegetarian', Colors.green),
+          getButton(context, () => _service.getFishRecipes(), 'Popular fish',
+              Icons.waves, 'Fish', Colors.blue),
+          getButton(context, () => _service.getMeatRecipes(), 'Popular meat',
+              Icons.lunch_dining, 'Meat', Colors.red[900]),
+          getButton(context, () => _service.getVeganRecipes(), 'Popular vegan',
+              Icons.grass, 'Vegan', Colors.green),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -196,10 +63,10 @@ class AppetiteWidget extends StatelessWidget {
     );
   }
 
-  Widget getButton(
-      BuildContext context, Function func, Widget child, String title) {
-    return OutlineButton(
-      color: Colors.blue,
+  Widget getButton(BuildContext context, Function func, String title,
+      IconData icon, String text, Color color) {
+    return RaisedButton(
+      color: color,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onPressed: () async {
         var result = await Navigator.push(
@@ -208,7 +75,17 @@ class AppetiteWidget extends StatelessWidget {
                 builder: (context) => SelectRecipeWidget(title, func())));
         _selectRecipe(context, result);
       },
-      child: child,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 70,
+          ),
+          Text(text, style: TextStyle(color: Colors.white),)
+        ],
+      ),
     );
   }
 

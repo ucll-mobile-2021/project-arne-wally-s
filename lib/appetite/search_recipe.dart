@@ -48,6 +48,9 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                         message: 'Fish',
                         child: RaisedButton(
                           onPressed: () {
+                            setState(() {
+                              fish = !fish;
+                            });
                           },
                           child: Icon(Icons.waves),
                           color: fish ? Colors.blue : null,
