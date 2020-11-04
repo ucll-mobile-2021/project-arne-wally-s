@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Buy',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
+            icon: Icon(Icons.restaurant),
             label: 'Cook',
           ),
         ],

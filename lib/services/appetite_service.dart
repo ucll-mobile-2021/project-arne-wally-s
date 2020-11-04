@@ -20,6 +20,51 @@ class AppetiteService {
     return getSearchResultsRecipes('');
   }
 
+  Future<List<Recipe>> getPopularRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getFavoriteRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getSurpriseRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getBudgetRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getTipRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getVegetarianRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getFishRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getMeatRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
+  Future<List<Recipe>> getVeganRecipes() async {
+    // TODO
+    return getSearchResultsRecipes('');
+  }
+
   Future<List<String>> getSearchSuggestions(String query) async {
     // Returns a list of suggestions while searching
     var response = await http.get('https://abc-cooking.andreasmilants.com/autocomplete?search=$query');
