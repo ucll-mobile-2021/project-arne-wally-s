@@ -24,7 +24,7 @@ class _CookWidgetState extends State<CookWidget> {
             var _recipes = service.myRecipes;
             if (_recipes.length > 0) {
               return Expanded(
-                  child: RecipeInstanceList.function(_recipes, cookDetail)
+                  child: RecipeInstanceList(_recipes)
               );
             }
             else {
@@ -54,45 +54,5 @@ class _CookWidgetState extends State<CookWidget> {
       ),
     );
   }
-}
-
-void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
-  if (recipeInstance.recipe.steps.length > 0) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CookDetailWidget(recipeInstance)));
-  }
-  else {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Woops!'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('It seems like this recipe has no instructions.'),
-                Text('This problem has been reported to our support team'),
-                Text('Sorry for the inconvenience!')
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Approve'),
-              onPressed: () {
-                // TODO Make sure the bad recipe gets removed
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-
-  }
-
 }
 
