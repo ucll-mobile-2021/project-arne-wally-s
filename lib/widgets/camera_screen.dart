@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:abc_cooking/widgets/preview_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
@@ -102,7 +100,7 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display Camera preview.
+
   Widget _cameraPreviewWidget() {
     if (controller == null || !controller.value.isInitialized) {
       return const Text(
@@ -121,7 +119,7 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display the control bar with buttons to take pictures
+
   Widget _cameraControlWidget(context) {
     return Expanded(
       child: Align(
@@ -146,7 +144,7 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display a row of toggle to select the camera (or a message if no camera is available).
+
   Widget _cameraToggleRowWidget() {
     if (cameras == null || cameras.isEmpty) {
       return Spacer();
