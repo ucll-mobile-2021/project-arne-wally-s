@@ -29,6 +29,10 @@ dependencies:
   json_annotation: ^3.1.0
   shimmer: ^1.1.2
   animated_text_kit: ^2.4.1
+  camera: ^0.5.8+11
+  path_provider: ^1.6.24
+  path: ^1.7.0
+  esys_flutter_share: ^1.0.2
 
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/models/step.dart' as RecipeStep;
+import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 
 class CookDetailWidget extends StatefulWidget {
@@ -32,83 +33,88 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                expandedHeight: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                floating: false,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                    title: Text(widget._recipeInstance.recipe.name,
-                        style: TextStyle(color: Colors.white, shadows: [
-                          Shadow(
-                            // bottomLeft
-                              offset: Offset(-.5, -.5),
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor),
-                          Shadow(
-                            // bottomRight
-                              offset: Offset(.5, -.5),
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor),
-                          Shadow(
-                            // topRight
-                              offset: Offset(.5, .5),
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor),
-                          Shadow(
-                            // topLeft
-                              offset: Offset(-.5, .5),
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor),
-                        ])),
-                    background: Image.network(
-                      widget._recipeInstance.recipe.picture,
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            ];
-          },
-          body: SingleChildScrollView(
-              child: Card(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Step ${widget._recipeInstance.recipe.steps[_counter]
-                            .number}',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline5,
-                      ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  title: Text(widget._recipeInstance.recipe.name,
+                      style: TextStyle(color: Colors.white, shadows: [
+                        Shadow(
+                          // bottomLeft
+                            offset: Offset(-.5, -.5),
+                            color: Theme
+                                .of(context)
+                                .primaryColor),
+                        Shadow(
+                          // bottomRight
+                            offset: Offset(.5, -.5),
+                            color: Theme
+                                .of(context)
+                                .primaryColor),
+                        Shadow(
+                          // topRight
+                            offset: Offset(.5, .5),
+                            color: Theme
+                                .of(context)
+                                .primaryColor),
+                        Shadow(
+                          // topLeft
+                            offset: Offset(-.5, .5),
+                            color: Theme
+                                .of(context)
+                                .primaryColor),
+                      ])),
+                  background: Image.network(
+                    widget._recipeInstance.recipe.picture,
+                    fit: BoxFit.cover,
+                  )),
+            ),
+          ];
+        },
+        body: SingleChildScrollView(
+            child: Card(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Step ${widget._recipeInstance.recipe.steps[_counter]
+                          .number}',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline5,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget._recipeInstance.recipe.steps[_counter]
-                            .instructions}',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline6,
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '${widget._recipeInstance.recipe.steps[_counter]
+                          .instructions}',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline6,
                     ),
-                    Padding(
+                  ),
+                  Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: widget._recipeInstance.recipe.steps[_counter].timer_title != null ?
-                      TimerWidget(widget._recipeInstance.recipe.steps[_counter]) :
-                      null ),
-                    ButtonBar(
+                      child: widget._recipeInstance.recipe.steps[_counter]
+                          .timer_title != null
+                          ?
+                      TimerWidget(widget._recipeInstance.recipe.steps[_counter])
+                          :
+                      null),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ButtonBar(
                       alignment: MainAxisAlignment.center,
                       children: [
                         _counter > 0
@@ -165,10 +171,22 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                 .length}')
                       ],
                     ),
-                  ],
-                ),
-              )),
-        ));
+                  ),
+                ],
+              ),
+            )
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.camera_alt),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CameraScreen()));
+        },
+      ),
+    );
   }
 }
 
