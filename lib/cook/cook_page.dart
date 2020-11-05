@@ -1,6 +1,8 @@
+import 'package:abc_cooking/appetite/appetite_page.dart';
 import 'package:abc_cooking/cook/cook_detail.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/service.dart';
+import 'package:abc_cooking/widgets/recipe_instance_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,22 +24,33 @@ class _CookWidgetState extends State<CookWidget> {
             var _recipes = service.myRecipes;
             if (_recipes.length > 0) {
               return Expanded(
-                  child: ListView.builder(
-                      padding: EdgeInsets.all(16.0),
-                      itemCount: _recipes.length,
-                      itemBuilder: (context, i) {
-                        return ListWidget(_recipes[i]);
-                      }));
+                  child: RecipeInstanceList.function(_recipes, cookDetail)
+              );
             }
             else {
-              return Center(
-                child: Text(
-                  "You have to add a recipe before you can start cooking!"
+              return Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "You have to add a recipe before you can start cooking!",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
                 ),
               );
             }
           })
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AppetiteWidget()));
+        },
       ),
     );
   }
@@ -79,7 +92,7 @@ class ListWidget extends StatelessWidget {
   }
 }
 
-void cookDetail(BuildContext context, RecipeInstance recipeInstance) async {
+void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
   Navigator.push(
       context,
       MaterialPageRoute(
