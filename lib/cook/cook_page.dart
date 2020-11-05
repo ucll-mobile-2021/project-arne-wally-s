@@ -56,46 +56,43 @@ class _CookWidgetState extends State<CookWidget> {
   }
 }
 
-class ListWidget extends StatelessWidget {
-  final RecipeInstance _recipeInstance;
-
-  ListWidget(this._recipeInstance);
-
-  @override
-  Widget build(BuildContext context) {
-    Image img = Image.network(_recipeInstance.recipe.picture);
-
-    return GestureDetector(
-      child: Card(
-        child: Column(
-          children: [
-            img,
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    _recipeInstance.recipe.name,
-                    style: Theme.of(context).textTheme.headline,
-                  ),
-                ],
-              ),
-            )
+void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
+  if (recipeInstance.recipe.steps.length > 0) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CookDetailWidget(recipeInstance)));
+  }
+  else {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Woops!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('It seems like this recipe has no instructions.'),
+                Text('This problem has been reported to our support team'),
+                Text('Sorry for the inconvenience!')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () {
+                // TODO Make sure the bad recipe gets removed
+                Navigator.of(context).pop();
+              },
+            ),
           ],
-        ),
-      ),
-      onTap: () {
-        cookDetail(context, _recipeInstance);
+        );
       },
     );
-  }
-}
 
-void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CookDetailWidget(recipeInstance)));
+  }
+
 }
 
