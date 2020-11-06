@@ -1,7 +1,5 @@
-import 'package:abc_cooking/widgets/recipe_detail.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/recipe_instance_widget.dart';
-import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

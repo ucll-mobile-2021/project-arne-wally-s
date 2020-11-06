@@ -47,7 +47,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: <Widget>[
-                      Text('Time is up!.'),
+                      Text('${widget._timerTitle} is done!'),
                       Text('Be sure to check you food before continuing.'),
                     ],
                   ),

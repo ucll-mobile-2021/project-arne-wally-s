@@ -1,6 +1,4 @@
 import 'package:abc_cooking/appetite/appetite_page.dart';
-import 'package:abc_cooking/cook/cook_detail.dart';
-import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:abc_cooking/widgets/recipe_instance_list.dart';
 import 'package:flutter/material.dart';
