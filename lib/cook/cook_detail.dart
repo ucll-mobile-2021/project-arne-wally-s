@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:abc_cooking/cook/timer_widget.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,25 +28,6 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
         _counter--;
       });
     }
-  }
-
-  double _timerCounter = 0.0;
-  Timer _timer;
-
-  void _startTimer(int number) {
-    _timerCounter = number * 60.0;
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_timerCounter > 0) {
-          _timerCounter--;
-        } else {
-          _timer.cancel();
-        }
-      });
-    });
   }
 
   @override
@@ -124,7 +104,6 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                     icon: Icon(Icons.alarm_add),
                                     color: Colors.white,
                                     onPressed: () {
-                                      _startTimer(widget._recipeInstance.recipe.steps[_counter].timer);
                                       // TODO write Timer function to keep track of timers
                                     },
                                   ),
@@ -184,20 +163,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
               ),
             ),
             widget._recipeInstance.recipe.steps[_counter].timer_title != null ?
-            Card(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Timer'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
-                    child: Text('$_timerCounter / ${widget._recipeInstance.recipe.steps[_counter].timer}'),
-                  ),
-                ],
-              ),
-              )
+            TimerWidget(widget._recipeInstance.recipe.steps[_counter].timer, widget._recipeInstance.recipe.steps[_counter].timer_title)
             : SizedBox(),
           ],
         )),
