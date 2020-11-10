@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'ingredient_amount.dart';
 import 'step.dart';
-
 part 'recipe.g.dart';
 
 @JsonSerializable()
@@ -31,6 +30,29 @@ class Recipe {
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
+
+  @override
+  String toString() {
+    return 'Recipe{name: $name, price: $price, veggie: $veggie, healthy: $healthy, difficulty: $difficulty, picture: $picture, id: $id}';
+  } //"name": name,
+  //"veggie": veggie,
+  /*
+
+   */
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "price": price,
+    "veggie": (veggie)? 1 : 0,
+    "healthy": healthy,
+    "prep_time": prep_time,
+    "difficulty": difficulty,
+    "picture": picture,
+  };
+
+
+
 }
 
 class RecipeInstance {
@@ -43,4 +65,7 @@ class RecipeInstance {
   String toString() {
     return '${recipe.name} - $persons';
   }
+
+
+
 }

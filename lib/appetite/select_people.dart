@@ -1,3 +1,4 @@
+import 'package:abc_cooking/DB/DB.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,11 +19,15 @@ class SelectPeopleWidget extends StatefulWidget {
 class _SelectPeopleState extends State<SelectPeopleWidget> {
   int people;
   PlatesWidget platesWidget;
+  RecipeHelper _recipeHelper= RecipeHelper();
 
   @override
   void initState() {
     super.initState();
     people = AppetiteService().getPeople();
+    _recipeHelper.initializeDatabase().then((value){
+      print('--------DB recipe ready----------');
+    });
     platesWidget = PlatesWidget(
       startPlates: people,
     );
@@ -102,6 +107,9 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
             onPressed: () {
               // Set default people to latest used value
               AppetiteService().setPeople(people);
+
+
+              _recipeHelper.insertRecipe(widget.recipe);
               Navigator.pop(context, RecipeInstance(widget.recipe, people));
             },
             padding: EdgeInsets.all(15),
