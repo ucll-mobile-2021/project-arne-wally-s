@@ -1,6 +1,7 @@
 import 'package:abc_cooking/cook/timer_widget.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/models/timer.dart';
+import 'package:abc_cooking/services/timer_service.dart';
 import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class CookDetailWidget extends StatefulWidget {
 
 class _CookDetailWidgetState extends State<CookDetailWidget> {
   int _counter = 0;
-  List<Timer> timers = [];
+  MyTimersService _myTimersService = MyTimersService();
 
   void _increment() {
     if (_counter < widget._recipeInstance.recipe.steps.length - 1)
@@ -106,7 +107,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                 color: Colors.white,
                                 onPressed: () {
                                   setState(() {
-                                    timers.add(Timer(title: widget._recipeInstance.recipe.steps[_counter].timer_title, minutes: widget._recipeInstance.recipe.steps[_counter].timer));
+                                    _myTimersService.addTimer(Timer(title: widget._recipeInstance.recipe.steps[_counter].timer_title, durationInMinutes: widget._recipeInstance.recipe.steps[_counter].timer));
                                   });
                                 },
                               ),
@@ -162,13 +163,13 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
             ],
           ),
         ),
-        timers.length > 0 ?
+        _myTimersService.myTimers.length > 0 ?
         Expanded(
           child: ListView.builder(
-            itemCount: timers.length,
+            itemCount: _myTimersService.myTimers.length,
             itemBuilder: (context, i) {
                 return GestureDetector(
-                    child: TimerWidget(timers[i].minutes, timers[i].title),
+                    child: TimerWidget(_myTimersService.myTimers[i]),
                     onLongPress: () {
                       showDialog<void>(
                         context: context,
@@ -188,7 +189,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                 child: Text('Yes'),
                                 onPressed: () {
                                   setState(() {
-                                    timers.removeAt(i);
+                                    _myTimersService.myTimers.removeAt(i);
                                   });
                                   Navigator.of(context).pop();
                                 },
