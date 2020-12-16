@@ -124,6 +124,10 @@ class RecipeHelper{
   void insertIngredient(Ingredient ingredient) async{
     var db = await this.database;
     print(ingredient.toJson().toString());
+    /*
+    final tables = await db.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+    print(tables);*/
+
     var result = await db.insert("ingredient", ingredient.toJson());
     print('result: $result');
   }
@@ -166,6 +170,17 @@ class RecipeHelper{
     // Remove the recipe from the Database.
     await db.delete(
       'step',
+      // Use a `where` clause to delete a specific recipe.
+      where: "1 or 1",
+      // Pass the recipe's id as a whereArg to prevent SQL injection.
+    );
+  }
+  Future<void> deleteAllIngredients() async {
+    // Get a reference to the database.
+    final db = await database;
+    // Remove the recipe from the Database.
+    await db.delete(
+      'ingredient',
       // Use a `where` clause to delete a specific recipe.
       where: "1 or 1",
       // Pass the recipe's id as a whereArg to prevent SQL injection.

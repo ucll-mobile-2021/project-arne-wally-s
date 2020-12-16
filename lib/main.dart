@@ -133,10 +133,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
             Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
             _recipeHelper.insertIngredient(ingredient);
-            //print(_recipeHelper.ingredients());
+            //_recipeHelper.deleteAllIngredients();
           });
-          // Set default people to latest used value
+        },)
+      ),Center( child: RaisedButton(
+        child: Text("ingredientAmount"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value){
+            print('--------DB ingredient ready----------');
 
+            Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
+            Ingredientamount ingredinetamount= new Ingredientamount(ingredient,2.5);
+            _recipeHelper.insertIngredientAmount(ingredinetamount);
+            //_recipeHelper.deleteAllIngredients();
+          });
         },)
       )
 
