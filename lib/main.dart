@@ -87,26 +87,48 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //button
     //_recipeHelper.insertRecipe(widget.recipe);
+    return Scaffold(body: Center( child: Column(children:<Widget>[
+      Center( child: RaisedButton(
+        child: Text("recipe"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value){
+            print('--------DB recipe ready----------');
+            Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
+            List<Ingredient> list;
+            List<im.Step> list2;
+            //var list = new List(1);
+            list = new List(1);
+            list2 = new List(1);
+            list[0] = ingredient;
+            im.Step step = new im.Step(1,"a","b",1);
+            list2[0] = step;
+            _recipeHelper.insertRecipe(new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" ));
+            //_recipeHelper.deleteRecipe("id2");
+          });
+          // Set default people to latest used value
 
-    return Scaffold(body: Center( child: RaisedButton(
-      onPressed: () {
-        _recipeHelper.initializeDatabase().then((value){
-          print('--------DB recipe ready----------');
-          Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
-          List<Ingredient> list;
-          List<im.Step> list2;
-          //var list = new List(1);
-          list = new List(1);
-          list2 = new List(1);
-          list[0] = ingredient;
-          im.Step step = new im.Step(1,"a","b",1);
-          list2[0] = step;
-          _recipeHelper.insertRecipe(new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" ));
-          //_recipeHelper.deleteRecipe("id2");
-        });
-        // Set default people to latest used value
+        },)
+      ),
+      Center( child: RaisedButton(
+        child: Text("step"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value){
+            print('--------DB step ready----------');
 
-      },)));
+            im.Step step = new im.Step(1,"a","b",1);
+            _recipeHelper.insertStep(step);
+            print(_recipeHelper.steps());
+            //_recipeHelper.deleteRecipe("id2");
+          });
+          // Set default people to latest used value
+
+        },)
+      )
+
+
+    ])));
+
+    /*
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -129,5 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
+     */
+
+
   }
 }

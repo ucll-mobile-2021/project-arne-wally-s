@@ -52,7 +52,6 @@ class RecipeHelper{
   Future<List<Recipe>> recipes() async {
     // Get a reference to the database.
     final Database db = await database;
-
     final List<Map<String, dynamic>> maps = await db.query('recipe');
     return List.generate(maps.length, (i) {
       var recipe1 =Recipe(
@@ -72,6 +71,20 @@ class RecipeHelper{
       print(recipe1.price);
       return recipe1;
     });
+  }
+  Future<List<im.Step>> steps() async {
+    // Get a reference to the database.
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('step');
+    var steps = List.generate(maps.length, (i){
+      im.Step step = im.Step(
+          maps[i]['timer'],
+          maps[i]['timer_title'],
+          maps[i]['instructions'],
+          maps[i]['number']
+      );
+    });
+    return steps;
   }
 
   void insertStep(im.Step step) async{
