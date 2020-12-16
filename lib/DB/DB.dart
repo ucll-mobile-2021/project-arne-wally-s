@@ -1,6 +1,10 @@
 // Avoid errors caused by flutter upgrade.
 // Importing 'package:flutter/widgets.dart' is required.
+import 'package:abc_cooking/models/ingredient.dart';
+import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/models/recipe.dart';
+import 'package:abc_cooking/models/timer.dart';
+import 'package:abc_cooking/models/step.dart' as im;
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,7 +12,7 @@ class RecipeHelper{
   static Database _database;
   static RecipeHelper _recipeHelper;
 
-  final String tableName = "recipe";
+  final String recipeTableName = "recipe";
   RecipeHelper._createInstance();
   factory RecipeHelper(){
     if(_recipeHelper == null){
@@ -24,17 +28,24 @@ class RecipeHelper{
     }
     return _database;
   }
-  Future<Database>initializeDatabase() async{
+  Future<Database>initializeDatabase() async {
     var dir = await getDatabasesPath();
     var path = dir + "recipe.db";
-    var database = openDatabase(path, version: 1,onCreate: (db,version){
-      // , name TEXT
-      //veggie BOOLEAN,
-      //, veggie INTEGER
-      //
+    var database = await openDatabase(path, version: 1,onCreate: (db,version){
       db.execute('''
-      CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
-    },);
+      CREATE TABLE recipe(id TEXT, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
+      db.execute('''
+      CREATE TABLE step(timer INTEGER, number INTEGER, instructions TEXT,timer_title TEXT)''');
+      db.execute('''
+      CREATE TABLE timer(minutes INTEGER, title TEXT)''');
+      db.execute('''
+      CREATE TABLE ingredient_amount(double REAL, ingredient TEXT, REFERENCES recipe(id))''');
+      db.execute('''
+      CREATE TABLE cart(double REAL, ingredient TEXT, REFERENCES recipe(id))''');
+
+  },);
+
+
     return database;
   }
 
@@ -52,6 +63,7 @@ class RecipeHelper{
           maps[i]['name'],
           maps[i]['price'],
           (maps[i]['veggie']==0)? false : true,
+          (maps[i]['vegan']==0)? false : true,
           maps[i]['healthy'],
           maps[i]['prep_time'],
           maps[i]['difficulty'],
@@ -59,11 +71,35 @@ class RecipeHelper{
           null,
           maps[i]['picture']
       );
-      print("##################################################");
       print(recipe1.toString());
       print(recipe1.price);
       return recipe1;
     });
+  }
+
+  void insertStep(im.Step step) async{
+    var db = await this.database;
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    print(step.toJson().toString());
+    var result = await db.insert("step", step.toJson());
+
+    print('result: $result');
+  }
+
+  void insertIngredient(Ingredient ingredient) async{
+    var db = await this.database;
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    print(ingredient.toJson().toString());
+    var result = await db.insert("ingredient", ingredient.toJson());
+
+    print('result: $result');
+  }
+  void insertIngredientAmount(Ingredientamount ingredientamount) async{
+    var db = await this.database;
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    print(ingredientamount.toJson().toString());
+    var result = await db.insert("ingredient", ingredientamount.toJson());
+    print('result: $result');
   }
 
   void insertRecipe(Recipe recipe) async{

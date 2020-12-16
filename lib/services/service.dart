@@ -11,16 +11,22 @@ class MyRecipesService extends ChangeNotifier {
   UnmodifiableListView<RecipeInstance> get myRecipes =>
       UnmodifiableListView(_myRecipes);
 
-  MyRecipesService() : super();
+  MyRecipesService() : super() {
+    //TODO load myrecipes from sqlite
+  }
 
   void addRecipe(RecipeInstance recipe) {
     _myRecipes.add(recipe);
+    //TODO add recipe to sqlite
+
     print(_myRecipes);
     notifyListeners();
   }
 
   void removeRecipe(RecipeInstance recipe) {
     _myRecipes.remove(recipe);
+    //TODO remove recipe in sqlite
+
     notifyListeners();
   }
 }

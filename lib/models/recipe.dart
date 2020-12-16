@@ -13,6 +13,7 @@ class Recipe {
   final String name;
   final int price;
   final bool veggie;
+  final bool vegan;
   final int healthy;
   final int prep_time;
   final int difficulty;
@@ -23,7 +24,7 @@ class Recipe {
 
   final String id;
 
-  Recipe(this.id, this.name, this.price, this.veggie, this.healthy,
+  Recipe(this.id, this.name, this.price, this.veggie,this.vegan, this.healthy,
       this.prep_time, this.difficulty, this.ingredients, this.steps, this.picture)
       : super();
 
