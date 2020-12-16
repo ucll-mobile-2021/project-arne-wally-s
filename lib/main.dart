@@ -1,9 +1,15 @@
 import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
+import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:abc_cooking/models/step.dart' as im;
+
+import 'DB/DB.dart';
+import 'models/ingredient.dart';
+import 'models/recipe.dart';
 
 void main() => runApp(MyApp());
 
@@ -64,6 +70,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  RecipeHelper _recipeHelper= RecipeHelper();
   static List<Widget> _pages = <Widget>[
     AppetiteWidget(),
     BuyWidget(),
@@ -78,7 +85,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //return Scaffold(body: Text("bla"));
+    //button
+    //_recipeHelper.insertRecipe(widget.recipe);
+
+    return Scaffold(body: Center( child: RaisedButton(
+      onPressed: () {
+        _recipeHelper.initializeDatabase().then((value){
+          print('--------DB recipe ready----------');
+          Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
+          List<Ingredient> list;
+          List<im.Step> list2;
+          //var list = new List(1);
+          list = new List(1);
+          list2 = new List(1);
+          list[0] = ingredient;
+          im.Step step = new im.Step(1,"a","b",1);
+          list2[0] = step;
+          _recipeHelper.insertRecipe(new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" ));
+          //_recipeHelper.deleteRecipe("id2");
+        });
+        // Set default people to latest used value
+
+      },)));
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

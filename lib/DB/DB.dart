@@ -53,10 +53,7 @@ class RecipeHelper{
     // Get a reference to the database.
     final Database db = await database;
 
-    // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await db.query('recipe');
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       var recipe1 =Recipe(
           maps[i]['id'],
@@ -104,28 +101,29 @@ class RecipeHelper{
 
   void insertRecipe(Recipe recipe) async{
     var db = await this.database;
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    print(recipe.toJson().toString());
-
     print("____________________________");
     recipes().toString();
     print("____________________________");
-
-    var result = await db.insert("recipe", recipe.toMap());
-
-    print('result: $result');
+    try{
+      var result = await db.insert("recipe", recipe.toMap());
+      print('result: $result');
+    }
+    catch(e){
+      print("insertRecipe error" + "prob unique constraint");
+    }
   }
+
 
   Future<void> deleteRecipe(String id) async {
     // Get a reference to the database.
     final db = await database;
 
-    // Remove the Dog from the Database.
+    // Remove the recipe from the Database.
     await db.delete(
       'recipe',
-      // Use a `where` clause to delete a specific dog.
+      // Use a `where` clause to delete a specific recipe.
       where: "id = ?",
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      // Pass the recipe's id as a whereArg to prevent SQL injection.
       whereArgs: [id],
     );
   }
