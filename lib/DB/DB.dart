@@ -31,7 +31,16 @@ class RecipeHelper{
   Future<Database>initializeDatabase() async {
     var dir = await getDatabasesPath();
     var path = dir + "recipe.db";
+    /*
+    var db1 = await openDatabase(path, version: 1,onCreate: (db,version){
+      db.execute('''
+      CREATE TABLE ingredient(name TEXT , measurement_unit TEXT ,type TEXT , price REAL , picture TEXT)''');
+    },);
+    */
+
     var database = await openDatabase(path, version: 1,onCreate: (db,version){
+      db.execute('''
+      CREATE TABLE ingredient(name TEXT, measurement_unit TEXT,type TEXT, price REAL, picture TEXT)''');
       db.execute('''
       CREATE TABLE recipe(id TEXT, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
       db.execute('''
@@ -39,11 +48,13 @@ class RecipeHelper{
       db.execute('''
       CREATE TABLE timer(minutes INTEGER, title TEXT)''');
       db.execute('''
-      CREATE TABLE ingredient_amount(double REAL, ingredient TEXT, REFERENCES recipe(id))''');
+      CREATE TABLE ingredient_amount(amount REAL, ingredient TEXT, REFERENCES recipe(id))''');
       db.execute('''
       CREATE TABLE cart(double REAL, ingredient TEXT, REFERENCES recipe(id))''');
 
   },);
+
+
 
 
     return database;
@@ -72,6 +83,21 @@ class RecipeHelper{
       return recipe1;
     });
   }
+  Future<List<Ingredient>> ingredients() async {
+    // Get a reference to the database.
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('ingredient');
+    var ingredients = List.generate(maps.length, (i) {
+      var ingredient =Ingredient(
+          maps[i]['name'],
+          maps[i]['measurement_unit'],
+          maps[i]['type'],
+          maps[i]['price'],
+          maps[i]['picture']
+      );
+    });
+    return ingredients;
+  }
   Future<List<im.Step>> steps() async {
     // Get a reference to the database.
     final Database db = await database;
@@ -89,7 +115,6 @@ class RecipeHelper{
 
   void insertStep(im.Step step) async{
     var db = await this.database;
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     print(step.toJson().toString());
     var result = await db.insert("step", step.toJson());
 
@@ -98,10 +123,8 @@ class RecipeHelper{
 
   void insertIngredient(Ingredient ingredient) async{
     var db = await this.database;
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     print(ingredient.toJson().toString());
     var result = await db.insert("ingredient", ingredient.toJson());
-
     print('result: $result');
   }
   void insertIngredientAmount(Ingredientamount ingredientamount) async{
@@ -114,9 +137,6 @@ class RecipeHelper{
 
   void insertRecipe(Recipe recipe) async{
     var db = await this.database;
-    print("____________________________");
-    recipes().toString();
-    print("____________________________");
     try{
       var result = await db.insert("recipe", recipe.toMap());
       print('result: $result');
@@ -130,7 +150,6 @@ class RecipeHelper{
   Future<void> deleteRecipe(String id) async {
     // Get a reference to the database.
     final db = await database;
-
     // Remove the recipe from the Database.
     await db.delete(
       'recipe',
@@ -138,6 +157,18 @@ class RecipeHelper{
       where: "id = ?",
       // Pass the recipe's id as a whereArg to prevent SQL injection.
       whereArgs: [id],
+    );
+  }
+
+  Future<void> deleteAllSteps() async {
+    // Get a reference to the database.
+    final db = await database;
+    // Remove the recipe from the Database.
+    await db.delete(
+      'step',
+      // Use a `where` clause to delete a specific recipe.
+      where: "1 or 1",
+      // Pass the recipe's id as a whereArg to prevent SQL injection.
     );
   }
 }

@@ -117,8 +117,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
             im.Step step = new im.Step(1,"a","b",1);
             _recipeHelper.insertStep(step);
+            //_recipeHelper.deleteAllSteps();
             print(_recipeHelper.steps());
             //_recipeHelper.deleteRecipe("id2");
+          });
+          // Set default people to latest used value
+
+        },)
+      ),
+      Center( child: RaisedButton(
+        child: Text("ingredient"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value){
+            print('--------DB ingredient ready----------');
+
+            Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
+            _recipeHelper.insertIngredient(ingredient);
+            //print(_recipeHelper.ingredients());
           });
           // Set default people to latest used value
 
@@ -127,7 +142,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     ])));
-
     /*
     return Scaffold(
       body: _pages[_selectedIndex],
