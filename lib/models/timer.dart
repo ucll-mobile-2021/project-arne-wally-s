@@ -4,10 +4,20 @@
 //@JsonSerializable()
 class Timer {
   String title;
-  int minutes;
+  DateTime timeOfCreation;
+  int durationInMinutes;
+  int durationInSeconds;
 
-  Timer({this.title, this.minutes});
-  //factory Timer.fromJson(Map<String, dynamic> json) => _$TimerFromJson(json);
 
-  //Map<String, dynamic> toJson() => _$TimerToJson(this);
+  Timer({this.title, this.durationInMinutes}) {
+    timeOfCreation = DateTime.now();
+    durationInSeconds = durationInMinutes * 60;
+  }
+
+  int timeLeftInSeconds() {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(timeOfCreation);
+    int timeLeft = durationInSeconds - difference.inSeconds;
+    return timeLeft;
+  }
 }

@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:abc_cooking/models/timer.dart' as timerData;
+import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
 
 class TimerWidget extends StatefulWidget {
-  final int _timerCounter;
-  final String _timerTitle;
+  final timerData.Timer _timer;
 
-  TimerWidget(this._timerCounter, this._timerTitle);
+  TimerWidget(this._timer);
 
   @override
   _TimerWidgetState createState() => _TimerWidgetState();
@@ -14,7 +15,8 @@ class TimerWidget extends StatefulWidget {
 
 class _TimerWidgetState extends State<TimerWidget> {
   int _counter;
-  Timer _timer;
+  Timer _countingTimer;
+  MyTimersService _timersService = MyTimersService();
 
   @override
   void initState() {
@@ -24,18 +26,18 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _countingTimer.cancel();
     super.dispose();
   }
 
   void _startTimer() {
-    _counter = 0;
-    if (_timer != null) {
-      _timer.cancel();
+    _counter = widget._timer.durationInSeconds - widget._timer.timeLeftInSeconds();
+    if (_countingTimer != null) {
+      _countingTimer.cancel();
     }
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if (_counter < widget._timerCounter * 60) {
+        if (_counter < widget._timer.durationInSeconds) {
           _counter++;
         } else {
           showDialog<void>(
@@ -47,7 +49,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: <Widget>[
-                      Text('${widget._timerTitle} is done!'),
+                      Text('${widget._timer.title} is done!'),
                       Text('Be sure to check you food before continuing.'),
                     ],
                   ),
@@ -56,6 +58,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                   TextButton(
                     child: Text('Got it!'),
                     onPressed: () {
+                      _timersService.removeTimer(widget._timer);
                       Navigator.of(context).pop();
                     },
                   ),
@@ -63,7 +66,7 @@ class _TimerWidgetState extends State<TimerWidget> {
               );
             },
           );
-          _timer.cancel();
+          _countingTimer.cancel();
         }
       });
     });
@@ -76,15 +79,15 @@ class _TimerWidgetState extends State<TimerWidget> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('${widget._timerTitle}'),
+            child: Text('${widget._timer.title}'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('$_counter / ${widget._timerCounter * 60}'),
+            child: Text('$_counter / ${widget._timer.durationInSeconds}'),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _counter == widget._timerCounter * 60 ?
+            child: _counter == widget._timer.durationInSeconds ?
             Text(
               'Finished!',
               style: TextStyle(color: Colors.green),
@@ -96,7 +99,7 @@ class _TimerWidgetState extends State<TimerWidget> {
           Padding(
             padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
             child: LinearProgressIndicator(
-              value: _counter / (widget._timerCounter * 60.0),
+              value: _counter / (widget._timer.durationInSeconds),
               backgroundColor: Colors.grey[700],
             ),
           )
