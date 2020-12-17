@@ -128,24 +128,28 @@ class _MyHomePageState extends State<MyHomePage> {
       Center( child: RaisedButton(
         child: Text("ingredient"),
         onPressed: () {
-          _recipeHelper.initializeDatabase().then((value){
+          _recipeHelper.initializeDatabase().then((value) async {
             print('--------DB ingredient ready----------');
 
             Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
-            _recipeHelper.insertIngredient(ingredient);
+            //_recipeHelper.insertIngredient(ingredient);
+            _recipeHelper.ingredients();
+            Ingredient t = await _recipeHelper.getIngredient("name");
+            print(t);
+
             //_recipeHelper.deleteAllIngredients();
           });
         },)
       ),Center( child: RaisedButton(
         child: Text("ingredientAmount"),
         onPressed: () {
-          _recipeHelper.initializeDatabase().then((value){
-            print('--------DB ingredient ready----------');
-
+          _recipeHelper.initializeDatabase().then((value) async{
+            print('--------DB ingredientAmount ready----------');
             Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
-            Ingredientamount ingredinetamount= new Ingredientamount(ingredient,2.5);
-            _recipeHelper.insertIngredientAmount(ingredinetamount);
-            //_recipeHelper.deleteAllIngredients();
+            Ingredientamount ingredientamount= new Ingredientamount(ingredient,2.5);
+            _recipeHelper.insertIngredientAmount(ingredientamount);
+            List<Ingredientamount> list = await _recipeHelper.ingredientAmounts();
+            //_recipeHelper.deleteAllIngredientAmount();
           });
         },)
       )

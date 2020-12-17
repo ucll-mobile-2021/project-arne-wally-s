@@ -14,4 +14,9 @@ class Ingredientamount {
   factory Ingredientamount.fromJson(Map<String, dynamic> json) => _$IngredientamountFromJson(json);
 
   Map<String, dynamic> toJson() => _$IngredientamountToJson(this);
+
+  Map<String, dynamic> toMap() => {
+    "amount":amount,
+    "ingredientName": ingredient.name,
+  };
 }

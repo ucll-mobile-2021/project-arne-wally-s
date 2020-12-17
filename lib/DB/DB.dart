@@ -28,6 +28,9 @@ class RecipeHelper{
     }
     return _database;
   }
+  static Future _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
   Future<Database>initializeDatabase() async {
     var dir = await getDatabasesPath();
     var path = dir + "recipe.db";
@@ -38,9 +41,10 @@ class RecipeHelper{
     },);
     */
 
-    var database = await openDatabase(path, version: 1,onCreate: (db,version){
+
+    var database = await openDatabase(path,onConfigure: _onConfigure ,version: 1,onCreate: (db,version){
       db.execute('''
-      CREATE TABLE ingredient(name TEXT, measurement_unit TEXT,type TEXT, price REAL, picture TEXT)''');
+      CREATE TABLE ingredient(name TEXT PRIMARY KEY, measurement_unit TEXT,type TEXT, price REAL, picture TEXT)''');
       db.execute('''
       CREATE TABLE recipe(id TEXT, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
       db.execute('''
@@ -48,9 +52,10 @@ class RecipeHelper{
       db.execute('''
       CREATE TABLE timer(minutes INTEGER, title TEXT)''');
       db.execute('''
-      CREATE TABLE ingredient_amount(amount REAL, ingredient TEXT, REFERENCES recipe(id))''');
+      CREATE TABLE ingredient_amount(amount REAL, ingredientName TEXT , FOREIGN KEY(ingredientName) REFERENCES ingredient(name))''');
+     /*
       db.execute('''
-      CREATE TABLE cart(double REAL, ingredient TEXT, REFERENCES recipe(id))''');
+      CREATE TABLE cart(double REAL, ingredient TEXT, REFERENCES recipe(id))''');*/
 
   },);
 
@@ -79,7 +84,6 @@ class RecipeHelper{
           maps[i]['picture']
       );
       print(recipe1.toString());
-      print(recipe1.price);
       return recipe1;
     });
   }
@@ -98,6 +102,53 @@ class RecipeHelper{
     });
     return ingredients;
   }
+
+  Future<Ingredient> getIngredient(String name) async {
+    // Get a reference to the database.
+    final Database db = await database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+          'ingredient', where: "name = '$name' ");
+      var ingredients = List.generate(maps.length, (i) {
+        var ingredient = Ingredient(
+            maps[i]['name'],
+            maps[i]['measurement_unit'],
+            maps[i]['type'],
+            maps[i]['price'],
+            maps[i]['picture']
+        );
+        return ingredient;
+      });
+      return  ingredients[0];
+    }
+    catch(ex){
+      print("error in getIngredient(String name)");
+    }
+
+  }
+
+  Future<List<Ingredientamount>> ingredientAmounts() async {
+    // Get a reference to the database.
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('ingredient_amount');
+
+    List<Ingredient> ingredients = [];
+    for( var i = 0 ; i < maps.length; i++ ) {
+      Ingredient temp = await getIngredient("name");
+      ingredients.add(temp);
+    }
+
+    List<Ingredientamount> ingredientAmounts = List.generate(maps.length,(i) {
+      //Ingredient ingredient = await getIngredient("name");
+      var ingredientAmount =Ingredientamount(
+        ingredients[i],
+        maps[i]['amount'],
+      );
+      return ingredientAmount;
+    });
+    return ingredientAmounts;
+  }
+
   Future<List<im.Step>> steps() async {
     // Get a reference to the database.
     final Database db = await database;
@@ -109,9 +160,12 @@ class RecipeHelper{
           maps[i]['instructions'],
           maps[i]['number']
       );
+      return step;
     });
     return steps;
   }
+
+
 
   void insertStep(im.Step step) async{
     var db = await this.database;
@@ -127,15 +181,19 @@ class RecipeHelper{
     /*
     final tables = await db.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
     print(tables);*/
-
-    var result = await db.insert("ingredient", ingredient.toJson());
-    print('result: $result');
+    try{
+    var result = await db.insert("ingredient", ingredient.toJson());}
+    catch(ex){
+      print("insertIngredient error");
+    }
+    //print('result: $result');
   }
   void insertIngredientAmount(Ingredientamount ingredientamount) async{
     var db = await this.database;
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    print(ingredientamount.toJson().toString());
-    var result = await db.insert("ingredient", ingredientamount.toJson());
+    /*final tables = await db.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+    print(tables);*/
+    //print(ingredientamount.toMap().toString());
+    var result = await db.insert("ingredient_amount", ingredientamount.toMap());
     print('result: $result');
   }
 
@@ -175,6 +233,18 @@ class RecipeHelper{
       // Pass the recipe's id as a whereArg to prevent SQL injection.
     );
   }
+  Future<void> deleteAllIngredientAmount() async {
+    // Get a reference to the database.
+    final db = await database;
+    // Remove the recipe from the Database.
+    await db.delete(
+      'ingredient_amount',
+      // Use a `where` clause to delete a specific recipe.
+      where: "1 or 1",
+      // Pass the recipe's id as a whereArg to prevent SQL injection.
+    );
+  }
+
   Future<void> deleteAllIngredients() async {
     // Get a reference to the database.
     final db = await database;
