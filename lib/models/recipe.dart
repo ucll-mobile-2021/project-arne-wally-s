@@ -44,6 +44,7 @@ class Recipe {
     "name": name,
     "price": price,
     "veggie": (veggie)? 1 : 0,
+    "vegan": (vegan)? 1 : 0,
     "healthy": healthy,
     "prep_time": prep_time,
     "difficulty": difficulty,
@@ -65,6 +66,13 @@ class RecipeInstance {
     return '${recipe.name} - $persons';
   }
 
-
+  Map<String, dynamic> toJson(RecipeInstance instance) => <String, dynamic>{
+    'id': instance.recipe.id,
+    'persons': instance.persons,
+  };
 
 }
+
+
+
+

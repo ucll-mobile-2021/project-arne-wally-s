@@ -19,4 +19,12 @@ class Ingredientamount {
     "amount":amount,
     "ingredientName": ingredient.name,
   };
+
+  Map<String, dynamic> ingredientAmountToJsonForDB(Ingredientamount ingredientAmount, String id) => {
+    "amount":amount,
+    "ingredientName": ingredient.name,
+    "id": id
+  };
+
+
 }

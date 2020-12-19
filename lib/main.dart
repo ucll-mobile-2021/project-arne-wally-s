@@ -1,3 +1,4 @@
+
 import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
@@ -92,18 +93,21 @@ class _MyHomePageState extends State<MyHomePage> {
       Center( child: RaisedButton(
         child: Text("recipe"),
         onPressed: () {
-          _recipeHelper.initializeDatabase().then((value){
+          _recipeHelper.initializeDatabase().then((value) async {
             print('--------DB recipe ready----------');
+            await _recipeHelper.deleteAllRecipes();
+            await _recipeHelper.ingredients();
             Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
-            List<Ingredient> list;
+            List<Ingredientamount> list;
             List<im.Step> list2;
             //var list = new List(1);
             list = new List(1);
             list2 = new List(1);
-            list[0] = ingredient;
+            list[0] = Ingredientamount(ingredient,1.0);
             im.Step step = new im.Step(1,"a","b",1);
             list2[0] = step;
-            _recipeHelper.insertRecipe(new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" ));
+            _recipeHelper.insertRecipe(new Recipe("id3","name",3,true,true,1,30,2,list,list2,"picture" ));
+            var recipe = await _recipeHelper.getRecipe("id3");
             //_recipeHelper.deleteRecipe("id2");
           });
           // Set default people to latest used value
@@ -117,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
             print('--------DB step ready----------');
 
             im.Step step = new im.Step(1,"a","b",1);
-            _recipeHelper.insertStep(step);
+            _recipeHelper.insertStep(step,null);
             //_recipeHelper.deleteAllSteps();
             print(_recipeHelper.steps());
             //_recipeHelper.deleteRecipe("id2");
@@ -133,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
             print('--------DB ingredient ready----------');
 
             Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
-            //_recipeHelper.insertIngredient(ingredient);
+            _recipeHelper.insertIngredient(ingredient);
             _recipeHelper.ingredients();
             Ingredient t = await _recipeHelper.getIngredient("name");
             print(t);
@@ -146,11 +150,14 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           _recipeHelper.initializeDatabase().then((value) async{
             print('--------DB ingredientAmount ready----------');
+            //_recipeHelper.deleteAllIngredients();
             Ingredient ingredient = new Ingredient("name","U","type",3.3,"picture");
             Ingredientamount ingredientamount= new Ingredientamount(ingredient,2.5);
             _recipeHelper.insertIngredientAmount(ingredientamount);
             List<Ingredientamount> list = await _recipeHelper.ingredientAmounts();
-            //_recipeHelper.deleteAllIngredientAmount();
+            print("name : " + list[0].ingredient.name);
+            print("unit : " + list[0].ingredient.measurement_unit);
+            print("price : " + list[0].ingredient.price.toString());
           });
         },)
       ),Center( child: RaisedButton(
@@ -164,6 +171,34 @@ class _MyHomePageState extends State<MyHomePage> {
             _recipeHelper.timers();
             Timer t = await _recipeHelper.getTimer("testtitle");
             print(t.title);
+            //print(_recipeHelper.);
+            //_recipeHelper.deleteRecipe("id2");
+          });
+          // Set default people to latest used value
+
+        },)
+      ),
+      Center( child: RaisedButton(
+        child: Text("recipeInstance"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value) async{
+            print('--------DB recipeInstance ready----------');
+            //##########
+            Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
+            List<Ingredient> list;
+            List<im.Step> list2;
+            //var list = new List(1);
+            list = new List(1);
+            list2 = new List(1);
+            list[0] = ingredient;
+            im.Step step = new im.Step(1,"a","b",1);
+            list2[0] = step;
+            Recipe recipe = new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" );
+            //#############""
+
+            RecipeInstance recipeInstance = new RecipeInstance(recipe, 5);
+            _recipeHelper.insertRecipeInstance(recipeInstance);
+
             //print(_recipeHelper.);
             //_recipeHelper.deleteRecipe("id2");
           });
