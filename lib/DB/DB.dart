@@ -126,6 +126,7 @@ class RecipeHelper{
     try {
       final List<Map<String, dynamic>> maps = await db.query(
           'recipeinstance', where: "uuid = '$uuid' ");
+      print("lengte: " + maps.length.toString());
 
       var recipeInstances = List.generate(maps.length, (i) async {
         var recipe = await getRecipe(maps[i]['recipeid']);
@@ -134,7 +135,6 @@ class RecipeHelper{
 
         return new RecipeInstance.fromDB(recipe, persons, uuid);
       });
-      print("##########");
       return recipeInstances[0];
     }
     catch (ex) {
@@ -260,7 +260,6 @@ class RecipeHelper{
     });
     return ingredientAmounts;
   }
-//recipeselected
 
 
   Future<List<RecipeInstance>> recipeInstances() async {
@@ -286,6 +285,30 @@ class RecipeHelper{
     return recipeInstances;
   }
 
+  Future<List<RecipeSelected>> recipeSelecteds() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('recipeselected');
+
+    List<RecipeInstance> recipeInstances = [];
+    for( var i = 0 ; i < maps.length; i++ ) {
+      print("recipeSelecteds instanceuuid: " + maps[i]['recipeinstance'].toString());
+      var temp = await getRecipeInstance(maps[i]['recipeinstance']);
+      recipeInstances.add(temp);
+    }
+    print("@@@@@@@@@@@@@@@@@é");
+    List<RecipeSelected> recipeSelecteds = List.generate(maps.length,(i) {
+      //Ingredient ingredient = await getIngredient("name");
+      var selected = (maps[i]['selected'] == 0 ? false : true);
+      var recipeSelected =RecipeSelected.fromDB(
+          recipeInstances[i],
+          selected,
+          maps[i]['uuid']
+      );
+      return recipeSelected;
+    });
+    return recipeSelecteds;
+  }
+  
   Future<List<im.Step>> steps() async {
     // Get a reference to the database.
     final Database db = await database;
@@ -319,7 +342,7 @@ class RecipeHelper{
     print('result: $result');
   }
 
-  void insertRecipeInstance(RecipeInstance recipeInstancee) async{
+  insertRecipeInstance(RecipeInstance recipeInstancee) async{
     var db = await this.database;
     print(recipeInstancee.toJson(recipeInstancee).toString());
     var result = await db.insert("recipeinstance", recipeInstancee.toJson(recipeInstancee) );
@@ -328,9 +351,7 @@ class RecipeHelper{
 
   void insertTimer(Timer timer) async{
     var db = await this.database;
-    //print(timer.toJson(timer).toString());
     var result = await db.insert("timer", timer.toJson(timer));
-    //print('result: $result');
   }
 
   insertIngredient(Ingredient ingredient) async{

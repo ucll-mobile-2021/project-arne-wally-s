@@ -232,9 +232,36 @@ class _MyHomePageState extends State<MyHomePage> {
             var recipeSelected = new RecipeSelected(recipeInstance);
             _recipeHelper.insertRecipeSelected(recipeSelected);
             var temp =await _recipeHelper.getRecipeInstance(recipeInstance.uuid);
-            //print(temp.uuid);
-            //print(temp.persons);
-            //print(temp.recipe.id);
+          });
+
+        },)
+
+      ),
+      Center( child: RaisedButton(
+        child: Text("recipeSelected"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value) async{
+            print('--------DB recipeSelected ready----------');
+            Ingredient ingredient = new Ingredient("name1", "measurement_unit", "type", 3.5, "picture");
+            Ingredientamount ingredientAmount = new Ingredientamount(ingredient, 1.2);
+            List<Ingredientamount> list;
+            List<im.Step> list2;
+            list = new List(1);
+            list2 = new List(1);
+            list[0] = ingredientAmount;
+            im.Step step = new im.Step(1,"a","b",1);
+            list2[0] = step;
+            Recipe recipe = new Recipe("id4","name",3,true,true,1,30,2,list,list2,"picture" );
+            await _recipeHelper.insertRecipe(recipe);
+            RecipeInstance recipeInstance = new RecipeInstance(recipe, 5);
+            await _recipeHelper.insertRecipeInstance(recipeInstance);
+            RecipeSelected recipeSelected = new RecipeSelected(recipeInstance);
+            //var temp =await _recipeHelper.getRecipeInstance(recipeInstance.uuid);
+            print(recipeSelected.uuid);
+            print(recipeSelected.selected);
+            print("recipeSelected: " + recipeSelected.recipe.uuid.toString());
+            print("recipeInstance: " + recipeInstance.uuid.toString());
+            var temp =await _recipeHelper.recipeSelecteds();
 
 
           });

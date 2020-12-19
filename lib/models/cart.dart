@@ -91,6 +91,7 @@ class RecipeSelected {
   var uuid;
 
   RecipeSelected(this.recipe) : this.selected = false, this.uuid = Uuid().v4();
+  RecipeSelected.fromDB(this.recipe,this.selected,this.uuid);
 
   void toggleSelect() {
     if (selected) {
