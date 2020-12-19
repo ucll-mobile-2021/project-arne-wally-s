@@ -46,11 +46,11 @@ class RecipeHelper{
       db.execute('''
       CREATE TABLE ingredient(name TEXT PRIMARY KEY, measurement_unit TEXT,type TEXT, price REAL, picture TEXT)''');
       db.execute('''
-      CREATE TABLE recipe(id TEXT, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
+      CREATE TABLE recipe(id TEXT PRIMARY KEY, name TEXT, price INTEGER,veggie INTEGER, healthy INTEGER, prep_time INTEGER, difficulty INTEGER,picture TEXT)''');
       db.execute('''
       CREATE TABLE step(timer INTEGER, number INTEGER, instructions TEXT,timer_title TEXT)''');
       db.execute('''
-      CREATE TABLE timer(minutes INTEGER, title TEXT)''');
+      CREATE TABLE timer(title TEXT , timeOfCreation TEXT, durationInMinutes INTEGER, durationInSeconds INTEGER)''');
       db.execute('''
       CREATE TABLE ingredient_amount(amount REAL, ingredientName TEXT , FOREIGN KEY(ingredientName) REFERENCES ingredient(name))''');
      /*
@@ -127,6 +127,26 @@ class RecipeHelper{
 
   }
 
+  Future<Timer> getTimer(String title) async {
+    // Get a reference to the database.
+    final Database db = await database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+          'timer', where: "title = '$title' ");
+      var timers = List.generate(maps.length, (i) {
+        Timer timer = timerConstructor(maps[i]['title'], maps[i]['durationInMinutes'],maps[i]['timeOfCreation']);
+        return timer;});
+
+
+      return  timers[0];
+    }
+    catch(ex){
+      print("error in getTimer(String name)");
+      print(ex);
+    }
+
+  }
+
   Future<List<Ingredientamount>> ingredientAmounts() async {
     // Get a reference to the database.
     final Database db = await database;
@@ -165,6 +185,17 @@ class RecipeHelper{
     return steps;
   }
 
+  Future<List<Timer>> timers() async {
+    // Get a reference to the database.
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('timer');
+    var timers = List.generate(maps.length, (i){
+      Timer timer = timerConstructor(maps[i]['title'], maps[i]['durationInMinutes'],maps[i]['timeOfCreation']);
+      return timer;
+    });
+    return timers;
+  }
+
 
 
   void insertStep(im.Step step) async{
@@ -173,6 +204,13 @@ class RecipeHelper{
     var result = await db.insert("step", step.toJson());
 
     print('result: $result');
+  }
+
+  void insertTimer(Timer timer) async{
+    var db = await this.database;
+    //print(timer.toJson(timer).toString());
+    var result = await db.insert("timer", timer.toJson(timer));
+    //print('result: $result');
   }
 
   void insertIngredient(Ingredient ingredient) async{
@@ -255,5 +293,11 @@ class RecipeHelper{
       where: "1 or 1",
       // Pass the recipe's id as a whereArg to prevent SQL injection.
     );
+  }
+
+  Timer timerConstructor(String title, int durationInMinutes,String timeOfCreation ){
+    var temp = Timer(title: title,durationInMinutes: durationInMinutes);
+    temp.timeOfCreation = DateTime.parse(timeOfCreation);
+    return temp;
   }
 }

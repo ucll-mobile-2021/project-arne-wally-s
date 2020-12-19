@@ -20,8 +20,6 @@ class Recipe {
   final List<Ingredientamount> ingredients;
   final List<Step> steps;
   final String picture;
-
-
   final String id;
 
   Recipe(this.id, this.name, this.price, this.veggie,this.vegan, this.healthy,

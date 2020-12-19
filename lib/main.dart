@@ -2,6 +2,7 @@ import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
 import 'package:abc_cooking/models/ingredient_amount.dart';
+import 'package:abc_cooking/models/timer.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -152,7 +153,24 @@ class _MyHomePageState extends State<MyHomePage> {
             //_recipeHelper.deleteAllIngredientAmount();
           });
         },)
-      )
+      ),Center( child: RaisedButton(
+        child: Text("timer"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value) async{
+            print('--------DB timer ready----------');
+
+            Timer timer = new Timer(title: "testtitle", durationInMinutes: 2);
+            _recipeHelper.insertTimer(timer);
+            _recipeHelper.timers();
+            Timer t = await _recipeHelper.getTimer("testtitle");
+            print(t.title);
+            //print(_recipeHelper.);
+            //_recipeHelper.deleteRecipe("id2");
+          });
+          // Set default people to latest used value
+
+        },)
+      ),
 
 
     ])));
