@@ -2,7 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'ingredient_amount.dart';
 import 'step.dart';
+import 'package:uuid/uuid.dart';
 part 'recipe.g.dart';
+
 
 @JsonSerializable()
 class Recipe {
@@ -58,8 +60,13 @@ class Recipe {
 class RecipeInstance {
   final Recipe recipe;
   final int persons;
+  var uuid;
 
-  RecipeInstance(this.recipe, this.persons) : super();
+  RecipeInstance(this.recipe, this.persons) : super(){
+    this.uuid =  Uuid().v4();
+
+  }
+  RecipeInstance.fromDB(this.recipe, this.persons,this.uuid) : super();
 
   @override
   String toString() {
@@ -67,7 +74,8 @@ class RecipeInstance {
   }
 
   Map<String, dynamic> toJson(RecipeInstance instance) => <String, dynamic>{
-    'id': instance.recipe.id,
+    'uuid': instance.uuid,
+    'recipeid': instance.recipe.id,
     'persons': instance.persons,
   };
 

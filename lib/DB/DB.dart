@@ -1,5 +1,6 @@
 // Avoid errors caused by flutter upgrade.
 // Importing 'package:flutter/widgets.dart' is required.
+import 'package:abc_cooking/models/cart.dart';
 import 'package:abc_cooking/models/ingredient.dart';
 import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/models/recipe.dart';
@@ -34,16 +35,7 @@ class RecipeHelper{
   Future<Database>initializeDatabase() async {
     var dir = await getDatabasesPath();
     var path = dir + "recipe.db";
-    /*
-    var db1 = await openDatabase(path, version: 1,onCreate: (db,version){
-      db.execute('''
-      CREATE TABLE ingredient(name TEXT , measurement_unit TEXT ,type TEXT , price REAL , picture TEXT)''');
-    },);
-    */
-
-
     var database = await openDatabase(path,onConfigure: _onConfigure ,version: 1,onCreate: (db,version){
-
       db.execute('''
       CREATE TABLE ingredient(name TEXT PRIMARY KEY, measurement_unit TEXT,type TEXT, price REAL, picture TEXT)''');
       db.execute('''
@@ -55,11 +47,9 @@ class RecipeHelper{
       db.execute('''
       CREATE TABLE ingredient_amount(amount REAL, ingredientName TEXT ,id TEXT ,FOREIGN KEY(ingredientName) REFERENCES ingredient(name), FOREIGN KEY(id) REFERENCES recipe(id) ON DELETE CASCADE)''');
       db.execute('''
-      CREATE TABLE recipeinstance(id TEXT , persons INTEGER, FOREIGN KEY(id) REFERENCES recipe(id))''');
-     /*
+      CREATE TABLE recipeinstance(uuid TEXT PRIMARY KEY, recipeid TEXT , persons INTEGER, FOREIGN KEY(recipeid) REFERENCES recipe(id))''');
       db.execute('''
-      CREATE TABLE cart(double REAL, ingredient TEXT, REFERENCES recipe(id))''');*/
-
+      CREATE TABLE recipeselected(uuid TEXT PRIMARY KEY ,recipeinstance TEXT , selected INTEGER)''');
   },);
 
 
@@ -126,9 +116,34 @@ class RecipeHelper{
     }
     catch(ex){
       print("error in getIngredient(String name)");
+      //print(ex);
     }
 
   }
+  Future<RecipeInstance> getRecipeInstance(String uuid) async {
+    // Get a reference to the database.
+    final Database db = await database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+          'recipeinstance', where: "uuid = '$uuid' ");
+
+      var recipeInstances = List.generate(maps.length, (i) async {
+        var recipe = await getRecipe(maps[i]['recipeid']);
+        var persons = maps[i]['persons'];
+        var uuid = maps[i]['uuid'];
+
+        return new RecipeInstance.fromDB(recipe, persons, uuid);
+      });
+      print("##########");
+      return recipeInstances[0];
+    }
+    catch (ex) {
+      print("error in getRecipeInstance(String name)");
+      print(ex);
+    }
+  }
+
+
   Future<Recipe> getRecipe(String id) async {
     // Get a reference to the database.
     final Database db = await database;
@@ -158,7 +173,8 @@ class RecipeHelper{
       return  recipes[0];
     }
     catch(ex){
-      print("error in getIngredient(String name)");
+      print("error in getRecipe(String name)");
+      //print(ex);
     }
 
   }
@@ -244,6 +260,8 @@ class RecipeHelper{
     });
     return ingredientAmounts;
   }
+//recipeselected
+
 
   Future<List<RecipeInstance>> recipeInstances() async {
     // Get a reference to the database.
@@ -252,15 +270,16 @@ class RecipeHelper{
 
     List<Recipe> recipes = [];
     for( var i = 0 ; i < maps.length; i++ ) {
-      //Ingredient temp = await getIngredient("name");
-      //recipes.add(temp);
+      print(maps[i]['recipeid']);
+      var temp = await getRecipe(maps[i]['recipeid']);
+      recipes.add(temp);
     }
-
     List<RecipeInstance> recipeInstances = List.generate(maps.length,(i) {
       //Ingredient ingredient = await getIngredient("name");
-      var recipeInstances =RecipeInstance(
+      var recipeInstances =RecipeInstance.fromDB(
         recipes[i],
         maps[i]['persons'],
+        maps[i]['uuid']
       );
       return recipeInstances;
     });
@@ -294,6 +313,11 @@ class RecipeHelper{
     return timers;
   }
 
+  void insertRecipeSelected(RecipeSelected recipeSelected) async{
+    var db = await this.database;
+    var result = await db.insert("recipeselected", recipeSelected.toJson(recipeSelected) );
+    print('result: $result');
+  }
 
   void insertRecipeInstance(RecipeInstance recipeInstancee) async{
     var db = await this.database;
@@ -332,7 +356,7 @@ class RecipeHelper{
     print('result: $result');
   }
 
-  void insertRecipe(Recipe recipe) async{
+  insertRecipe(Recipe recipe) async{
     var db = await this.database;
     try{
       var result = await db.insert("recipe", recipe.toMap());

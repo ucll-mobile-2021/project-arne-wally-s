@@ -2,6 +2,7 @@
 import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
+import 'package:abc_cooking/models/cart.dart';
 import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/models/timer.dart';
 import 'package:abc_cooking/services/service.dart';
@@ -184,27 +185,62 @@ class _MyHomePageState extends State<MyHomePage> {
           _recipeHelper.initializeDatabase().then((value) async{
             print('--------DB recipeInstance ready----------');
             //##########
-            Ingredient ingredient = new Ingredient("name", "measurement_unit", "type", 3.5, "picture");
-            List<Ingredient> list;
+            Ingredient ingredient = new Ingredient("name1", "measurement_unit", "type", 3.5, "picture");
+            Ingredientamount ingredientAmount = new Ingredientamount(ingredient, 1.2);
+            List<Ingredientamount> list;
             List<im.Step> list2;
             //var list = new List(1);
             list = new List(1);
             list2 = new List(1);
-            list[0] = ingredient;
+            list[0] = ingredientAmount;
             im.Step step = new im.Step(1,"a","b",1);
             list2[0] = step;
-            Recipe recipe = new Recipe("id3","name",3,true,true,1,30,2,null,list2,"picture" );
+            Recipe recipe = new Recipe("id4","name",3,true,true,1,30,2,list,list2,"picture" );
             //#############""
-
+            //await _recipeHelper.insertRecipe(recipe);
             RecipeInstance recipeInstance = new RecipeInstance(recipe, 5);
             _recipeHelper.insertRecipeInstance(recipeInstance);
+            var temp =await _recipeHelper.recipeInstances();
 
-            //print(_recipeHelper.);
-            //_recipeHelper.deleteRecipe("id2");
+
           });
-          // Set default people to latest used value
 
         },)
+
+      ),
+      Center( child: RaisedButton(
+        child: Text("recipeInstance"),
+        onPressed: () {
+          _recipeHelper.initializeDatabase().then((value) async{
+            print('--------DB recipeSelected ready----------');
+            //##########
+            Ingredient ingredient = new Ingredient("name1", "measurement_unit", "type", 3.5, "picture");
+            Ingredientamount ingredientAmount = new Ingredientamount(ingredient, 1.2);
+            List<Ingredientamount> list;
+            List<im.Step> list2;
+            //var list = new List(1);
+            list = new List(1);
+            list2 = new List(1);
+            list[0] = ingredientAmount;
+            im.Step step = new im.Step(1,"a","b",1);
+            list2[0] = step;
+            Recipe recipe = new Recipe("id4","name",3,true,true,1,30,2,list,list2,"picture" );
+            //#############""
+            await _recipeHelper.insertRecipe(recipe);
+            RecipeInstance recipeInstance = new RecipeInstance(recipe, 5);
+            await _recipeHelper.insertRecipeInstance(recipeInstance);
+            var recipeSelected = new RecipeSelected(recipeInstance);
+            _recipeHelper.insertRecipeSelected(recipeSelected);
+            var temp =await _recipeHelper.getRecipeInstance(recipeInstance.uuid);
+            //print(temp.uuid);
+            //print(temp.persons);
+            //print(temp.recipe.id);
+
+
+          });
+
+        },)
+
       ),
 
 

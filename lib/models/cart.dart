@@ -2,6 +2,7 @@ import 'package:abc_cooking/models/ingredient.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class Cart {
   static final Cart _singleton = Cart._internal();
@@ -87,8 +88,9 @@ class Cart {
 class RecipeSelected {
   RecipeInstance recipe;
   bool selected;
+  var uuid;
 
-  RecipeSelected(this.recipe) : this.selected = false;
+  RecipeSelected(this.recipe) : this.selected = false, this.uuid = Uuid().v4();
 
   void toggleSelect() {
     if (selected) {
@@ -98,6 +100,13 @@ class RecipeSelected {
     }
     selected = !selected;
   }
+
+  Map<String, dynamic> toJson(RecipeSelected recipeSelected) => <String, dynamic>{
+    'uuid': recipeSelected.uuid,
+    'recipeinstance': recipeSelected.recipe.uuid,
+    "selected": (recipeSelected.selected)? 1 : 0,
+  };
+
 }
 
 class IngredientAmountSelected {
