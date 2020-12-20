@@ -24,7 +24,6 @@ class Cart {
     print("og length: " + this.ingredients.length.toString());
     print("og length recip: " + this.recipes.length.toString());
     _recipeHelper.initializeDatabase().then((value) async{
-      //await saveCart();
       this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
       this.recipes = await _recipeHelper.recipeSelecteds();
       //print("CartLoaded");
@@ -83,7 +82,7 @@ class Cart {
             amount: ingredient.amount * recipe.persons));
       }
     }
-    saveCart();
+    //saveCart();
   }
 
   void unselectRecipe(RecipeInstance recipe) {
@@ -101,7 +100,7 @@ class Cart {
       }
     }
     ingredients = newNew;
-    saveCart();
+    //saveCart();
   }
 
 

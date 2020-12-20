@@ -295,7 +295,7 @@ class RecipeHelper{
 
     List<Ingredient> ingredients = [];
     for( var i = 0 ; i < maps.length; i++ ) {
-      print("ingredientAmountSelecteds + ingredientname = " + maps[i]['ingredientname']);
+      //print("ingredientAmountSelecteds + ingredientname = " + maps[i]['ingredientname']);
       var temp = await getIngredient(maps[i]['ingredientname']);
       ingredients.add(temp);
     }

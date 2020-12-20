@@ -71,7 +71,14 @@ class BuyWidgetState extends State<BuyWidget> {
               child: Text("load"),
               onPressed: () {
                 var cart = Cart();
+                print("@@@@@@@@@@@@@@");
+                print("pre-load ingr: " + cart.ingredients.length.toString());
+                print("pre-load recipi: " + cart.recipes.length.toString());
                 cart.loadCart();
+                print("##############");
+                print("post-load ingri: " + cart.ingredients.length.toString());
+                print("post-load recipi: " + cart.recipes.length.toString());
+                setState(() {});
 
               })
         ],
