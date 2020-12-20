@@ -1,3 +1,4 @@
+import 'package:abc_cooking/DB/DB.dart';
 import 'package:abc_cooking/models/ingredient.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:path/path.dart';
@@ -8,14 +9,37 @@ class Cart {
   static final Cart _singleton = Cart._internal();
   List<RecipeSelected> recipes = [];
   List<IngredientAmountSelected> ingredients = [];
+  RecipeHelper _recipeHelper= RecipeHelper();
 
   factory Cart() {
     return _singleton;
   }
 
-  Cart._internal() {
+  Cart._internal()  {
+    //print("Cart._internal");
+    //loadCart();
     // TODO Load cart from database
   }
+  void loadCart(){
+    print("og length: " + this.ingredients.length.toString());
+    print("og length recip: " + this.recipes.length.toString());
+    _recipeHelper.initializeDatabase().then((value) async{
+      //await saveCart();
+      this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
+      this.recipes = await _recipeHelper.recipeSelecteds();
+      //print("CartLoaded");
+      print("new length: " + this.ingredients.length.toString());
+      print("new length recip: " + this.recipes.length.toString());
+
+      //print(recipes.length);
+    });
+  }
+  void saveCart() async {
+    _recipeHelper.insertFullCart(recipes,ingredients);
+
+  }
+
+
 
   bool isEmpty() {
     for (var recipe in recipes) {
@@ -80,9 +104,7 @@ class Cart {
     saveCart();
   }
 
-  void saveCart() async {
-    // TODO save cart to database
-  }
+
 }
 
 class RecipeSelected {
@@ -117,4 +139,10 @@ class IngredientAmountSelected {
 
   IngredientAmountSelected(
       {this.ingredient, this.amount, this.selected: false});
+
+  Map<String, dynamic> toJson(IngredientAmountSelected ingredientAmountSelected) => <String, dynamic>{
+    'ingredientname': ingredientAmountSelected.ingredient.name,
+    'amount': ingredientAmountSelected.amount,
+    "selected": (ingredientAmountSelected.selected)? 1 : 0,
+  };
 }

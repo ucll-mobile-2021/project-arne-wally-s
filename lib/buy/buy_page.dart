@@ -24,7 +24,14 @@ class BuyWidgetState extends State<BuyWidget> {
             builder: (context, service, child) {
               var cart = Cart();
               cart.setRecipes(service.myRecipes);
-              if (cart.recipes.length == 0) {
+    if (cart.ingredients.length == 0) {
+      print("ingredients are 0 so load cart");
+      //cart.loadCart();
+      print("ingredients found " + cart.ingredients.length.toString());
+    }
+
+    if (cart.recipes.length == 0) {
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(child: Text('You should add recipes first')),
@@ -53,6 +60,20 @@ class BuyWidgetState extends State<BuyWidget> {
                   }));
             },
           ),
+          RaisedButton(
+              child: Text("save"),
+              onPressed: () {
+                var cart = Cart();
+                cart.saveCart();
+
+              }),
+          RaisedButton(
+              child: Text("load"),
+              onPressed: () {
+                var cart = Cart();
+                cart.loadCart();
+
+              })
         ],
       ),
       floatingActionButton: FloatingActionButton(
