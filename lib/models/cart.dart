@@ -21,14 +21,11 @@ class Cart {
     // TODO Load cart from database
   }
   void loadCart(){
-    print("og length: " + this.ingredients.length.toString());
-    print("og length recip: " + this.recipes.length.toString());
+
     _recipeHelper.initializeDatabase().then((value) async{
       this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
       this.recipes = await _recipeHelper.recipeSelecteds();
       //print("CartLoaded");
-      print("new length: " + this.ingredients.length.toString());
-      print("new length recip: " + this.recipes.length.toString());
 
       //print(recipes.length);
     });

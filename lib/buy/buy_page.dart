@@ -25,9 +25,8 @@ class BuyWidgetState extends State<BuyWidget> {
               var cart = Cart();
               cart.setRecipes(service.myRecipes);
     if (cart.ingredients.length == 0) {
-      print("ingredients are 0 so load cart");
       //cart.loadCart();
-      print("ingredients found " + cart.ingredients.length.toString());
+      //  print("ingredients found " + cart.ingredients.length.toString());
     }
 
     if (cart.recipes.length == 0) {
