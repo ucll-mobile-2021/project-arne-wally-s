@@ -42,11 +42,21 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
           appBar: AppBar(title: Text(widget._recipeInstance.recipe.name)),
           body: Stack(
             children: [
-              Column(
-                children: [
-                  Card(
-                    child: Column(
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 2.5,
+                          child: Image.network(
+                            widget._recipeInstance.recipe.picture,
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -58,7 +68,8 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             '${widget._recipeInstance.recipe.steps[_counter].instructions}',
-                            style: Theme.of(context).textTheme.headline6,
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.justify,
                           ),
                         ),
                         Padding(
@@ -72,38 +83,36 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                     children: [
                                       Text(
                                           '${widget._recipeInstance.recipe.steps[_counter].timer_title}: ${widget._recipeInstance.recipe.steps[_counter].timer} min'),
-                                      Ink(
-                                        decoration: const ShapeDecoration(
-                                          color: Colors.deepOrange,
-                                          shape: CircleBorder(),
-                                        ),
-                                        child: IconButton(
-                                          icon: Icon(Icons.alarm_add),
-                                          color: Colors.white,
-                                          onPressed: () {
-                                            setState(() {
-                                              _myTimersService.addTimer(Timer(
-                                                  title: widget
-                                                      ._recipeInstance
-                                                      .recipe
-                                                      .steps[_counter]
-                                                      .timer_title,
-                                                  durationInMinutes: widget
-                                                      ._recipeInstance
-                                                      .recipe
-                                                      .steps[_counter]
-                                                      .timer));
-                                            });
-                                          },
-                                        ),
+                                      RaisedButton(
+                                        color: Theme.of(context).primaryColor,
+                                        textColor: Colors.white,
+                                        child: Text('Start timer'),
+                                        onPressed: () {
+                                          setState(() {
+                                            _myTimersService.addTimer(Timer(
+                                                title: widget
+                                                    ._recipeInstance
+                                                    .recipe
+                                                    .steps[_counter]
+                                                    .timer_title,
+                                                durationInMinutes: widget
+                                                    ._recipeInstance
+                                                    .recipe
+                                                    .steps[_counter]
+                                                    .timer));
+                                          });
+                                        },
                                       ),
                                     ],
                                   )
                                 : null),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 55,
+                    ),
+                  ],
+                ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -171,7 +180,8 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                 color: Theme.of(context).primaryColor),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('${_myTimersService.myTimers.length}'),
+                              child:
+                                  Text('${_myTimersService.myTimers.length}'),
                             ),
                           ),
                         ),
