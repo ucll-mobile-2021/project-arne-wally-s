@@ -17,6 +17,7 @@ class RecipeInstanceList extends StatelessWidget {
     return ListView.builder(
         itemCount: 1,
         itemBuilder: (context, i) {
+          print(_recipeInstances[i]);
           return Wrap(
             spacing: 5,
             runSpacing: 5,

@@ -97,19 +97,18 @@ void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Woops!'),
+          title: Text('Whoops!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('It seems like this recipe has no instructions.'),
-                Text('This problem has been reported to our support team.'),
+                Text('It seems like this recipe has no instructions. This problem has been reported to our support team.'),
                 Text('Sorry for the inconvenience!')
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Approve'),
+              child: Text('OK'),
               onPressed: () {
                 var service =
                     Provider.of<MyRecipesService>(context, listen: false);

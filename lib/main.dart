@@ -6,6 +6,7 @@ import 'package:abc_cooking/models/cart.dart';
 import 'package:abc_cooking/models/ingredient_amount.dart';
 import 'package:abc_cooking/models/timer.dart';
 import 'package:abc_cooking/services/service.dart';
+import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:abc_cooking/models/step.dart' as im;
@@ -41,8 +42,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyRecipesService(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MyRecipesService()),
+        ChangeNotifierProvider(create: (_) => MyTimersService()),
+      ],
       child: MaterialApp(
         title: 'ABC Cooking',
         theme: ThemeData(
