@@ -43,7 +43,7 @@ class AppetiteWidget extends StatelessWidget {
           getButton(context, () => _service.getBudgetRecipes(),
               'Budget recipes', Icons.local_atm, 'Budget', Colors.green[900]),
           getButton(context, () => _service.getTipRecipes(), 'Tip from us',
-              Icons.emoji_objects_outlined, 'Tip from us', Colors.deepOrange),
+              Icons.emoji_objects_outlined, 'Tip from us', Theme.of(context).primaryColor),
           getButton(context, () => _service.getVegetarianRecipes(),
               'Popular vegetarian', Icons.eco, 'Vegetarian', Colors.green),
           getButton(context, () => _service.getFishRecipes(), 'Popular fish',
@@ -100,6 +100,7 @@ class AppetiteWidget extends StatelessWidget {
   }
 
   void _selectRecipe(BuildContext context, RecipeInstance recipe) {
+    Scaffold.of(context).hideCurrentSnackBar();
     if (recipe != null) {
       var service = Provider.of<MyRecipesService>(context, listen: false);
       service.addRecipe(recipe);

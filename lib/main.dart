@@ -108,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         selectedItemColor: Theme.of(context).accentColor,
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          _onItemTapped(index);
+        } ,
       ),
     );
   }

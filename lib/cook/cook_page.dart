@@ -16,40 +16,31 @@ class _CookWidgetState extends State<CookWidget> {
       appBar: AppBar(
         title: const Text('Cook'),
       ),
-      body: Column(
-        children: [
-          Consumer<MyRecipesService>(builder: (context, service, child) {
-            var _recipes = service.myRecipes;
-            if (_recipes.length > 0) {
-              return Expanded(
-                  child: RecipeInstanceList(_recipes)
-              );
-            }
-            else {
-              return Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "You have to add a recipe before you can start cooking!",
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ),
-                ),
-              );
-            }
-          })
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AppetiteWidget()));
-        },
-      ),
+      body: Consumer<MyRecipesService>(builder: (context, service, child) {
+        var _recipes = service.myRecipes;
+        if (_recipes.length > 0) {
+          return Expanded(
+              child: RecipeInstanceList(_recipes)
+          );
+        }
+        else {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage('assets/logo_pan.png'),
+              ),
+              Text(
+                'Appetite? Add some recipes!',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 17),
+              ),
+            ],
+          );
+        }
+      }),
     );
   }
 }

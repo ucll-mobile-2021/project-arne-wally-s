@@ -64,7 +64,6 @@ class RecipeInstance {
 
   RecipeInstance(this.recipe, this.persons) : super(){
     this.uuid =  Uuid().v4();
-
   }
   RecipeInstance.fromDB(this.recipe, this.persons,this.uuid) : super();
 

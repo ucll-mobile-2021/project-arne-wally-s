@@ -1,6 +1,8 @@
 import 'package:abc_cooking/models/cart.dart';
+import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingList extends StatefulWidget {
   @override
@@ -12,116 +14,120 @@ class ShoppingList extends StatefulWidget {
 class ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
-    var cart = Cart();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shopping list'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DataTable(
-              columns: [
-                DataColumn(label: Text('Done')),
-                DataColumn(label: Text('Ingredient')),
-                DataColumn(label: Text('Amount')),
-              ],
-              rows: List<DataRow>.generate(cart.ingredients.length, (index) {
-                var ingredient = cart.ingredients[index];
-                return DataRow(
-                  color: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    // All rows will have the same selected color.
-                    if (states.contains(MaterialState.selected))
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.08);
-                    // Even rows will have a grey color.
-                    if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
-                    return null; // Use default value for other states and odd rows.
-                  }),
-                  cells: [
-                    DataCell(Checkbox(
-                      value: cart.ingredients[index].selected,
-                      onChanged: (val) {
-                        cart.ingredients[index].selected = val;
-                        setState(() {});
-                      },
-                    )),
-                    DataCell(
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8.0, right: 8, bottom: 8),
-                            child: Image.network(ingredient.ingredient.picture),
+    return Consumer<MyRecipesService>(
+      builder: (context, service, child) {
+        var cart = service.cart;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Shopping list'),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                DataTable(
+                  columns: [
+                    DataColumn(label: Text('Done')),
+                    DataColumn(label: Text('Ingredient')),
+                    DataColumn(label: Text('Amount')),
+                  ],
+                  rows: List<DataRow>.generate(cart.ingredients.length, (index) {
+                    var ingredient = cart.ingredients[index];
+                    return DataRow(
+                      color: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        // All rows will have the same selected color.
+                        if (states.contains(MaterialState.selected))
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.08);
+                        // Even rows will have a grey color.
+                        if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
+                        return null; // Use default value for other states and odd rows.
+                      }),
+                      cells: [
+                        DataCell(Checkbox(
+                          value: cart.ingredients[index].selected,
+                          onChanged: (val) {
+                            cart.ingredients[index].toggleSelected();
+                            setState(() {});
+                          },
+                        )),
+                        DataCell(
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, right: 8, bottom: 8),
+                                child: Image.network(ingredient.ingredient.picture),
+                              ),
+                              Expanded(child: Text(ingredient.ingredient.name)),
+                            ],
                           ),
-                          Expanded(child: Text(ingredient.ingredient.name)),
-                        ],
+                        ),
+                        DataCell(Text(getAmount(ingredient))),
+                      ],
+                    );
+                  }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      if (cart.ingredients.any((e) => e.selected != true)) {
+                        showDialog<void>(
+                            context: context,
+                            barrierDismissible: false, // user must tap button!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Done shopping?'),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: <Widget>[
+                                      Text(
+                                          'You haven\'t selected some of you ingredients yet'),
+                                      Text(
+                                          'Are you sure you wanna close you shopping list?')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Yes'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('No'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    padding: EdgeInsets.all(15),
+                    color: Theme.of(context).accentColor,
+                    textColor: Theme.of(context).colorScheme.onSecondary,
+                    child: Text(
+                      'Finish',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    DataCell(Text(getAmount(ingredient))),
-                  ],
-                );
-              }),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                onPressed: () {
-                  if (cart.ingredients.any((e) => e.selected != true)) {
-                    showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Done shopping?'),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  Text(
-                                      'You haven\'t selected some of you ingredients yet'),
-                                  Text(
-                                      'Are you sure you wanna close you shopping list?')
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('Yes'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: Text('No'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
-                padding: EdgeInsets.all(15),
-                color: Theme.of(context).accentColor,
-                textColor: Theme.of(context).colorScheme.onSecondary,
-                child: Text(
-                  'Finish',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 

@@ -32,10 +32,7 @@ class Cart {
   }
   void saveCart() async {
     _recipeHelper.insertFullCart(recipes,ingredients);
-
   }
-
-
 
   bool isEmpty() {
     for (var recipe in recipes) {
@@ -46,21 +43,39 @@ class Cart {
     return true;
   }
 
-  void setRecipes(List<RecipeInstance> newRecipes) {
-    List<RecipeSelected> newNew = [];
-    for (var recipe in newRecipes) {
-      var found = false;
-      for (var r in recipes) {
-        if (r.recipe == recipe) {
-          found = true;
-          newNew.add(r);
-        }
-      }
-      if (!found) {
-        newNew.add(RecipeSelected(recipe));
+  List<RecipeInstance> getSelected() {
+    List<RecipeInstance> newNew = [];
+    for (var recipe in recipes) {
+      if (recipe.selected) {
+        newNew.add(recipe.recipe);
       }
     }
-    recipes = newNew;
+    return newNew;
+  }
+
+  void deleteSelected() {
+    var rs = getSelected();
+    for (var r in rs) {
+      removeRecipe(r);
+    }
+    saveCart();
+  }
+
+  void removeRecipe(RecipeInstance recipeInstance) {
+    var r = null;
+    unselectRecipe(recipeInstance);
+    for (var recipe in recipes) {
+      if (recipe.recipe == recipeInstance) {
+        r = recipe;
+      }
+    }
+    recipes.remove(r);
+    saveCart();
+  }
+
+  void addRecipe(RecipeInstance recipe) {
+    recipes.add(RecipeSelected(recipe));
+    saveCart();
   }
 
   void selectRecipe(RecipeInstance recipe) {
@@ -79,7 +94,7 @@ class Cart {
             amount: ingredient.amount * recipe.persons));
       }
     }
-    //saveCart();
+    saveCart();
   }
 
   void unselectRecipe(RecipeInstance recipe) {
@@ -97,7 +112,7 @@ class Cart {
       }
     }
     ingredients = newNew;
-    //saveCart();
+    saveCart();
   }
 
 
@@ -118,6 +133,7 @@ class RecipeSelected {
       Cart().selectRecipe(recipe);
     }
     selected = !selected;
+    Cart().saveCart();
   }
 
   Map<String, dynamic> toJson(RecipeSelected recipeSelected) => <String, dynamic>{
@@ -135,6 +151,11 @@ class IngredientAmountSelected {
 
   IngredientAmountSelected(
       {this.ingredient, this.amount, this.selected: false});
+
+  void toggleSelected() {
+    selected = !selected;
+    Cart().saveCart();
+  }
 
   Map<String, dynamic> toJson(IngredientAmountSelected ingredientAmountSelected) => <String, dynamic>{
     'ingredientname': ingredientAmountSelected.ingredient.name,
