@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //button
     //_recipeHelper.insertRecipe(widget.recipe);
+    /*
     return Scaffold(body: Center( child: Column(children:<Widget>[
       Center( child: RaisedButton(
         child: Text("recipe"),
@@ -209,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     ])));
-    /*
+    */
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -232,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
-     */
+
 
 
   }
