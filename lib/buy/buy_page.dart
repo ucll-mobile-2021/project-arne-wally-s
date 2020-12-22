@@ -23,8 +23,12 @@ class BuyWidgetState extends State<BuyWidget> {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image(
-                    image: AssetImage('assets/logo_pan.png'),
+                  Center(
+                    child: Icon(
+                      Icons.shopping_cart,
+                      size: 250,
+                      color: Theme.of(context).primaryColor.withAlpha(240),
+                    ),
                   ),
                   Text(
                     'Appetite? Add some recipes!',
@@ -36,9 +40,9 @@ class BuyWidgetState extends State<BuyWidget> {
                 ],
               )
             : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                DataTable(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  DataTable(
                     columns: [
                       DataColumn(label: Text('Selected')),
                       DataColumn(label: Text('Recipe')),
@@ -55,16 +59,18 @@ class BuyWidgetState extends State<BuyWidget> {
                             },
                             value: service.cart.recipes[index].selected,
                           )),
-                          DataCell(Text(service.cart.recipes[index].recipe.recipe.name)),
+                          DataCell(Text(
+                              service.cart.recipes[index].recipe.recipe.name)),
                           DataCell(Center(
-                              child: Text(
-                                  service.cart.recipes[index].recipe.persons.toString()))),
+                              child: Text(service
+                                  .cart.recipes[index].recipe.persons
+                                  .toString()))),
                         ]);
                       },
                     ),
                   ),
-              ],
-            ),
+                ],
+              ),
         floatingActionButton: Cart().isEmpty()
             ? SizedBox()
             : Stack(

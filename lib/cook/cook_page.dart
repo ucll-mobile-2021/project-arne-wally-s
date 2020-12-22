@@ -25,8 +25,11 @@ class _CookWidgetState extends State<CookWidget> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image(
-                image: AssetImage('assets/logo_pan.png'),
+              Center(
+                child: Image(
+                  image: AssetImage('assets/logo_pan.png'),
+                  height: 250,
+                ),
               ),
               Text(
                 'Appetite? Add some recipes!',
