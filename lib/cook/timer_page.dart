@@ -33,6 +33,7 @@ class TimerPage extends StatelessWidget {
           itemBuilder: (context, i) {
             return GestureDetector(
               child: TimerWidget(service.myTimers[i]),
+              key: UniqueKey(),
               onLongPress: () {
                 showDialog<void>(
                   context: context,

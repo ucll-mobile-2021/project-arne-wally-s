@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:abc_cooking/models/timer.dart' as timerData;
 import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TimerWidget extends StatefulWidget {
   final timerData.Timer _timer;
@@ -16,7 +17,6 @@ class TimerWidget extends StatefulWidget {
 class _TimerWidgetState extends State<TimerWidget> {
   int _counter;
   Timer _countingTimer;
-  MyTimersService _timersService = MyTimersService();
 
   @override
   void initState() {
@@ -55,12 +55,16 @@ class _TimerWidgetState extends State<TimerWidget> {
                   ),
                 ),
                 actions: <Widget>[
-                  TextButton(
-                    child: Text('Got it!'),
-                    onPressed: () {
-                      _timersService.removeTimer(widget._timer);
-                      Navigator.of(context).pop();
-                    },
+                  Consumer<MyTimersService>(
+                    builder: (context, service, child) {
+                      return TextButton(
+                        child: Text('Got it!'),
+                        onPressed: () {
+                          service.removeTimer(widget._timer);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
                   ),
                 ],
               );
