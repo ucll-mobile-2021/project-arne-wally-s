@@ -19,15 +19,12 @@ class SelectPeopleWidget extends StatefulWidget {
 class _SelectPeopleState extends State<SelectPeopleWidget> {
   int people;
   PlatesWidget platesWidget;
-  RecipeHelper _recipeHelper= RecipeHelper();
+  //RecipeHelper _recipeHelper= RecipeHelper();
 
   @override
   void initState() {
     super.initState();
     people = AppetiteService().getPeople();
-    _recipeHelper.initializeDatabase().then((value){
-      print('--------DB recipe ready----------');
-    });
     platesWidget = PlatesWidget(
       startPlates: people,
     );
@@ -109,7 +106,7 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
               AppetiteService().setPeople(people);
 
 
-              _recipeHelper.insertRecipe(widget.recipe);
+              //_recipeHelper.insertRecipe(widget.recipe);
               Navigator.pop(context, RecipeInstance(widget.recipe, people));
             },
             padding: EdgeInsets.all(15),

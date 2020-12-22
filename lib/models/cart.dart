@@ -1,20 +1,41 @@
+import 'package:abc_cooking/DB/DB.dart';
 import 'package:abc_cooking/models/ingredient.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class Cart {
   static final Cart _singleton = Cart._internal();
   List<RecipeSelected> recipes = [];
   List<IngredientAmountSelected> ingredients = [];
+  RecipeHelper _recipeHelper= RecipeHelper();
 
   factory Cart() {
     return _singleton;
   }
 
-  Cart._internal() {
+  Cart._internal()  {
+    //print("Cart._internal");
+    //loadCart();
     // TODO Load cart from database
   }
+  void loadCart(){
+
+    _recipeHelper.initializeDatabase().then((value) async{
+      this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
+      this.recipes = await _recipeHelper.recipeSelecteds();
+      //print("CartLoaded");
+
+      //print(recipes.length);
+    });
+  }
+  void saveCart() async {
+    _recipeHelper.insertFullCart(recipes,ingredients);
+
+  }
+
+
 
   bool isEmpty() {
     for (var recipe in recipes) {
@@ -58,7 +79,7 @@ class Cart {
             amount: ingredient.amount * recipe.persons));
       }
     }
-    saveCart();
+    //saveCart();
   }
 
   void unselectRecipe(RecipeInstance recipe) {
@@ -76,19 +97,19 @@ class Cart {
       }
     }
     ingredients = newNew;
-    saveCart();
+    //saveCart();
   }
 
-  void saveCart() async {
-    // TODO save cart to database
-  }
+
 }
 
 class RecipeSelected {
   RecipeInstance recipe;
   bool selected;
+  var uuid;
 
-  RecipeSelected(this.recipe) : this.selected = false;
+  RecipeSelected(this.recipe) : this.selected = false, this.uuid = Uuid().v4();
+  RecipeSelected.fromDB(this.recipe,this.selected,this.uuid);
 
   void toggleSelect() {
     if (selected) {
@@ -98,6 +119,13 @@ class RecipeSelected {
     }
     selected = !selected;
   }
+
+  Map<String, dynamic> toJson(RecipeSelected recipeSelected) => <String, dynamic>{
+    'uuid': recipeSelected.uuid,
+    'recipeinstance': recipeSelected.recipe.uuid,
+    "selected": (recipeSelected.selected)? 1 : 0,
+  };
+
 }
 
 class IngredientAmountSelected {
@@ -107,4 +135,10 @@ class IngredientAmountSelected {
 
   IngredientAmountSelected(
       {this.ingredient, this.amount, this.selected: false});
+
+  Map<String, dynamic> toJson(IngredientAmountSelected ingredientAmountSelected) => <String, dynamic>{
+    'ingredientname': ingredientAmountSelected.ingredient.name,
+    'amount': ingredientAmountSelected.amount,
+    "selected": (ingredientAmountSelected.selected)? 1 : 0,
+  };
 }
