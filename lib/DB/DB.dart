@@ -59,15 +59,6 @@ class RecipeHelper{
 
   void insertFullCart(List<RecipeSelected>recipes,List<IngredientAmountSelected> ingredients) async{
     var db = await this.database;
-
-    try{
-      ingredients.forEach((ingredientAmountSelected) async {
-        await _recipeHelper.insertIngredient(ingredientAmountSelected.ingredient);
-        await _recipeHelper.insertIngredientAmountSelected(ingredientAmountSelected);
-      });}
-    catch(ex){
-      print("insertFullCart -> error in insertFullCart ingredientAmountSelected");
-    }
     try{
       recipes.forEach((recipeSelected) async {
         print("recipeSelected");
@@ -82,6 +73,15 @@ class RecipeHelper{
     }
     catch(ex){
       print("insertFullCart -> error in insertFullCart  recipeSelected");
+    }
+    try{
+      ingredients.forEach((ingredientAmountSelected) async {
+        //recipe should have added ingredient
+        //await _recipeHelper.insertIngredient(ingredientAmountSelected.ingredient);
+        await _recipeHelper.insertIngredientAmountSelected(ingredientAmountSelected);
+      });}
+    catch(ex){
+      print("insertFullCart -> error in insertFullCart ingredientAmountSelected");
     }
     print('the cart is full');
   }
