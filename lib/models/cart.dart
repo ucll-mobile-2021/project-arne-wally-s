@@ -25,7 +25,7 @@ class Cart {
     _recipeHelper.initializeDatabase().then((value) async{
       this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
       this.recipes = await _recipeHelper.recipeSelecteds();
-      //print("CartLoaded");
+      print("CartLoaded");
 
       //print(recipes.length);
     });
