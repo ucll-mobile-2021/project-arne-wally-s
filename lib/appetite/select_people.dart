@@ -19,6 +19,7 @@ class SelectPeopleWidget extends StatefulWidget {
 class _SelectPeopleState extends State<SelectPeopleWidget> {
   int people;
   PlatesWidget platesWidget;
+
   //RecipeHelper _recipeHelper= RecipeHelper();
 
   @override
@@ -105,7 +106,6 @@ class _SelectPeopleState extends State<SelectPeopleWidget> {
               // Set default people to latest used value
               AppetiteService().setPeople(people);
 
-
               //_recipeHelper.insertRecipe(widget.recipe);
               Navigator.pop(context, RecipeInstance(widget.recipe, people));
             },
@@ -162,6 +162,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   Animation<double> _radiusPlate;
   Animation<double> _radiusTable;
   Random random = Random();
+  double speed;
 
   int _amountPlates;
 
@@ -171,9 +172,11 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    speed = 0.85;
+
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: (400 / speed).round()),
     );
 
     var arcSize = 2 * pi / _amountPlates;
@@ -216,9 +219,9 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
       children: [
         Transform(
           alignment: Alignment.center,
-          transform: Matrix4.skew(getRotation(_vibrateAnimation.value),
-              getRotation(_vibrateAnimation.value))
-            ..rotateX(pi / 4.5 + getRotation(_vibrateAnimation.value)),
+          transform: Matrix4.skew(getRotation(_vibrateAnimation.value) / 1.5,
+              getRotation(_vibrateAnimation.value) / 1.5)
+            ..rotateX(pi / 4.5 + getRotation(_vibrateAnimation.value) / 1.5),
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -230,33 +233,37 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
                     color: Colors.black87)
               ],
             ),
-            child: CustomPaint(
-              painter: PlatePainter(_radiusTable, _radiusPlate, plates: plates),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                width: 300,
-                height: 300,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                    return ScaleTransition(child: child, scale: animation);
-                  },
-                  child: _amountPlates == 2
-                      ? Transform.translate(
-                          offset: Offset(0, -35),
-                          child: SizedBox(
-                              child: Image(
-                            image: AssetImage('assets/candle.png'),
-                            width: 20,
-                            height: 80,
-                            fit: BoxFit.fill,
-                          )),
-                          key: ValueKey<int>(2),
-                        )
-                      : null,
+            child: Transform.translate(
+              offset: Offset(0, getRotation(_vibrateAnimation.value).abs() * 500),
+              child: CustomPaint(
+                painter: PlatePainter(_radiusTable, _radiusPlate,
+                    plates: plates, vibrateAnimation: _vibrateAnimation),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  width: 300,
+                  height: 300,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: (200 / speed).round()),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(child: child, scale: animation);
+                    },
+                    child: _amountPlates == 2
+                        ? Transform.translate(
+                            offset: Offset(0, -35),
+                            child: SizedBox(
+                                child: Image(
+                              image: AssetImage('assets/candle.png'),
+                              width: 20,
+                              height: 80,
+                              fit: BoxFit.fill,
+                            )),
+                            key: ValueKey<int>(2),
+                          )
+                        : null,
+                  ),
                 ),
               ),
             ),
@@ -290,7 +297,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
     controller.dispose();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: (400 / speed).round()),
     );
     _amountPlates += 1;
     var arcSize = 2 * pi / _amountPlates;
@@ -326,7 +333,7 @@ class _PlatesState extends State<PlatesWidget> with TickerProviderStateMixin {
     controller.dispose();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: (400 / speed).round()),
     );
     _amountPlates -= 1;
 
@@ -365,11 +372,13 @@ class PlatePainter extends CustomPainter {
   final List<Plate> plates;
   final Animation<double> radiusPlate;
   final Animation<double> radiusTable;
+  final Animation<double> vibrateAnimation;
 
   PlatePainter(
     this.radiusTable,
     this.radiusPlate, {
     this.plates: const [],
+    this.vibrateAnimation,
   });
 
   @override
@@ -396,12 +405,17 @@ class PlatePainter extends CustomPainter {
       ..color = Color.fromARGB(255, 240, 240, 230)
       ..style = PaintingStyle.stroke
       ..strokeWidth = radius * .2;
+    var paintShade = Paint()
+      ..color = Color.fromARGB(50, 50, 50, 50)
+      ..style = PaintingStyle.fill;
 
     var paintRimRim = Paint()
       ..color = Color.fromARGB(255, 170, 170, 170)
       ..strokeWidth = 5
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.round;
+
+    Offset offset = Offset(0, getOffset(vibrateAnimation.value));
 
     for (var plate in plates) {
       Offset downCenter = Offset(
@@ -415,12 +429,18 @@ class PlatePainter extends CustomPainter {
                   distanceFromCenter /
                   2 *
                   sin(plate.animationTheta.value - pi / 2));
-      canvas.drawCircle(downCenter, radius * .88, paintRimRim);
+      canvas.drawCircle(downCenter, radius * .88, paintShade);
+      canvas.drawCircle(downCenter + offset, radius * .88, paintRimRim);
       var center = Offset(downCenter.dx, downCenter.dy - radius * .05);
-      canvas.drawCircle(center, radius * .6, paintBottom);
+      canvas.drawCircle(center + offset, radius * .6, paintBottom);
       center = Offset(center.dx, center.dy - radius * .13);
-      canvas.drawCircle(center, radius - paintRim.strokeWidth, paintRim);
+      canvas.drawCircle(
+          center + offset, radius - paintRim.strokeWidth, paintRim);
     }
+  }
+
+  double getOffset(double value) {
+    return - (sin(value * 4 * pi) * 10).abs();
   }
 
   @override
