@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:abc_cooking/widgets/recipe_detail.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/recipe_widget.dart';
@@ -27,30 +28,34 @@ class RecipeList extends StatelessWidget {
         future: _futureRecipes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              children: snapshot.data
-                  .map((item) {
-                    return Container(
-                      width: w,
-                      child: RecipeWidget.width(
-                          item,
-                          _function != null
-                              ? () {
-                                  Function.apply(_function, [context, item]);
-                                }
-                              : null,
-                          w),
-                    );
-                  })
-                  .toList()
-                  .cast<Widget>(),
+            return SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height - 80,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: StaggeredGridView.countBuilder(
+                    crossAxisCount: 2,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) =>
+                        RecipeWidget.tap(
+                            snapshot.data[index],
+                            _function != null
+                                ? () {
+                                    Function.apply(_function,
+                                        [context, snapshot.data[index]]);
+                                  }
+                                : null),
+                    staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                  ),
+                ),
+              ),
             );
           }
           if (snapshot.hasError) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height - 150,
+              height: MediaQuery.of(context).size.height - 80,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
