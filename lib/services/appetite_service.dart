@@ -14,35 +14,47 @@ class AppetiteService {
 
   AppetiteService._internal();
 
+  Future<List<Recipe>> getRecipesFromUrl(String url) async {
+    var response =
+        await http.get(url);
+    if (response.statusCode == 200) {
+      return List.from(jsonDecode(response.body)['results'])
+          .map((e) => Recipe.fromJson(e))
+          .toList();
+    }
+    throw Exception('Failed to get recipes');
+  }
+
   Future<List<Recipe>> getRecommendedRecipes() async {
-    // TODO
+    // TODO create a json from recipe id's
+    var myJson = "[]";
     // Returns a list of recommended recipes
-    return getSearchResultsRecipes('');
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recommended/?recipes=$myJson');
   }
 
   Future<List<Recipe>> getPopularRecipes() async {
-    // TODO
-    return getSearchResultsRecipes('');
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/random/');
   }
 
   Future<List<Recipe>> getFavoriteRecipes() async {
-    // TODO
-    return getSearchResultsRecipes('');
+    // TODO create a json from recipe id's
+    var myJson = "[]";
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/get-recipes/?recipes=$myJson');
   }
 
   Future<List<Recipe>> getSurpriseRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/random/');
   }
 
   Future<List<Recipe>> getBudgetRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/budget/');
   }
 
   Future<List<Recipe>> getTipRecipes() async {
     // TODO
-    return getSearchResultsRecipes('');
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/tip/');
   }
 
   Future<List<Recipe>> getVegetarianRecipes() async {
@@ -92,16 +104,8 @@ class AppetiteService {
       bool veggie: false,
       bool meat: false,
       bool fish: false}) async {
-    var qS =
-        '?search=$query&vegan=$vegan&veggie=$veggie&meat=$meat&fish=$fish';
-    var response =
-        await http.get('https://abc-cooking.andreasmilants.com/recipes$qS');
-    if (response.statusCode == 200) {
-      return List.from(jsonDecode(response.body))
-          .map((e) => Recipe.fromJson(e))
-          .toList();
-    }
-    throw Exception('Failed to get recipes');
+    var qS = '?search=$query&vegan=$vegan&veggie=$veggie&meat=$meat&fish=$fish';
+    return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recipes$qS');
   }
 
   Future<List<Recipe>> getSearchFoodListResultsRecipes(
