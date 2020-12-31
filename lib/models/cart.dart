@@ -73,6 +73,14 @@ class Cart {
     saveCart();
   }
 
+  List<RecipeInstance> getRecipeInstances() {
+    List<RecipeInstance> instances = [];
+    for (var r in recipes) {
+      instances.add(r.recipe);
+    }
+    return instances;
+  }
+
   void addRecipe(RecipeInstance recipe) {
     recipes.add(RecipeSelected(recipe));
     saveCart();

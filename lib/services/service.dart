@@ -4,22 +4,19 @@ import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
 
 class MyRecipesService extends ChangeNotifier {
-  List<RecipeInstance> _myRecipes = [];
   Cart cart = Cart();  // This should be saved to the database. It takes care of this itself
 
   UnmodifiableListView<RecipeInstance> get myRecipes =>
-      UnmodifiableListView(_myRecipes);
+      UnmodifiableListView(cart.getRecipeInstances());
 
   MyRecipesService() : super();
 
   void addRecipe(RecipeInstance recipe) {
-    _myRecipes.add(recipe);
     cart.addRecipe(recipe);
     notifyListeners();
   }
 
   void removeRecipe(RecipeInstance recipe) {
-    _myRecipes.remove(recipe);
     cart.removeRecipe(recipe);
     notifyListeners();
   }

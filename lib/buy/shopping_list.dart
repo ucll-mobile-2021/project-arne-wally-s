@@ -74,6 +74,9 @@ class ShoppingListState extends State<ShoppingList> {
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     onPressed: () {
+                      /*
+                      // This is not needed, since we save the current selected items
+                      // And people can always come back later
                       if (cart.ingredients.any((e) => e.selected != true)) {
                         showDialog<void>(
                             context: context,
@@ -109,8 +112,9 @@ class ShoppingListState extends State<ShoppingList> {
                               );
                             });
                       } else {
-                        Navigator.of(context).pop();
                       }
+                       */
+                      Navigator.of(context).pop();
                     },
                     padding: EdgeInsets.all(15),
                     color: Theme.of(context).accentColor,
