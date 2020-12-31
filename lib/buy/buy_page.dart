@@ -39,38 +39,40 @@ class BuyWidgetState extends State<BuyWidget> {
                   ),
                 ],
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  DataTable(
-                    columns: [
-                      DataColumn(label: Text('Selected')),
-                      DataColumn(label: Text('Recipe')),
-                      DataColumn(label: Icon(Icons.people)),
-                    ],
-                    rows: List<DataRow>.generate(
-                      service.cart.recipes.length,
-                      (index) {
-                        return DataRow(cells: [
-                          DataCell(Checkbox(
-                            onChanged: (val) {
-                              service.cart.recipes[index].toggleSelect();
-                              setState(() {});
-                            },
-                            value: service.cart.recipes[index].selected,
-                          )),
-                          DataCell(Text(
-                              service.cart.recipes[index].recipe.recipe.name)),
-                          DataCell(Center(
-                              child: Text(service
-                                  .cart.recipes[index].recipe.persons
-                                  .toString()))),
-                        ]);
-                      },
+            : SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    DataTable(
+                      columns: [
+                        DataColumn(label: Text('Selected')),
+                        DataColumn(label: Text('Recipe')),
+                        DataColumn(label: Icon(Icons.people)),
+                      ],
+                      rows: List<DataRow>.generate(
+                        service.cart.recipes.length,
+                        (index) {
+                          return DataRow(cells: [
+                            DataCell(Checkbox(
+                              onChanged: (val) {
+                                service.cart.recipes[index].toggleSelect();
+                                setState(() {});
+                              },
+                              value: service.cart.recipes[index].selected,
+                            )),
+                            DataCell(Text(
+                                service.cart.recipes[index].recipe.recipe.name)),
+                            DataCell(Center(
+                                child: Text(service
+                                    .cart.recipes[index].recipe.persons
+                                    .toString()))),
+                          ]);
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+            ),
         floatingActionButton: Cart().isEmpty()
             ? SizedBox()
             : Stack(

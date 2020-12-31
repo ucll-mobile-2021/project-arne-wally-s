@@ -1,29 +1,59 @@
 PODS:
+  - camera (0.0.1):
+    - Flutter
+  - esys_flutter_share (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - path_provider (0.0.1):
+    - Flutter
   - speech_to_text (0.0.1):
     - Flutter
     - Try
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - Try (2.1.1)
 
 DEPENDENCIES:
+  - camera (from `.symlinks/plugins/camera/ios`)
+  - esys_flutter_share (from `.symlinks/plugins/esys_flutter_share/ios`)
   - Flutter (from `Flutter`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   trunk:
+    - FMDB
     - Try
 
 EXTERNAL SOURCES:
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
+  esys_flutter_share:
+    :path: ".symlinks/plugins/esys_flutter_share/ios"
   Flutter:
     :path: Flutter
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
   speech_to_text:
     :path: ".symlinks/plugins/speech_to_text/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
+  esys_flutter_share: 05c386b082c0651ce53a6fea869fc7eafea16e96
+  Flutter: 446b87ace8a3747a167979213b4aef59a0b5e5fa
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
 
-PODFILE CHECKSUM: 5ce064bfca3a7148e91fca4a2095362726417f43
+PODFILE CHECKSUM: be561e86c423a208ac4a7208cd7d60aa05e27633
 
 COCOAPODS: 1.9.3

@@ -9,29 +9,29 @@ class Cart {
   static final Cart _singleton = Cart._internal();
   List<RecipeSelected> recipes = [];
   List<IngredientAmountSelected> ingredients = [];
-  RecipeHelper _recipeHelper= RecipeHelper();
+  RecipeHelper _recipeHelper = RecipeHelper();
 
   factory Cart() {
     return _singleton;
   }
 
-  Cart._internal()  {
+  Cart._internal() {
     //print("Cart._internal");
-    //loadCart();
+    loadCart();
     // TODO Load cart from database
   }
-  void loadCart(){
 
-    _recipeHelper.initializeDatabase().then((value) async{
+  void loadCart() {
+    _recipeHelper.initializeDatabase().then((value) async {
       this.ingredients = await _recipeHelper.ingredientAmountSelecteds();
       this.recipes = await _recipeHelper.recipeSelecteds();
-      print("CartLoaded");
 
       //print(recipes.length);
     });
   }
+
   void saveCart() async {
-    _recipeHelper.insertFullCart(recipes,ingredients);
+    _recipeHelper.insertFullCart(recipes, ingredients);
   }
 
   bool isEmpty() {
@@ -114,8 +114,6 @@ class Cart {
     ingredients = newNew;
     saveCart();
   }
-
-
 }
 
 class RecipeSelected {
@@ -123,25 +121,33 @@ class RecipeSelected {
   bool selected;
   var uuid;
 
-  RecipeSelected(this.recipe) : this.selected = false, this.uuid = Uuid().v4();
-  RecipeSelected.fromDB(this.recipe,this.selected,this.uuid);
+  RecipeSelected(this.recipe)
+      : this.selected = false,
+        this.uuid = Uuid().v4();
+
+  RecipeSelected.fromDB(this.recipe, this.selected, this.uuid);
 
   void toggleSelect() {
-    if (selected) {
+    selected = !selected;
+    if (!selected) {
       Cart().unselectRecipe(recipe);
     } else {
       Cart().selectRecipe(recipe);
     }
-    selected = !selected;
-    Cart().saveCart();
+    // Cart().saveCart(); This is called in other functions already
   }
 
-  Map<String, dynamic> toJson(RecipeSelected recipeSelected) => <String, dynamic>{
-    'uuid': recipeSelected.uuid,
-    'recipeinstance': recipeSelected.recipe.uuid,
-    "selected": (recipeSelected.selected)? 1 : 0,
-  };
+  Map<String, dynamic> toJson(RecipeSelected recipeSelected) =>
+      <String, dynamic>{
+        'uuid': recipeSelected.uuid,
+        'recipeinstance': recipeSelected.recipe.uuid,
+        "selected": (recipeSelected.selected) ? 1 : 0,
+      };
 
+  @override
+  String toString() {
+    return '${recipe..uuid}';
+  }
 }
 
 class IngredientAmountSelected {
@@ -157,9 +163,16 @@ class IngredientAmountSelected {
     Cart().saveCart();
   }
 
-  Map<String, dynamic> toJson(IngredientAmountSelected ingredientAmountSelected) => <String, dynamic>{
-    'ingredientname': ingredientAmountSelected.ingredient.name,
-    'amount': ingredientAmountSelected.amount,
-    "selected": (ingredientAmountSelected.selected)? 1 : 0,
-  };
+  @override
+  String toString() {
+    return "$ingredient: $amount";
+  }
+
+  Map<String, dynamic> toJson(
+          IngredientAmountSelected ingredientAmountSelected) =>
+      <String, dynamic>{
+        'ingredientname': ingredientAmountSelected.ingredient.name,
+        'amount': ingredientAmountSelected.amount,
+        "selected": (ingredientAmountSelected.selected) ? 1 : 0,
+      };
 }
