@@ -16,14 +16,18 @@ class RecipeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Image img;
+    Widget img;
     if (_width != 0) {
-      img = Image.network(
-        _recipe.picture,
+      img = FadeInImage.assetNetwork(
+        image: _recipe.picture,
+        placeholder: 'assets/logo_pan.png',
         height: _width,
       );
     } else {
-      img = Image.network(_recipe.picture);
+      img = FadeInImage.assetNetwork(
+        image: _recipe.picture,
+        placeholder: 'assets/logo_pan.png',
+      );
     }
 
     return GestureDetector(

@@ -48,6 +48,34 @@ class RecipeList extends StatelessWidget {
                   .cast<Widget>(),
             );
           }
+          if (snapshot.hasError) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Image(
+                          image: AssetImage('assets/logo_pan.png'),
+                          height: 250,
+                        ),
+                      ),
+                      Text(
+                        "Could not load recipes from server, because you have no internet connection",
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            //fontWeight: FontWeight.bold,
+                            fontSize: 17),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
           var a = [1, 2, 3, 4, 5, 6];
           final random = Random();
           double textWidth = random.nextInt((w * .8).toInt()).toDouble();
