@@ -43,37 +43,30 @@ class AppetiteService {
   }
 
   Future<List<Recipe>> getSurpriseRecipes() async {
-    // TODO
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/random/');
   }
 
   Future<List<Recipe>> getBudgetRecipes() async {
-    // TODO
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/budget/');
   }
 
   Future<List<Recipe>> getTipRecipes() async {
-    // TODO
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/tip/');
   }
 
   Future<List<Recipe>> getVegetarianRecipes() async {
-    // TODO
     return getSearchResultsRecipes('', veggie: true);
   }
 
   Future<List<Recipe>> getFishRecipes() async {
-    // TODO
     return getSearchResultsRecipes('', fish: true);
   }
 
   Future<List<Recipe>> getMeatRecipes() async {
-    // TODO
     return getSearchResultsRecipes('', meat: true);
   }
 
   Future<List<Recipe>> getVeganRecipes() async {
-    // TODO
     return getSearchResultsRecipes('', vegan: true);
   }
 
