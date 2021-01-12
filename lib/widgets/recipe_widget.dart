@@ -1,5 +1,6 @@
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert' show utf8;
 
 class RecipeWidget extends StatelessWidget {
   final Recipe _recipe;
@@ -29,7 +30,6 @@ class RecipeWidget extends StatelessWidget {
         placeholder: 'assets/logo_pan.png',
       );
     }
-
     return GestureDetector(
       child: Card(
         child: Column(

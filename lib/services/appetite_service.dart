@@ -79,8 +79,6 @@ class AppetiteService {
           .map((e) => e.toString())
           .toList();
     }
-    print('error');
-    print(response.body);
     List<String> suggestions = [];
     return suggestions;
   }
