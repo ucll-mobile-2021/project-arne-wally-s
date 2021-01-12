@@ -13,6 +13,8 @@ class MyRecipesService extends ChangeNotifier {
 
   void addRecipe(RecipeInstance recipe) {
     cart.addRecipe(recipe);
+
+    // TODO Save recipe uuid to new db table
     notifyListeners();
   }
 
