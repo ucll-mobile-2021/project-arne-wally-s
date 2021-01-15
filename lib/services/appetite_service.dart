@@ -25,8 +25,15 @@ class AppetiteService {
     throw Exception('Failed to get recipes');
   }
 
+  // String UUIDsToJson() moet misschien in service
+
+  // String recommendedRecipesJson()
+
+  // String favoriteRecipesJson()
+
   Future<List<Recipe>> getRecommendedRecipes() async {
     // TODO create a json from recipe id's
+    // var recommendedRecipesJson = RecipeHelper.recommendedRecipesJson()
     var myJson = "[]";
     // Returns a list of recommended recipes
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recommended/?recipes=$myJson');
