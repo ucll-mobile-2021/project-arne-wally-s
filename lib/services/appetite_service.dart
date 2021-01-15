@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:abc_cooking/DB/DB.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,16 +26,10 @@ class AppetiteService {
     throw Exception('Failed to get recipes');
   }
 
-  // String UUIDsToJson() moet misschien in service
-
-  // String recommendedRecipesJson()
-
-  // String favoriteRecipesJson()
-
   Future<List<Recipe>> getRecommendedRecipes() async {
-    // TODO create a json from recipe id's
-    // var recommendedRecipesJson = RecipeHelper.recommendedRecipesJson()
-    var myJson = "[]";
+    var usedRecipes = await RecipeHelper().usedRecipes();
+    print("used recipes id's: " + usedRecipes.toString());
+    var myJson = jsonEncode(usedRecipes).toString();
     // Returns a list of recommended recipes
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recommended/?recipes=$myJson');
   }
@@ -44,8 +39,9 @@ class AppetiteService {
   }
 
   Future<List<Recipe>> getFavoriteRecipes() async {
-    // TODO create a json from recipe id's
-    var myJson = "[]";
+    var usedRecipes = await RecipeHelper().usedRecipes();
+    print("used recipes id's: " + usedRecipes.toString());
+    var myJson = jsonEncode(usedRecipes).toString();
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/get-recipes/?recipes=$myJson');
   }
 
