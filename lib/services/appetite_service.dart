@@ -102,7 +102,7 @@ class AppetiteService {
   Future<List<Recipe>> getSearchFoodListResultsRecipes(
       List<String> food) async {
     var query = food.join(' ');
-    return getSearchResultsRecipes(query);
+    return getSearchResultsRecipes(query);  
   }
 
   int getPeople() {
