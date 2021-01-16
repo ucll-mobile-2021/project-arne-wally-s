@@ -8,6 +8,6 @@
     </style>
     <!-- when Flutter experience initialises -->
     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">@drawable/normal_background</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 </resources>
