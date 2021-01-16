@@ -34,73 +34,83 @@ class SearchRecipe extends SearchDelegate<Recipe> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return SingleChildScrollView(
-        child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              var results = _service.getSearchResultsRecipes(query,
-                  fish: fish, meat: meat, veggie: veggie, vegan: vegan);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ButtonBar(
-                    children: [
-                      Tooltip(
-                        message: 'Fish',
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              fish = !fish;
-                            });
-                          },
-                          child: Icon(Icons.waves),
-                          color: fish ? Colors.blue : null,
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Meat',
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              meat = !meat;
-                            });
-                          },
-                          child: Icon(Icons.lunch_dining),
-                          color: meat ? Colors.red[900] : null,
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Vegetarian',
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              veggie = !veggie;
-                            });
-                          },
-                          child: Icon(Icons.eco),
-                          color: veggie ? Colors.green : null,
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Vegan',
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              vegan = !vegan;
-                            });
-                          },
-                          child: Icon(Icons.grass),
-                          color: vegan ? Colors.green : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                  RecipeList.function(results, (context, recipe) {
-                    close(context, recipe);
-                  }),
-                ],
-              );
-            }
-        ));
+    return SingleChildScrollView(child:
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      var results = _service.getSearchResultsRecipes(query,
+          fish: fish, meat: meat, veggie: veggie, vegan: vegan);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ButtonBar(
+            children: [
+              Tooltip(
+                message: 'Fish',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      fish = !fish;
+                      meat = false;
+                      veggie = false;
+                      vegan = false;
+                    });
+                  },
+                  child: Icon(Icons.waves),
+                  color: fish ? Colors.blue : null,
+                ),
+              ),
+              Tooltip(
+                message: 'Meat',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      meat = !meat;
+                      fish = false;
+                      veggie = false;
+                      vegan = false;
+                    });
+                  },
+                  child: Icon(Icons.lunch_dining),
+                  color: meat ? Colors.red[900] : null,
+                ),
+              ),
+              Tooltip(
+                message: 'Vegetarian',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      veggie = !veggie;
+                      meat = false;
+                      fish = false;
+                      vegan = false;
+                    });
+                  },
+                  child: Icon(Icons.eco),
+                  color: veggie ? Colors.green : null,
+                ),
+              ),
+              Tooltip(
+                message: 'Vegan',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      vegan = !vegan;
+                      meat = false;
+                      veggie = false;
+                      fish = false;
+                    });
+                  },
+                  child: Icon(Icons.grass),
+                  color: vegan ? Colors.green : null,
+                ),
+              ),
+            ],
+          ),
+          RecipeList.function(results, (context, recipe) {
+            close(context, recipe);
+          }),
+        ],
+      );
+    }));
   }
 
   @override
