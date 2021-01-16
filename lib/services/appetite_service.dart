@@ -90,7 +90,8 @@ class AppetiteService {
     // TODO
     // Returns a list of search suggestions when nothing is typed yet
     // Could be popular items or recent searches
-    return [];
+    var recipes = await RecipeHelper().recipes();
+    return List.generate(recipes.length, (index) => recipes[index].name);
   }
 
   Future<List<Recipe>> getSearchResultsRecipes(String query,
