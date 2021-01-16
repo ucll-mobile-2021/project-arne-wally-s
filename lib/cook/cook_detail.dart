@@ -39,160 +39,182 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
     return Consumer<MyTimersService>(
         builder: (context, _myTimersService, child) {
       return Scaffold(
-          appBar: AppBar(title: Text(widget._recipeInstance.recipe.name)),
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 2.5,
-                          child: Image.network(
-                            widget._recipeInstance.recipe.picture,
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Step ${widget._recipeInstance.recipe.steps[_counter].number}/${widget._recipeInstance.recipe.steps.length}',
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${widget._recipeInstance.recipe.steps[_counter].instructions}',
-                            style: TextStyle(color: Colors.black),
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: widget._recipeInstance.recipe.steps[_counter]
-                                        .timer_title !=
-                                    null
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                          '${widget._recipeInstance.recipe.steps[_counter].timer_title}: ${widget._recipeInstance.recipe.steps[_counter].timer} min'),
-                                      RaisedButton(
-                                        color: Theme.of(context).primaryColor,
-                                        textColor: Colors.white,
-                                        child: Text('Start timer'),
-                                        onPressed: () {
-                                          setState(() {
-                                            _myTimersService.addTimer(Timer(
-                                                title: widget
-                                                    ._recipeInstance
-                                                    .recipe
-                                                    .steps[_counter]
-                                                    .timer_title,
-                                                durationInMinutes: widget
-                                                    ._recipeInstance
-                                                    .recipe
-                                                    .steps[_counter]
-                                                    .timer));
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  )
-                                : null),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 55,
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ButtonBar(
-                  alignment: MainAxisAlignment.center,
-                  children: [
-                    _counter > 0
-                        ? OutlineButton(
-                            onPressed: _decrement,
-                            padding: EdgeInsets.all(15),
-                            textColor: Theme.of(context).primaryColor,
-                            child: Text('Previous'),
-                          )
-                        : null,
-                    _counter < widget._recipeInstance.recipe.steps.length - 1
-                        ? RaisedButton(
-                            onPressed: _increment,
-                            padding: EdgeInsets.all(15),
-                            color: Theme.of(context).accentColor,
-                            textColor:
-                                Theme.of(context).colorScheme.onSecondary,
-                            child: Text(
-                              'Next',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : RaisedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            padding: EdgeInsets.all(15),
-                            color: Theme.of(context).accentColor,
-                            textColor:
-                                Theme.of(context).colorScheme.onSecondary,
-                            child: Text(
-                              'Finish',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          floatingActionButton: _myTimersService.myTimers.isEmpty
-              ? null
-              : FloatingActionButton(
-                  child: Stack(
+        appBar: AppBar(title: Text(widget._recipeInstance.recipe.name)),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Icon(Icons.timer),
-                      ),
-                      Transform.translate(
-                        offset: Offset(5, -5),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Theme.of(context).primaryColor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Text('${_myTimersService.myTimers.length}'),
-                            ),
-                          ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 2.5,
+                        child: Image.network(
+                          widget._recipeInstance.recipe.picture,
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Step ${widget._recipeInstance.recipe.steps[_counter].number}/${widget._recipeInstance.recipe.steps.length}',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${widget._recipeInstance.recipe.steps[_counter].instructions}',
+                          style: TextStyle(color: Colors.black),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: widget._recipeInstance.recipe.steps[_counter]
+                                      .timer_title !=
+                                  null
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                        '${widget._recipeInstance.recipe.steps[_counter].timer_title}: ${widget._recipeInstance.recipe.steps[_counter].timer} min'),
+                                    RaisedButton(
+                                      color: Theme.of(context).primaryColor,
+                                      textColor: Colors.white,
+                                      child: Text('Start timer'),
+                                      onPressed: () {
+                                        setState(() {
+                                          _myTimersService.addTimer(Timer(
+                                              title: widget
+                                                  ._recipeInstance
+                                                  .recipe
+                                                  .steps[_counter]
+                                                  .timer_title,
+                                              durationInMinutes: widget
+                                                  ._recipeInstance
+                                                  .recipe
+                                                  .steps[_counter]
+                                                  .timer));
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : null),
                     ],
                   ),
+                  SizedBox(
+                    height: 55,
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ButtonBar(
+                alignment: MainAxisAlignment.center,
+                children: [
+                  _counter > 0
+                      ? OutlineButton(
+                          onPressed: _decrement,
+                          padding: EdgeInsets.all(15),
+                          textColor: Theme.of(context).primaryColor,
+                          child: Text('Previous'),
+                        )
+                      : null,
+                  _counter < widget._recipeInstance.recipe.steps.length - 1
+                      ? RaisedButton(
+                          onPressed: _increment,
+                          padding: EdgeInsets.all(15),
+                          color: Theme.of(context).accentColor,
+                          textColor: Theme.of(context).colorScheme.onSecondary,
+                          child: Text(
+                            'Next',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : RaisedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          padding: EdgeInsets.all(15),
+                          color: Theme.of(context).accentColor,
+                          textColor: Theme.of(context).colorScheme.onSecondary,
+                          child: Text(
+                            'Finish',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                ],
+              ),
+            )
+          ],
+        ),
+        floatingActionButton: Stack(
+          children: [
+            Positioned(
+                bottom: 63,
+                right: 0,
+                child: _myTimersService.myTimers.isEmpty
+                    ? SizedBox()
+                    : FloatingActionButton(
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.timer),
+                            ),
+                            Transform.translate(
+                              offset: Offset(5, -5),
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Theme.of(context).primaryColor),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        '${_myTimersService.myTimers.length}'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TimerPage()));
+                        },
+                      )),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: FloatingActionButton(
+                  heroTag: "btn2",
+                  child: Icon(Icons.camera_alt),
+                  backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () async {
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TimerPage()));
-                  },
-                ));
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CameraScreen()));
+                  }),
+            ),
+          ],
+        ),
+      );
     });
   }
 }
