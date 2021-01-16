@@ -142,7 +142,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                         )
                       : RaisedButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(true);
                           },
                           padding: EdgeInsets.all(15),
                           color: Theme.of(context).accentColor,
@@ -159,61 +159,40 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
             )
           ],
         ),
-        floatingActionButton: Stack(
-          children: [
-            Positioned(
-                bottom: 63,
-                right: 0,
-                child: _myTimersService.myTimers.isEmpty
-                    ? SizedBox()
-                    : FloatingActionButton(
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Icon(Icons.timer),
-                            ),
-                            Transform.translate(
-                              offset: Offset(5, -5),
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).primaryColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        '${_myTimersService.myTimers.length}'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TimerPage()));
-                        },
-                      )),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: FloatingActionButton(
-                  heroTag: "btn2",
-                  child: Icon(Icons.camera_alt),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  onPressed: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CameraScreen()));
-                  }),
-            ),
-          ],
-        ),
+        floatingActionButton: _myTimersService.myTimers.isEmpty
+            ? null
+            : FloatingActionButton(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Icon(Icons.timer),
+              ),
+              Transform.translate(
+                offset: Offset(5, -5),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                          '${_myTimersService.myTimers.length}'),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          onPressed: () async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TimerPage()));
+          },
+        )
       );
     });
   }
