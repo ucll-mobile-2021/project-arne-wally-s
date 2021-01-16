@@ -54,7 +54,11 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       vegan = false;
                     });
                   },
-                  child: Icon(Icons.waves),
+                  child: Image.asset(
+                    'assets/fish.png',
+                    width: 21,
+                    height: 21,
+                  ),
                   color: fish ? Colors.blue : null,
                 ),
               ),
