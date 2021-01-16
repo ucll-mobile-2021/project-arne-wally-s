@@ -58,22 +58,22 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Step ${widget._recipeInstance.recipe.steps[_counter].number}/${widget._recipeInstance.recipe.steps.length}',
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headline.merge(TextStyle(fontSize: 30)),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 16.0, right: 16),
                         child: Text(
                           '${widget._recipeInstance.recipe.steps[_counter].instructions}',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black, fontSize: 20),
                           textAlign: TextAlign.justify,
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(left: 16.0, right: 16),
                           child: widget._recipeInstance.recipe.steps[_counter]
                                       .timer_title !=
                                   null
@@ -124,7 +124,12 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                           onPressed: _decrement,
                           padding: EdgeInsets.all(15),
                           textColor: Theme.of(context).primaryColor,
-                          child: Text('Previous'),
+                          child: Row(
+                            children: [
+                              Icon(Icons.arrow_left),
+                              Text('Previous', style: TextStyle(fontSize: 17),),
+                            ],
+                          ),
                         )
                       : null,
                   _counter < widget._recipeInstance.recipe.steps.length - 1
@@ -133,11 +138,17 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                           padding: EdgeInsets.all(15),
                           color: Theme.of(context).accentColor,
                           textColor: Theme.of(context).colorScheme.onSecondary,
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Next',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17
+                                ),
+                              ),
+                              Icon(Icons.arrow_right),
+                            ],
                           ),
                         )
                       : RaisedButton(
@@ -147,11 +158,17 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                           padding: EdgeInsets.all(15),
                           color: Theme.of(context).accentColor,
                           textColor: Theme.of(context).colorScheme.onSecondary,
-                          child: Text(
-                            'Finish',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Finish',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17
+                                ),
+                              ),
+                              Icon(Icons.arrow_right),
+                            ],
                           ),
                         ),
                 ],
