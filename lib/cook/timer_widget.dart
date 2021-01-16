@@ -50,7 +50,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                   child: ListBody(
                     children: <Widget>[
                       Text('${widget._timer.title} is done!'),
-                      Text('Be sure to check you food before continuing.'),
+                      Text('Be sure to check your food before continuing.'),
                     ],
                   ),
                 ),
