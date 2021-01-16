@@ -115,6 +115,16 @@ class RecipeHelper {
     });
   }
 
+  Future<List<String>> usedRecipes() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('recipe');
+    return List.generate(maps.length, (i) {
+      var id = maps[i]['id'];
+      return id;
+    });
+  }
+
+
   Future<List<Ingredient>> ingredients() async {
     // Get a reference to the database.
     final Database db = await database;
