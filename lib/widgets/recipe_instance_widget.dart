@@ -1,4 +1,5 @@
 import 'package:abc_cooking/cook/cook_detail.dart';
+import 'package:abc_cooking/cook/finished.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,8 @@ class RecipeInstanceWidget extends StatelessWidget {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('Do you want to remove this recipe from your cooking list?'),
+                    Text(
+                        'Do you want to remove this recipe from your cooking list?'),
                   ],
                 ),
               ),
@@ -69,7 +71,8 @@ class RecipeInstanceWidget extends StatelessWidget {
                 TextButton(
                   child: Text('Confirm'),
                   onPressed: () {
-                    var service = Provider.of<MyRecipesService>(context, listen: false);
+                    var service =
+                        Provider.of<MyRecipesService>(context, listen: false);
                     service.removeRecipe(_recipeInstance);
                     Navigator.of(context).pop();
                   },
@@ -89,12 +92,15 @@ class RecipeInstanceWidget extends StatelessWidget {
   }
 }
 
-void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
+void cookDetail(BuildContext context, RecipeInstance recipeInstance) async {
   if (recipeInstance.recipe.steps.length > 0) {
-    Navigator.push(
+    var finished = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CookDetailWidget(recipeInstance)));
+    if (finished != null && finished) {
+      await Navigator.push(context, MaterialPageRoute(builder: (context) => FinishedPage()));
+    }
   } else {
     showDialog<void>(
       context: context,
@@ -105,7 +111,8 @@ void cookDetail(BuildContext context, RecipeInstance recipeInstance) {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('It seems like this recipe has no instructions. This problem has been reported to our support team.'),
+                Text(
+                    'It seems like this recipe has no instructions. This problem has been reported to our support team.'),
                 Text('Sorry for the inconvenience!')
               ],
             ),
