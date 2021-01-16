@@ -97,6 +97,7 @@ class BuyWidgetState extends State<BuyWidget> {
                         child: Icon(Icons.shopping_cart),
                         onPressed: () {
                           shop(context);
+                          Scaffold.of(context).hideCurrentSnackBar();
                         }),
                   ),
                 ],
