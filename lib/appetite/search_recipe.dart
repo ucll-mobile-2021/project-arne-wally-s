@@ -62,7 +62,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Image.asset(
-                    'assets/fish.png',
+                    fish ? 'assets/fish_white.png' : 'assets/fish.png',
                     width: 21,
                     height: 21,
                   ),
@@ -82,7 +82,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       dessert = false;
                     });
                   },
-                  child: Icon(Icons.lunch_dining),
+                  child: Icon(
+                      Icons.lunch_dining,
+                    color: meat ? Colors.white : null,
+                  ),
                   color: meat ? Colors.red[900] : null,
                 ),
               ),
@@ -99,7 +102,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       dessert = false;
                     });
                   },
-                  child: Icon(Icons.eco),
+                  child: Icon(
+                      Icons.eco,
+                      color: veggie ? Colors.white : null,
+                  ),
                   color: veggie ? Colors.green : null,
                 ),
               ),
@@ -116,7 +122,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       dessert = false;
                     });
                   },
-                  child: Icon(Icons.grass),
+                  child: Icon(
+                      Icons.grass,
+                      color: vegan ? Colors.white : null,
+                  ),
                   color: vegan ? Colors.green : null,
                 ),
               ),
@@ -134,7 +143,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       dessert = false;
                     });
                   },
-                  child: Icon(Icons.local_bar),
+                  child: Icon(
+                      Icons.local_bar,
+                      color: drink ? Colors.white : null,
+                  ),
                   color: drink ? Colors.black : null,
                 ),
               ),
@@ -152,7 +164,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       drink = false;
                     });
                   },
-                  child: Icon(Icons.cake),
+                  child: Icon(
+                      Icons.cake,
+                      color: dessert ? Colors.white : null,
+                  ),
                   color: dessert ? Colors.brown : null,
                 ),
               ),
