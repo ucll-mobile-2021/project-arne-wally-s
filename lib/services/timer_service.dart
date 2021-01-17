@@ -34,4 +34,9 @@ class MyTimersService extends ChangeNotifier {
     _myTimers.remove(timer);
     notifyListeners();
   }
+
+  void removeAllTimers(){
+    _myTimers = [];
+    notifyListeners();
+  }
 }

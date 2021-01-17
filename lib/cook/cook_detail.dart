@@ -154,7 +154,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                         )
                       : RaisedButton(
                           onPressed: () {
-                            // TODO remove timers
+                            _myTimersService.removeAllTimers();
                             Navigator.of(context).pop(true);
                           },
                           padding: EdgeInsets.all(15),
