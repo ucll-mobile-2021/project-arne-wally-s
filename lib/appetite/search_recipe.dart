@@ -43,10 +43,58 @@ class SearchRecipe extends SearchDelegate<Recipe> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Wrap(
-            spacing: 10.0,
-            runSpacing: 10.0,
-            alignment: WrapAlignment.center,
+          // drink? alcoholic : fish, meat, veggie, vegan
+          drink ?
+          ButtonBar(
+            alignment:MainAxisAlignment.center,
+            children: [
+              // TODO alcoholic filter
+              // Drinks
+              Tooltip(
+                message: 'Drink',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      drink = !drink;
+                      vegan = false;
+                      meat = false;
+                      veggie = false;
+                      fish = false;
+                      dessert = false;
+                    });
+                  },
+                  child: Icon(
+                    Icons.local_bar,
+                    color: drink ? Colors.white : null,
+                  ),
+                  color: drink ? Colors.black : null,
+                ),
+              ),
+              // Deserts
+              Tooltip(
+                message: 'Dessert',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      dessert = !dessert;
+                      vegan = false;
+                      meat = false;
+                      veggie = false;
+                      fish = false;
+                      drink = false;
+                    });
+                  },
+                  child: Icon(
+                    Icons.cake,
+                    color: dessert ? Colors.white : null,
+                  ),
+                  color: dessert ? Colors.brown : null,
+                ),
+              ),
+            ],
+          )
+          : ButtonBar(
+            alignment:MainAxisAlignment.center,
             children: [
               Tooltip(
                 message: 'Fish',
@@ -83,7 +131,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Icon(
-                      Icons.lunch_dining,
+                    Icons.lunch_dining,
                     color: meat ? Colors.white : null,
                   ),
                   color: meat ? Colors.red[900] : null,
@@ -103,8 +151,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Icon(
-                      Icons.eco,
-                      color: veggie ? Colors.white : null,
+                    Icons.eco,
+                    color: veggie ? Colors.white : null,
                   ),
                   color: veggie ? Colors.green : null,
                 ),
@@ -123,12 +171,21 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Icon(
-                      Icons.grass,
-                      color: vegan ? Colors.white : null,
+                    Icons.grass,
+                    color: vegan ? Colors.white : null,
                   ),
                   color: vegan ? Colors.green : null,
                 ),
               ),
+
+            ],
+          ),
+
+
+          // drink, dessert
+          ButtonBar(
+            alignment:MainAxisAlignment.center,
+            children: [
               // Drinks
               Tooltip(
                 message: 'Drink',
@@ -144,8 +201,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Icon(
-                      Icons.local_bar,
-                      color: drink ? Colors.white : null,
+                    Icons.local_bar,
+                    color: drink ? Colors.white : null,
                   ),
                   color: drink ? Colors.black : null,
                 ),
@@ -165,14 +222,22 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                     });
                   },
                   child: Icon(
-                      Icons.cake,
-                      color: dessert ? Colors.white : null,
+                    Icons.cake,
+                    color: dessert ? Colors.white : null,
                   ),
                   color: dessert ? Colors.brown : null,
                 ),
               ),
             ],
           ),
+
+
+
+
+
+
+
+
           RecipeList.function(results, (context, recipe) {
             close(context, recipe);
           }),
