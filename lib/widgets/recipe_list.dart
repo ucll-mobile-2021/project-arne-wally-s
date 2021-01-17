@@ -29,26 +29,23 @@ class RecipeList extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height - 80,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: StaggeredGridView.countBuilder(
-                    crossAxisCount: 2,
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        RecipeWidget.tap(
-                            snapshot.data[index],
-                            _function != null
-                                ? () {
-                                    Function.apply(_function,
-                                        [context, snapshot.data[index]]);
-                                  }
-                                : null),
-                    staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
-                    mainAxisSpacing: 4.0,
-                    crossAxisSpacing: 4.0,
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: 2,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      RecipeWidget.tap(
+                          snapshot.data[index],
+                          _function != null
+                              ? () {
+                                  Function.apply(_function,
+                                      [context, snapshot.data[index]]);
+                                }
+                              : null),
+                  staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
+                  mainAxisSpacing: 4.0,
+                  crossAxisSpacing: 4.0,
                 ),
               ),
             );
