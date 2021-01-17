@@ -106,7 +106,16 @@ class AppetiteService {
       bool fish: false,
       bool drink: false,
       bool dessert: false}) async {
-    var qS = '?search=$query&vegan=$vegan&veggie=$veggie&meat=$meat&fish=$fish&drink=$drink&dessert=$dessert';
+    var qSDrink = drink ? '&drink=$drink' : '';
+    var qSDessert = dessert ? '&dessert=$dessert' : '';
+    var qS = '?search=$query' +
+        '&vegan=$vegan' +
+        '&veggie=$veggie' +
+        '&meat=$meat' +
+        '&fish=$fish' +
+        qSDrink +
+        qSDessert;
+
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recipes$qS');
   }
 
