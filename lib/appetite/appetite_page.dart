@@ -142,6 +142,28 @@ class AppetiteWidget extends StatelessWidget {
               ),
               'Vegan',
               Colors.green),
+          getButton(
+              context,
+                  () => _service.getDrinkRecipes(),
+              'Popular drinks',
+              Icon(
+                Icons.local_bar,
+                color: Colors.white,
+                size: 70,
+              ),
+              'Drinks',
+              Colors.black),
+          getButton(
+              context,
+                  () => _service.getDessertRecipes(),
+              'Popular desserts',
+              Icon(
+                Icons.cake,
+                color: Colors.white,
+                size: 70,
+              ),
+              'Desserts',
+              Colors.brown),
         ],
       ),
       floatingActionButton: FloatingActionButton(
