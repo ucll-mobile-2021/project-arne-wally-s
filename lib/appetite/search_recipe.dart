@@ -175,7 +175,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
           ),
           RecipeList.function(results, (context, recipe) {
             close(context, recipe);
-          }),
+          }, subtrHeight: 185,),
         ],
       );
     }));
