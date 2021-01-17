@@ -96,8 +96,10 @@ class RecipeDetailWidget extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
-                                  child: Image.network(
-                                      ingredient.ingredient.picture),
+                                  child: FadeInImage.assetNetwork(
+                                      image: ingredient.ingredient.picture,
+                                      placeholder: 'assets/placeholder.png',
+                                    )
                                 ),
                                 Text(ingredient.ingredient.name),
                               ],

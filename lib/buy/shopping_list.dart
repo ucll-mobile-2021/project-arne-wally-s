@@ -14,67 +14,69 @@ class ShoppingList extends StatefulWidget {
 class ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MyRecipesService>(
-      builder: (context, service, child) {
-        var cart = service.cart;
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Shopping list'),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                DataTable(
-                  columns: [
-                    DataColumn(label: Text('Done')),
-                    DataColumn(label: Text('Ingredient')),
-                    DataColumn(label: Text('Amount')),
-                  ],
-                  rows: List<DataRow>.generate(cart.ingredients.length, (index) {
-                    var ingredient = cart.ingredients[index];
-                    return DataRow(
-                      color: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        // All rows will have the same selected color.
-                        if (states.contains(MaterialState.selected))
-                          return Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.08);
-                        // Even rows will have a grey color.
-                        if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
-                        return null; // Use default value for other states and odd rows.
-                      }),
-                      cells: [
-                        DataCell(Checkbox(
-                          value: cart.ingredients[index].selected,
-                          onChanged: (val) {
-                            cart.ingredients[index].toggleSelected();
-                            setState(() {});
-                          },
-                        )),
-                        DataCell(
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, right: 8, bottom: 8),
-                                child: Image.network(ingredient.ingredient.picture),
+    return Consumer<MyRecipesService>(builder: (context, service, child) {
+      var cart = service.cart;
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Shopping list'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              DataTable(
+                columns: [
+                  DataColumn(label: Text('Done')),
+                  DataColumn(label: Text('Ingredient')),
+                  DataColumn(label: Text('Amount')),
+                ],
+                rows: List<DataRow>.generate(cart.ingredients.length, (index) {
+                  var ingredient = cart.ingredients[index];
+                  return DataRow(
+                    color: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      // All rows will have the same selected color.
+                      if (states.contains(MaterialState.selected))
+                        return Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.08);
+                      // Even rows will have a grey color.
+                      if (index % 2 == 0) return Colors.grey.withOpacity(0.3);
+                      return null; // Use default value for other states and odd rows.
+                    }),
+                    cells: [
+                      DataCell(Checkbox(
+                        value: cart.ingredients[index].selected,
+                        onChanged: (val) {
+                          cart.ingredients[index].toggleSelected();
+                          setState(() {});
+                        },
+                      )),
+                      DataCell(
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8.0, right: 8, bottom: 8),
+                              child: FadeInImage.assetNetwork(
+                                image: ingredient.ingredient.picture,
+                                placeholder: 'assets/placeholder.png',
                               ),
-                              Expanded(child: Text(ingredient.ingredient.name)),
-                            ],
-                          ),
+                            ),
+                            Expanded(child: Text(ingredient.ingredient.name)),
+                          ],
                         ),
-                        DataCell(Text(getAmount(ingredient))),
-                      ],
-                    );
-                  }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      /*
+                      ),
+                      DataCell(Text(getAmount(ingredient))),
+                    ],
+                  );
+                }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: () {
+                    /*
                       // This is not needed, since we save the current selected items
                       // And people can always come back later
                       if (cart.ingredients.any((e) => e.selected != true)) {
@@ -114,25 +116,24 @@ class ShoppingListState extends State<ShoppingList> {
                       } else {
                       }
                        */
-                      Navigator.of(context).pop();
-                    },
-                    padding: EdgeInsets.all(15),
-                    color: Theme.of(context).accentColor,
-                    textColor: Theme.of(context).colorScheme.onSecondary,
-                    child: Text(
-                      'Finish',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Navigator.of(context).pop();
+                  },
+                  padding: EdgeInsets.all(15),
+                  color: Theme.of(context).accentColor,
+                  textColor: Theme.of(context).colorScheme.onSecondary,
+                  child: Text(
+                    'Finish',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 
   String getAmount(IngredientAmountSelected ingredientamount) {
