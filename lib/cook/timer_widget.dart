@@ -31,7 +31,8 @@ class _TimerWidgetState extends State<TimerWidget> {
   }
 
   void _startTimer() {
-    _counter = widget._timer.durationInSeconds - widget._timer.timeLeftInSeconds();
+    _counter =
+        widget._timer.durationInSeconds - widget._timer.timeLeftInSeconds();
     if (_countingTimer != null) {
       _countingTimer.cancel();
     }
@@ -55,17 +56,15 @@ class _TimerWidgetState extends State<TimerWidget> {
                   ),
                 ),
                 actions: <Widget>[
-                  Consumer<MyTimersService>(
-                    builder: (context, service, child) {
-                      return TextButton(
-                        child: Text('Got it!'),
-                        onPressed: () {
-                          service.removeTimer(widget._timer);
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    }
-                  ),
+                  Consumer<MyTimersService>(builder: (context, service, child) {
+                    return TextButton(
+                      child: Text('Got it!'),
+                      onPressed: () {
+                        service.removeTimer(widget._timer);
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  }),
                 ],
               );
             },
@@ -78,37 +77,57 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var left = Duration(seconds: widget._timer.durationInSeconds - _counter);
+    var goal = Duration(seconds: widget._timer.durationInSeconds);
     return Card(
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('${widget._timer.title}'),
+            child: Text('${widget._timer.title}', style: Theme.of(context).textTheme.headline5,),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('$_counter / ${widget._timer.durationInSeconds}'),
+          SizedBox(height: 30,),
+          Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Transform.translate(
+                  offset: Offset(0, 10),
+                  child: CircularProgressIndicator(
+                    value: _counter / (widget._timer.durationInSeconds),
+                    backgroundColor: Colors.grey[300],
+                    strokeWidth: 60,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Transform.translate(
+                  offset: Offset(0, -10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    padding: EdgeInsets.all(30),
+                    child: Text(
+                      '${durationToTime(left)}',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _counter == widget._timer.durationInSeconds ?
-            Text(
-              'Finished!',
-              style: TextStyle(color: Colors.green),
-            ) :
-            Text(
-              'In progress!'
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
-            child: LinearProgressIndicator(
-              value: _counter / (widget._timer.durationInSeconds),
-              backgroundColor: Colors.grey[700],
-            ),
-          )
+          SizedBox(height: 20,)
         ],
       ),
     );
+  }
+
+  String durationToTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
   }
 }
