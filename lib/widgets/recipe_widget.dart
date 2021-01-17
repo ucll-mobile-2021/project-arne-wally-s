@@ -21,13 +21,13 @@ class RecipeWidget extends StatelessWidget {
     if (_width != 0) {
       img = FadeInImage.assetNetwork(
         image: _recipe.picture,
-        placeholder: 'assets/logo_pan.png',
+        placeholder: 'assets/placeholder.png',
         height: _width,
       );
     } else {
       img = FadeInImage.assetNetwork(
         image: _recipe.picture,
-        placeholder: 'assets/logo_pan.png',
+        placeholder: 'assets/placeholder.png',
       );
     }
     return GestureDetector(
