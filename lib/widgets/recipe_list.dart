@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 class RecipeList extends StatelessWidget {
   final Future<List<Recipe>> _futureRecipes;
   Function _function;
+  final int subtrHeight;
 
-  RecipeList(this._futureRecipes, bool shouldReturnRecipeInstance) {
+  RecipeList(this._futureRecipes, bool shouldReturnRecipeInstance, {this.subtrHeight: 80}) {
     if (shouldReturnRecipeInstance) {
       this._function = returnRecipe;
     } else {
@@ -19,7 +20,7 @@ class RecipeList extends StatelessWidget {
     }
   }
 
-  RecipeList.function(this._futureRecipes, this._function);
+  RecipeList.function(this._futureRecipes, this._function, {this.subtrHeight: 80});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class RecipeList extends StatelessWidget {
           if (snapshot.hasData) {
             return SingleChildScrollView(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height - 200,
+                height: MediaQuery.of(context).size.height - subtrHeight,
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: StaggeredGridView.countBuilder(
@@ -55,7 +56,7 @@ class RecipeList extends StatelessWidget {
           }
           if (snapshot.hasError) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height - 80,
+              height: MediaQuery.of(context).size.height - subtrHeight,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
