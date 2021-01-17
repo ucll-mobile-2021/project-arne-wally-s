@@ -21,6 +21,7 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  static final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
   MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'ABC Cooking',
+        navigatorKey: navigatorKey,
         theme: ThemeData(
           // This is the theme of your application.
           //

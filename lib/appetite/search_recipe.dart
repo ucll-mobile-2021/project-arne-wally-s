@@ -1,9 +1,13 @@
+import 'package:abc_cooking/appetite/select_recipe_page.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/appetite_service.dart';
+import 'package:abc_cooking/widgets/recipe_detail.dart';
 import 'package:abc_cooking/widgets/recipe_list.dart';
 import 'package:flutter/material.dart';
 
-class SearchRecipe extends SearchDelegate<Recipe> {
+import '../main.dart';
+
+class SearchRecipe extends SearchDelegate<RecipeInstance> {
   final AppetiteService _service;
   bool fish = false;
   bool meat = false;
@@ -11,6 +15,9 @@ class SearchRecipe extends SearchDelegate<Recipe> {
   bool vegan = false;
   bool drink = false;
   bool dessert = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   SearchRecipe(this._service);
 
@@ -260,14 +267,16 @@ class SearchRecipe extends SearchDelegate<Recipe> {
               ),
             ],
           ),
-
-          RecipeList.function(
-            results,
-            (context, recipe) {
-              close(context, recipe);
-            },
-            subtrHeight: 175,
-          ),
+          RecipeList.function(results, (thisContext, recipe) async {
+            var result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (c) => RecipeDetailWidget.select(recipe, true)));
+            if (result != null) {
+              // You should not try to understand this
+              close(MyApp.navigatorKey.currentContext, result);
+            }
+          }, subtrHeight: 175,),
         ],
       );
     }));

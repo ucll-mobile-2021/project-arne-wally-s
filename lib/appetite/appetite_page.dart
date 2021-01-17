@@ -144,7 +144,7 @@ class AppetiteWidget extends StatelessWidget {
               Colors.green),
           getButton(
               context,
-                  () => _service.getDrinkRecipes(),
+              () => _service.getDrinkRecipes(),
               'Popular drinks',
               Icon(
                 Icons.local_bar,
@@ -155,7 +155,7 @@ class AppetiteWidget extends StatelessWidget {
               Colors.black),
           getButton(
               context,
-                  () => _service.getDessertRecipes(),
+              () => _service.getDessertRecipes(),
               'Popular desserts',
               Icon(
                 Icons.cake,
@@ -200,6 +200,7 @@ class AppetiteWidget extends StatelessWidget {
     );
   }
 
+/*
   void selectRecipe(BuildContext context, Recipe recipe) async {
     _selectRecipe(
         context,
@@ -209,6 +210,7 @@ class AppetiteWidget extends StatelessWidget {
                 builder: (context) =>
                     RecipeDetailWidget.select(recipe, true))));
   }
+ */
 
   void _selectRecipe(BuildContext context, RecipeInstance recipe) {
     Scaffold.of(context).hideCurrentSnackBar();
@@ -245,14 +247,6 @@ class AppetiteWidget extends StatelessWidget {
   void _searchManually(BuildContext context) async {
     var recipe =
         await showSearch(context: context, delegate: SearchRecipe(_service));
-    if (recipe != null) {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => RecipeDetailWidget.select(recipe, true)));
-      if (result != null) {
-        _selectRecipe(context, result);
-      }
-    }
+    _selectRecipe(context, recipe);
   }
 }
