@@ -39,208 +39,235 @@ class SearchRecipe extends SearchDelegate<Recipe> {
     return SingleChildScrollView(child:
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       var results = _service.getSearchResultsRecipes(query,
-          fish: fish, meat: meat, veggie: veggie, vegan: vegan, drink: drink, dessert: dessert);
+          fish: fish,
+          meat: meat,
+          veggie: veggie,
+          vegan: vegan,
+          drink: drink,
+          dessert: dessert);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // drink? alcoholic : fish, meat, veggie, vegan
-          drink ?
-          ButtonBar(
-            alignment:MainAxisAlignment.center,
-            children: [
-              // TODO alcoholic filter
-              // Drinks
-              Tooltip(
-                message: 'Drink',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      drink = !drink;
-                      vegan = false;
-                      meat = false;
-                      veggie = false;
-                      fish = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.local_bar,
-                    color: drink ? Colors.white : null,
-                  ),
-                  color: drink ? Colors.black : null,
+          drink
+              ? ButtonBar(
+                  buttonPadding: EdgeInsets.zero,
+                  alignment: MainAxisAlignment.end,
+                  children: [
+                    // TODO alcoholic filter
+                    // Drinks
+                    Tooltip(
+                      message: 'Drink',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              drink = !drink;
+                              vegan = false;
+                              meat = false;
+                              veggie = false;
+                              fish = false;
+                              dessert = false;
+                            });
+                          },
+                          child: Icon(
+                            Icons.local_bar,
+                            color: drink ? Colors.white : null,
+                          ),
+                          color: drink ? Colors.black : null,
+                        ),
+                      ),
+                    ),
+                    // Deserts
+                    Tooltip(
+                      message: 'Dessert',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              dessert = !dessert;
+                              vegan = false;
+                              meat = false;
+                              veggie = false;
+                              fish = false;
+                              drink = false;
+                            });
+                          },
+                          child: Icon(
+                            Icons.cake,
+                            color: dessert ? Colors.white : null,
+                          ),
+                          color: dessert ? Colors.brown : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : ButtonBar(
+                  buttonPadding: EdgeInsets.zero,
+                  alignment: MainAxisAlignment.end,
+                  children: [
+                    Tooltip(
+                      message: 'Fish',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              fish = !fish;
+                              meat = false;
+                              veggie = false;
+                              vegan = false;
+                              drink = false;
+                              dessert = false;
+                            });
+                          },
+                          child: Image.asset(
+                            fish ? 'assets/fish_white.png' : 'assets/fish.png',
+                            width: 21,
+                            height: 21,
+                          ),
+                          color: fish ? Colors.blue : null,
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Meat',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              meat = !meat;
+                              fish = false;
+                              veggie = false;
+                              vegan = false;
+                              drink = false;
+                              dessert = false;
+                            });
+                          },
+                          child: Icon(
+                            Icons.lunch_dining,
+                            color: meat ? Colors.white : null,
+                          ),
+                          color: meat ? Colors.red[900] : null,
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Vegetarian',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              veggie = !veggie;
+                              meat = false;
+                              fish = false;
+                              vegan = false;
+                              drink = false;
+                              dessert = false;
+                            });
+                          },
+                          child: Icon(
+                            Icons.eco,
+                            color: veggie ? Colors.white : null,
+                          ),
+                          color: veggie ? Colors.green : null,
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Vegan',
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            setState(() {
+                              vegan = !vegan;
+                              meat = false;
+                              veggie = false;
+                              fish = false;
+                              drink = false;
+                              dessert = false;
+                            });
+                          },
+                          child: Icon(
+                            Icons.grass,
+                            color: vegan ? Colors.white : null,
+                          ),
+                          color: vegan ? Colors.green : null,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              // Deserts
-              Tooltip(
-                message: 'Dessert',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      dessert = !dessert;
-                      vegan = false;
-                      meat = false;
-                      veggie = false;
-                      fish = false;
-                      drink = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.cake,
-                    color: dessert ? Colors.white : null,
-                  ),
-                  color: dessert ? Colors.brown : null,
-                ),
-              ),
-            ],
-          )
-          : ButtonBar(
-            alignment:MainAxisAlignment.center,
-            children: [
-              Tooltip(
-                message: 'Fish',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      fish = !fish;
-                      meat = false;
-                      veggie = false;
-                      vegan = false;
-                      drink = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Image.asset(
-                    fish ? 'assets/fish_white.png' : 'assets/fish.png',
-                    width: 21,
-                    height: 21,
-                  ),
-                  color: fish ? Colors.blue : null,
-                ),
-              ),
-              Tooltip(
-                message: 'Meat',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      meat = !meat;
-                      fish = false;
-                      veggie = false;
-                      vegan = false;
-                      drink = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.lunch_dining,
-                    color: meat ? Colors.white : null,
-                  ),
-                  color: meat ? Colors.red[900] : null,
-                ),
-              ),
-              Tooltip(
-                message: 'Vegetarian',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      veggie = !veggie;
-                      meat = false;
-                      fish = false;
-                      vegan = false;
-                      drink = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.eco,
-                    color: veggie ? Colors.white : null,
-                  ),
-                  color: veggie ? Colors.green : null,
-                ),
-              ),
-              Tooltip(
-                message: 'Vegan',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      vegan = !vegan;
-                      meat = false;
-                      veggie = false;
-                      fish = false;
-                      drink = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.grass,
-                    color: vegan ? Colors.white : null,
-                  ),
-                  color: vegan ? Colors.green : null,
-                ),
-              ),
-
-            ],
-          ),
-
 
           // drink, dessert
           ButtonBar(
-            alignment:MainAxisAlignment.center,
+            alignment: MainAxisAlignment.end,
+            buttonPadding: EdgeInsets.zero,
             children: [
               // Drinks
               Tooltip(
                 message: 'Drink',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      drink = !drink;
-                      vegan = false;
-                      meat = false;
-                      veggie = false;
-                      fish = false;
-                      dessert = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.local_bar,
-                    color: drink ? Colors.white : null,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      setState(() {
+                        drink = !drink;
+                        vegan = false;
+                        meat = false;
+                        veggie = false;
+                        fish = false;
+                        dessert = false;
+                      });
+                    },
+                    child: Icon(
+                      Icons.local_bar,
+                      color: drink ? Colors.white : null,
+                    ),
+                    color: drink ? Colors.black : null,
                   ),
-                  color: drink ? Colors.black : null,
                 ),
               ),
               // Deserts
               Tooltip(
                 message: 'Dessert',
-                child: RaisedButton(
-                  onPressed: () {
-                    setState(() {
-                      dessert = !dessert;
-                      vegan = false;
-                      meat = false;
-                      veggie = false;
-                      fish = false;
-                      drink = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.cake,
-                    color: dessert ? Colors.white : null,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      setState(() {
+                        dessert = !dessert;
+                        vegan = false;
+                        meat = false;
+                        veggie = false;
+                        fish = false;
+                        drink = false;
+                      });
+                    },
+                    child: Icon(
+                      Icons.cake,
+                      color: dessert ? Colors.white : null,
+                    ),
+                    color: dessert ? Colors.brown : null,
                   ),
-                  color: dessert ? Colors.brown : null,
                 ),
               ),
             ],
           ),
 
-
-
-
-
-
-
-
-          RecipeList.function(results, (context, recipe) {
-            close(context, recipe);
-          }, subtrHeight: 185,),
+          RecipeList.function(
+            results,
+            (context, recipe) {
+              close(context, recipe);
+            },
+            subtrHeight: 175,
+          ),
         ],
       );
     }));
