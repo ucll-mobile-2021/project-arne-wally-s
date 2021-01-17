@@ -62,12 +62,14 @@ class Cart {
   }
 
   void removeRecipe(RecipeInstance recipeInstance) {
-    var r = null;
-    unselectRecipe(recipeInstance);
+    RecipeSelected r;
     for (var recipe in recipes) {
       if (recipe.recipe == recipeInstance) {
         r = recipe;
       }
+    }
+    if (r.selected) {
+      unselectRecipe(recipeInstance);
     }
     recipes.remove(r);
     saveCart();
