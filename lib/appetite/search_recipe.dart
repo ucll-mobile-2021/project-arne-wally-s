@@ -254,7 +254,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       Icons.cake,
                       color: dessert ? Colors.white : null,
                     ),
-                    color: dessert ? Colors.brown : null,
+                    color: dessert ? Colors.brown[800] : null,
                   ),
                 ),
               ),
