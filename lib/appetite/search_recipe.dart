@@ -9,6 +9,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
   bool meat = false;
   bool veggie = false;
   bool vegan = false;
+  bool drink = false;
+  bool dessert = false;
 
   SearchRecipe(this._service);
 
@@ -37,7 +39,7 @@ class SearchRecipe extends SearchDelegate<Recipe> {
     return SingleChildScrollView(child:
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       var results = _service.getSearchResultsRecipes(query,
-          fish: fish, meat: meat, veggie: veggie, vegan: vegan);
+          fish: fish, meat: meat, veggie: veggie, vegan: vegan, drink: drink, dessert: dessert);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,6 +54,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       meat = false;
                       veggie = false;
                       vegan = false;
+                      drink = false;
+                      dessert = false;
                     });
                   },
                   child: Image.asset(
@@ -71,6 +75,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       fish = false;
                       veggie = false;
                       vegan = false;
+                      drink = false;
+                      dessert = false;
                     });
                   },
                   child: Icon(Icons.lunch_dining),
@@ -86,6 +92,8 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       meat = false;
                       fish = false;
                       vegan = false;
+                      drink = false;
+                      dessert = false;
                     });
                   },
                   child: Icon(Icons.eco),
@@ -101,10 +109,48 @@ class SearchRecipe extends SearchDelegate<Recipe> {
                       meat = false;
                       veggie = false;
                       fish = false;
+                      drink = false;
+                      dessert = false;
                     });
                   },
                   child: Icon(Icons.grass),
                   color: vegan ? Colors.green : null,
+                ),
+              ),
+              // Drinks
+              Tooltip(
+                message: 'Drink',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      drink = !drink;
+                      vegan = false;
+                      meat = false;
+                      veggie = false;
+                      fish = false;
+                      dessert = false;
+                    });
+                  },
+                  child: Icon(Icons.local_bar),
+                  color: drink ? Colors.black : null,
+                ),
+              ),
+              // Deserts
+              Tooltip(
+                message: 'Dessert',
+                child: RaisedButton(
+                  onPressed: () {
+                    setState(() {
+                      dessert = !dessert;
+                      vegan = false;
+                      meat = false;
+                      veggie = false;
+                      fish = false;
+                      drink = false;
+                    });
+                  },
+                  child: Icon(Icons.cake),
+                  color: dessert ? Colors.brown : null,
                 ),
               ),
             ],

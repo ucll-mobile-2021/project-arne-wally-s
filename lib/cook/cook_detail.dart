@@ -109,7 +109,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 55,
+                    height: 75,
                   ),
                 ],
               ),
@@ -127,6 +127,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                           child: Row(
                             children: [
                               Icon(Icons.arrow_left),
+                              // TODO fix opacity
                               Text('Previous', style: TextStyle(fontSize: 17),),
                             ],
                           ),
@@ -153,6 +154,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                         )
                       : RaisedButton(
                           onPressed: () {
+                            // TODO remove timers
                             Navigator.of(context).pop(true);
                           },
                           padding: EdgeInsets.all(15),
