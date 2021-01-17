@@ -43,7 +43,10 @@ class SearchRecipe extends SearchDelegate<Recipe> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ButtonBar(
+          Wrap(
+            spacing: 10.0,
+            runSpacing: 10.0,
+            alignment: WrapAlignment.center,
             children: [
               Tooltip(
                 message: 'Fish',
