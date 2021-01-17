@@ -120,14 +120,14 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                 alignment: MainAxisAlignment.center,
                 children: [
                   _counter > 0
-                      ? OutlineButton(
+                      ? RaisedButton(
                           onPressed: _decrement,
                           padding: EdgeInsets.all(15),
+                          color: Colors.white,
                           textColor: Theme.of(context).primaryColor,
                           child: Row(
                             children: [
                               Icon(Icons.arrow_left),
-                              // TODO fix opacity
                               Text('Previous', style: TextStyle(fontSize: 17),),
                             ],
                           ),
