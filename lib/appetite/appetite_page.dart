@@ -163,7 +163,7 @@ class AppetiteWidget extends StatelessWidget {
                 size: 70,
               ),
               'Desserts',
-              Colors.brown),
+              Colors.brown[800]),
         ],
       ),
       floatingActionButton: FloatingActionButton(
