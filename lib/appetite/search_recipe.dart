@@ -133,8 +133,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                           },
                           child: Image.asset(
                             fish ? 'assets/fish_white.png' : 'assets/fish.png',
-                            width: 21,
-                            height: 21,
+                            width: 19,
+                            height: 19,
                           ),
                           color: fish ? Colors.blue : null,
                         ),

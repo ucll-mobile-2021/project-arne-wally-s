@@ -28,7 +28,6 @@ class AppetiteService {
 
   Future<List<Recipe>> getRecommendedRecipes() async {
     var usedRecipes = await RecipeHelper().usedRecipes();
-    print("used recipes id's: " + usedRecipes.toString());
     var myJson = jsonEncode(usedRecipes).toString();
     // Returns a list of recommended recipes
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recommended/?recipes=$myJson');
@@ -40,7 +39,6 @@ class AppetiteService {
 
   Future<List<Recipe>> getFavoriteRecipes() async {
     var usedRecipes = await RecipeHelper().usedRecipes();
-    print("used recipes id's: " + usedRecipes.toString());
     var myJson = jsonEncode(usedRecipes).toString();
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/get-recipes/?recipes=$myJson');
   }

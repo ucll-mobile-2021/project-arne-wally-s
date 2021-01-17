@@ -115,8 +115,8 @@ class AppetiteWidget extends StatelessWidget {
               'Popular fish',
               Image.asset(
                 'assets/fish_white.png',
-                width: 58,
-                height: 58,
+                width: 50,
+                height: 50,
               ),
               'Fish',
               Colors.blue),
@@ -199,18 +199,6 @@ class AppetiteWidget extends StatelessWidget {
       ),
     );
   }
-
-/*
-  void selectRecipe(BuildContext context, Recipe recipe) async {
-    _selectRecipe(
-        context,
-        await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    RecipeDetailWidget.select(recipe, true))));
-  }
- */
 
   void _selectRecipe(BuildContext context, RecipeInstance recipe) {
     Scaffold.of(context).hideCurrentSnackBar();
