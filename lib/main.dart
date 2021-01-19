@@ -88,17 +88,22 @@ class _MyHomePageState extends State<MyHomePage> {
     CookWidget(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  final controller = PageController(initialPage: 0, keepPage: true);
+
+  void _setIndex(int index) {
+    if (index != _selectedIndex) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var pageView = PageView(children: _pages, onPageChanged: _setIndex,);
     //button
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: pageView,
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -117,8 +122,11 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Theme.of(context).accentColor,
         currentIndex: _selectedIndex,
         onTap: (index) {
-          _onItemTapped(index);
-        } ,
+          setState(() {
+            _selectedIndex = index;
+            pageView.controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
+          });
+          } ,
       ),
     );
   }
