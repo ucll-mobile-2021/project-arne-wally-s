@@ -10,6 +10,8 @@ import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class CookDetailWidget extends StatefulWidget {
   final RecipeInstance _recipeInstance;
@@ -61,6 +63,10 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
         for (var timer in timerService.myTimers) {
           if (timer.timeLeftInSeconds() <= 0) {
             Vibration.vibrate();
+            Future<AudioPlayer> playLocalAsset() async {
+              AudioCache cache = new AudioCache();
+              return await cache.play("microwave.wav");
+            }
             showDialog<void>(
               context: context,
               barrierDismissible: false, // user must tap button!
