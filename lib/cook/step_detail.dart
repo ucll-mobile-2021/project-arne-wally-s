@@ -35,8 +35,13 @@ class StepDetail extends StatelessWidget {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                            '${recipe.steps[step].timer_title}: ${recipe.steps[step].timer} min'),
+                        new Container(
+                          padding: const EdgeInsets.all(16.0),
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Text(
+                                '${recipe.steps[step].timer_title}: ${recipe.steps[step].timer} min'),
+                        ),
+
                         RaisedButton(
                           color: Theme.of(context).accentColor,
                           textColor: Colors.white,
