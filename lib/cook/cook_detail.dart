@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:abc_cooking/cook/timer_page.dart';
 import 'package:abc_cooking/cook/timer_widget.dart';
 import 'package:abc_cooking/models/recipe.dart';
-import 'package:abc_cooking/models/timer.dart';
+import 'package:abc_cooking/models/timer.dart' as timerData;
+import 'package:abc_cooking/services/service.dart';
 import 'package:abc_cooking/services/timer_service.dart';
 import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +20,7 @@ class CookDetailWidget extends StatefulWidget {
 }
 
 class _CookDetailWidgetState extends State<CookDetailWidget> {
+  // Counter to keep track of recipes steps
   int _counter = 0;
 
   void _increment() {
@@ -32,6 +36,61 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
         _counter--;
       });
     }
+  }
+
+  // Timer to check if there are any recipe timers that are done
+  Timer _countingTimer;
+
+  @override
+  void initState() {
+    _startTimer();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _countingTimer.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        var timerService = MyTimersService();
+        if (timerService.myTimers.length > 0) {
+          for ( var timer in timerService.myTimers) {
+            if (timer.timeLeftInSeconds() <= 0) {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false, // user must tap button!
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Time!'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text('${timer.title} is done!'),
+                          Text('Be sure to check your food before continuing.'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: Text('Got it!'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                    ],
+                  );
+                },
+              );
+              timerService.removeTimer(timer);
+            }
+          }
+        }
+      });
+    });
   }
 
   @override
@@ -89,7 +148,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                                       child: Text('Start timer'),
                                       onPressed: () {
                                         setState(() {
-                                          _myTimersService.addTimer(Timer(
+                                          _myTimersService.addTimer(timerData.Timer(
                                               title: widget
                                                   ._recipeInstance
                                                   .recipe
