@@ -7,6 +7,7 @@ import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:abc_cooking/services/timer_service.dart';
 import 'package:abc_cooking/widgets/camera_screen.dart';
+import 'package:abc_cooking/widgets/horizontal_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
@@ -151,6 +152,15 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
                     ),
                   ],
                 ),),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    SizedBox(height: 10,),
+                    HorizontalDots(widget._recipeInstance.recipe.steps.length, _counter),
+                  ],
+                ),
+              ),
             ],
           ),
           floatingActionButton: _myTimersService.myTimers.isEmpty
