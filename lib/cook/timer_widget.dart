@@ -4,6 +4,7 @@ import 'package:abc_cooking/models/timer.dart' as timerData;
 import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TimerWidget extends StatefulWidget {
   final timerData.Timer _timer;
@@ -41,6 +42,7 @@ class _TimerWidgetState extends State<TimerWidget> {
         if (_counter < widget._timer.durationInSeconds) {
           _counter++;
         } else {
+          Vibration.vibrate();
           showDialog<void>(
             context: context,
             barrierDismissible: false, // user must tap button!

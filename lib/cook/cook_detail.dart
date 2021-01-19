@@ -9,6 +9,7 @@ import 'package:abc_cooking/services/timer_service.dart';
 import 'package:abc_cooking/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class CookDetailWidget extends StatefulWidget {
   final RecipeInstance _recipeInstance;
@@ -55,11 +56,11 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
 
   void _startTimer() {
     _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
         var timerService = MyTimersService();
         if (timerService.myTimers.length > 0) {
           for ( var timer in timerService.myTimers) {
             if (timer.timeLeftInSeconds() <= 0) {
+              Vibration.vibrate();
               showDialog<void>(
                 context: context,
                 barrierDismissible: false, // user must tap button!
@@ -88,8 +89,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
               timerService.removeTimer(timer);
             }
           }
-        }
-      });
+        };
     });
   }
 
