@@ -17,7 +17,7 @@ class TimerPage extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo_pan.png'),
+              Image.asset('assets/timer.gif'),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
