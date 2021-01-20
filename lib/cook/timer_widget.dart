@@ -5,6 +5,8 @@ import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class TimerWidget extends StatefulWidget {
   final timerData.Timer _timer;
@@ -31,6 +33,11 @@ class _TimerWidgetState extends State<TimerWidget> {
     super.dispose();
   }
 
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("microwave.mp3");
+  }
+
   void _startTimer() {
     _counter =
         widget._timer.durationInSeconds - widget._timer.timeLeftInSeconds();
@@ -43,6 +50,7 @@ class _TimerWidgetState extends State<TimerWidget> {
           _counter++;
         } else {
           Vibration.vibrate();
+          playLocalAsset();
           showDialog<void>(
             context: context,
             barrierDismissible: false, // user must tap button!
