@@ -101,7 +101,7 @@ class RecipeDetailWidget extends StatelessWidget {
                                       placeholder: 'assets/placeholder.png',
                                     )
                                 ),
-                                Text(ingredient.ingredient.name),
+                                Expanded(child: Text(ingredient.ingredient.name)),
                               ],
                             )),
                             DataCell(Text(getAmount(ingredient))),
