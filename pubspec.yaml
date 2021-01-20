@@ -40,6 +40,8 @@ dependencies:
   vibration: ^1.7.3
   audioplayers: ^0.17.2
   waterfall_flow: any
+  flutter_map: any
+  location: ^3.0.0
 
 
 dev_dependencies:
