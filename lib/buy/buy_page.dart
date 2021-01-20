@@ -1,3 +1,4 @@
+import 'package:abc_cooking/buy/map_page.dart';
 import 'package:abc_cooking/buy/shopping_list.dart';
 import 'package:abc_cooking/models/cart.dart';
 import 'package:abc_cooking/services/location_service.dart';
@@ -25,35 +26,60 @@ class BuyWidgetState extends State<BuyWidget> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2.5,
-                child: FutureBuilder(
-                  future: LocationService.getLocation(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return FlutterMap(
-                        options: new MapOptions(
-                          center: snapshot.data,
-                          zoom: 13,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapPage()));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Theme.of(context).primaryColor,
+                      boxShadow: [BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 5)],
+                      image: DecorationImage(
+                        image: AssetImage('assets/map.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(35.0),
+                            child: Text(
+                              'Look for shops nearby',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                                  shadows: [
+                                    Shadow(
+                                      // bottomLeft
+                                        offset: Offset(-.7, -.7),
+                                        color: Theme.of(context).primaryColor),
+                                    Shadow(
+                                      // bottomRight
+                                        offset: Offset(.7, -.7),
+                                        color: Theme.of(context).primaryColor),
+                                    Shadow(
+                                      // topRight
+                                        offset: Offset(.7, .7),
+                                        color: Theme.of(context).primaryColor),
+                                    Shadow(
+                                      // topLeft
+                                        offset: Offset(-.7, .7),
+                                        color: Theme.of(context).primaryColor),
+                                  ]
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
-                        layers: [
-                          new TileLayerOptions(
-                              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                              subdomains: ['a', 'b', 'c']
-                          ),
-                          new MarkerLayerOptions(
-                            markers: [
-
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      print(snapshot.error);
-                    }
-                    return Text('Loading');
-                  }
+                      ],
+                    ),
+                  ),
                 ),
               ),
               (service.empty())
@@ -64,7 +90,8 @@ class BuyWidgetState extends State<BuyWidget> {
                           child: Icon(
                             Icons.shopping_cart,
                             size: 250,
-                            color: Theme.of(context).primaryColor.withAlpha(240),
+                            color:
+                                Theme.of(context).primaryColor.withAlpha(240),
                           ),
                         ),
                         Text(
@@ -77,37 +104,37 @@ class BuyWidgetState extends State<BuyWidget> {
                       ],
                     )
                   : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      DataTable(
-                        columns: [
-                          DataColumn(label: Text('Selected')),
-                          DataColumn(label: Text('Recipe')),
-                          DataColumn(label: Icon(Icons.people)),
-                        ],
-                        rows: List<DataRow>.generate(
-                          service.cart.recipes.length,
-                          (index) {
-                            return DataRow(cells: [
-                              DataCell(Checkbox(
-                                onChanged: (val) {
-                                  service.cart.recipes[index].toggleSelect();
-                                  setState(() {});
-                                },
-                                value: service.cart.recipes[index].selected,
-                              )),
-                              DataCell(Text(service
-                                  .cart.recipes[index].recipe.recipe.name)),
-                              DataCell(Center(
-                                  child: Text(service
-                                      .cart.recipes[index].recipe.persons
-                                      .toString()))),
-                            ]);
-                          },
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        DataTable(
+                          columns: [
+                            DataColumn(label: Text('Selected')),
+                            DataColumn(label: Text('Recipe')),
+                            DataColumn(label: Icon(Icons.people)),
+                          ],
+                          rows: List<DataRow>.generate(
+                            service.cart.recipes.length,
+                            (index) {
+                              return DataRow(cells: [
+                                DataCell(Checkbox(
+                                  onChanged: (val) {
+                                    service.cart.recipes[index].toggleSelect();
+                                    setState(() {});
+                                  },
+                                  value: service.cart.recipes[index].selected,
+                                )),
+                                DataCell(Text(service
+                                    .cart.recipes[index].recipe.recipe.name)),
+                                DataCell(Center(
+                                    child: Text(service
+                                        .cart.recipes[index].recipe.persons
+                                        .toString()))),
+                              ]);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
             ],
           ),
         ),

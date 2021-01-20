@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class JumpingDots extends StatefulWidget {
   final int numberOfDots;
   final MainAxisAlignment alignment;
+  final Color color;
 
   const JumpingDots(
       {Key key,
       this.numberOfDots = 3,
-      this.alignment = MainAxisAlignment.start})
+      this.alignment = MainAxisAlignment.start, this.color = Colors.white})
       : super(key: key);
 
   @override
@@ -52,7 +53,7 @@ class _JumpingDotsState extends State<JumpingDots>
               //Only Y-axis position will change.
               child: Transform.translate(
                 offset: Offset(0, _animations[index].value),
-                child: DotWidget(),
+                child: DotWidget(color: widget.color,),
               ),
             );
           },
@@ -105,14 +106,16 @@ class _JumpingDotsState extends State<JumpingDots>
 }
 
 class DotWidget extends StatelessWidget {
+  final Color color;
   const DotWidget({
     Key key,
+    this.color: Colors.white
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
       height: 4,
       width: 4,
     );
