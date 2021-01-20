@@ -6,7 +6,6 @@ import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
-import 'package:latlong/latlong.dart';
 
 class BuyWidget extends StatefulWidget {
   @override
@@ -32,6 +31,7 @@ class BuyWidgetState extends State<BuyWidget> {
                   onTap: () async {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => MapPage()));
+                    Scaffold.of(context).hideCurrentSnackBar();
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -86,6 +86,7 @@ class BuyWidgetState extends State<BuyWidget> {
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        SizedBox(height: 70,),
                         Center(
                           child: Image.asset(
                             "assets/cart.gif",
