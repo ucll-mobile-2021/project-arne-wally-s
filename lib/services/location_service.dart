@@ -28,4 +28,14 @@ class LocationService {
     _locationData = await location.getLocation();
     return LatLng(_locationData.latitude, _locationData.longitude);
   }
+
+  static Future<List<Supermarket>> getSupermarkets(LatLng location) {
+
+  }
+}
+
+
+class Supermarket {
+  LatLng location;
+  String name;
 }

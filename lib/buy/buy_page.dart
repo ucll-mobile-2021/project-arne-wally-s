@@ -84,7 +84,7 @@ class BuyWidgetState extends State<BuyWidget> {
               ),
               (service.empty())
                   ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Center(
                           child: Image.asset(
