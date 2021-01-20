@@ -1,15 +1,19 @@
+import 'dart:async';
 
 import 'package:abc_cooking/cook/cook_page.dart';
 import 'package:abc_cooking/buy/buy_page.dart';
 import 'package:abc_cooking/appetite/appetite_page.dart';
 import 'package:abc_cooking/models/cart.dart';
 import 'package:abc_cooking/models/ingredient_amount.dart';
-import 'package:abc_cooking/models/timer.dart';
+import 'package:abc_cooking/models/timer.dart' as timerData;
 import 'package:abc_cooking/services/service.dart';
 import 'package:abc_cooking/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:abc_cooking/models/step.dart' as im;
+import 'package:vibration/vibration.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'DB/DB.dart';
 import 'models/ingredient.dart';
@@ -96,6 +100,65 @@ class _MyHomePageState extends State<MyHomePage> {
         _selectedIndex = index;
       });
     }
+  }
+
+  Timer _countingTimer;
+
+  @override
+  void initState() {
+    _startTimer();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _countingTimer.cancel();
+    super.dispose();
+  }
+
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("microwave.mp3");
+  }
+
+  void _startTimer() {
+    _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var timerService = MyTimersService();
+      if (timerService.myTimers.length > 0) {
+        for (var timer in timerService.myTimers) {
+          if (timer.timeLeftInSeconds() <= 0) {
+            Vibration.vibrate();
+            playLocalAsset();
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Time!'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text('${timer.title} is done!'),
+                        Text('Be sure to check your food before continuing.'),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Got it!'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              },
+            );
+            timerService.removeTimer(timer);
+          }
+        }
+      }
+    });
   }
 
   @override
