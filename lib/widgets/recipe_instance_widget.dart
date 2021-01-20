@@ -1,5 +1,6 @@
 import 'package:abc_cooking/cook/cook_detail.dart';
 import 'package:abc_cooking/cook/finished.dart';
+import 'package:abc_cooking/main.dart';
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/services/service.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +94,7 @@ class RecipeInstanceWidget extends StatelessWidget {
 }
 
 void cookDetail(BuildContext context, RecipeInstance recipeInstance) async {
+  MyHomePageState.scaffoldKey.currentState.hideCurrentSnackBar();
   if (recipeInstance.recipe.steps.length > 0) {
     var finished = await Navigator.push(
         context,

@@ -80,12 +80,14 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   RecipeHelper _recipeHelper= RecipeHelper();
+  static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
   static List<Widget> _pages = <Widget>[
     AppetiteWidget(),
     BuyWidget(),
@@ -166,6 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var pageView = PageView(children: _pages, onPageChanged: _setIndex,);
     //button
     return Scaffold(
+      key: scaffoldKey,
       body: pageView,
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
