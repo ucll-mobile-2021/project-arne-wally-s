@@ -39,6 +39,7 @@ dependencies:
   simple_animations: ^2.4.2
   vibration: ^1.7.3
   audioplayers: ^0.17.2
+  waterfall_flow: any
 
 
 dev_dependencies:

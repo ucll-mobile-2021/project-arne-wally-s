@@ -6,13 +6,15 @@ import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/recipe_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:waterfall_flow/waterfall_flow.dart';
 
 class RecipeList extends StatelessWidget {
   final Future<List<Recipe>> _futureRecipes;
   Function _function;
   final int subtrHeight;
 
-  RecipeList(this._futureRecipes, bool shouldReturnRecipeInstance, {this.subtrHeight: 80}) {
+  RecipeList(this._futureRecipes, bool shouldReturnRecipeInstance,
+      {this.subtrHeight: 80}) {
     if (shouldReturnRecipeInstance) {
       this._function = returnRecipe;
     } else {
@@ -20,7 +22,8 @@ class RecipeList extends StatelessWidget {
     }
   }
 
-  RecipeList.function(this._futureRecipes, this._function, {this.subtrHeight: 80});
+  RecipeList.function(this._futureRecipes, this._function,
+      {this.subtrHeight: 80});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,29 @@ class RecipeList extends StatelessWidget {
                 height: MediaQuery.of(context).size.height - subtrHeight,
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: StaggeredGridView.countBuilder(
+                  child: WaterfallFlow.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return RecipeWidget.tap(
+                          snapshot.data[index],
+                          _function != null
+                              ? () {
+                                  Function.apply(_function,
+                                      [context, snapshot.data[index]]);
+                                }
+                              : null);
+                    },
+                    //cacheExtent: 0.0,
+                    padding: EdgeInsets.all(4.0),
+                    gridDelegate:
+                        SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0,
+                    ),
+                  ),
+                  // Same result, less performance down here
+                  /*StaggeredGridView.countBuilder(
                     crossAxisCount: 2,
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) =>
@@ -49,7 +74,7 @@ class RecipeList extends StatelessWidget {
                     staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
                     mainAxisSpacing: 4.0,
                     crossAxisSpacing: 4.0,
-                  ),
+                  ),*/
                 ),
               ),
             );
