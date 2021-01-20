@@ -26,7 +26,7 @@ class _CookWidgetState extends State<CookWidget> {
             children: [
               Center(
                 child: Image(
-                  image: AssetImage('assets/pan.gif'),
+                  image: AssetImage('assets/food.gif'),
                   height: 250,
                 ),
               ),

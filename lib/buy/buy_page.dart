@@ -89,7 +89,7 @@ class BuyWidgetState extends State<BuyWidget> {
                         SizedBox(height: 70,),
                         Center(
                           child: Image.asset(
-                            "assets/cart.gif",
+                            "assets/groceries.gif",
                             height: 250.0,
                             width: 250.0,
                           ),
