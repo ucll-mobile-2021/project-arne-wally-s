@@ -147,7 +147,7 @@ class AppetiteWidget extends StatelessWidget {
               () => _service.getDrinkRecipes(),
               'Popular drinks',
               Icon(
-                Icons.local_bar,
+                Icons.liquor,
                 color: Colors.white,
                 size: 70,
               ),
