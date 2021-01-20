@@ -15,6 +15,7 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
   bool vegan = false;
   bool drink = false;
   bool dessert = false;
+  bool alcohol = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -51,65 +52,38 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
           veggie: veggie,
           vegan: vegan,
           drink: drink,
-          dessert: dessert);
+          dessert: dessert,
+          alcohol: alcohol);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // drink? alcoholic : fish, meat, veggie, vegan
-          drink
+          drink || dessert
               ? ButtonBar(
                   buttonPadding: EdgeInsets.zero,
                   alignment: MainAxisAlignment.end,
                   children: [
-                    // TODO alcoholic filter
-                    // Drinks
+                    // Alcohol
                     Tooltip(
-                      message: 'Drink',
+                      message: 'Alcohol',
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: RaisedButton(
                           onPressed: () {
                             setState(() {
-                              drink = !drink;
-                              vegan = false;
-                              meat = false;
-                              veggie = false;
-                              fish = false;
-                              dessert = false;
+                              alcohol = !alcohol;
                             });
                           },
                           child: Icon(
                             Icons.local_bar,
-                            color: drink ? Colors.white : null,
+                            color: alcohol ? Colors.white : null,
                           ),
-                          color: drink ? Colors.black : null,
+                          color: alcohol ? Colors.red : null,
                         ),
                       ),
                     ),
-                    // Deserts
-                    Tooltip(
-                      message: 'Dessert',
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              dessert = !dessert;
-                              vegan = false;
-                              meat = false;
-                              veggie = false;
-                              fish = false;
-                              drink = false;
-                            });
-                          },
-                          child: Icon(
-                            Icons.cake,
-                            color: dessert ? Colors.white : null,
-                          ),
-                          color: dessert ? Colors.brown[800] : null,
-                        ),
-                      ),
-                    ),
+                    // Drinks
+
                   ],
                 )
               : ButtonBar(
@@ -129,6 +103,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                               vegan = false;
                               drink = false;
                               dessert = false;
+                              alcohol = false;
+
                             });
                           },
                           child: Image.asset(
@@ -153,6 +129,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                               vegan = false;
                               drink = false;
                               dessert = false;
+                              alcohol = false;
+
                             });
                           },
                           child: Icon(
@@ -176,6 +154,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                               vegan = false;
                               drink = false;
                               dessert = false;
+                              alcohol = false;
+
                             });
                           },
                           child: Icon(
@@ -199,6 +179,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                               fish = false;
                               drink = false;
                               dessert = false;
+                              alcohol = false;
+
                             });
                           },
                           child: Icon(
@@ -231,10 +213,12 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                         veggie = false;
                         fish = false;
                         dessert = false;
+                        alcohol = false;
+
                       });
                     },
                     child: Icon(
-                      Icons.local_bar,
+                      Icons.liquor,
                       color: drink ? Colors.white : null,
                     ),
                     color: drink ? Colors.black : null,
@@ -255,6 +239,8 @@ class SearchRecipe extends SearchDelegate<RecipeInstance> {
                         veggie = false;
                         fish = false;
                         drink = false;
+                        alcohol = false;
+
                       });
                     },
                     child: Icon(

@@ -80,6 +80,12 @@ class AppetiteService {
     return getSearchResultsRecipes('', dessert: true);
   }
 
+  Future<List<Recipe>> getAlcoholRecipes() async {
+    return getSearchResultsRecipes('', alcohol: true);
+  }
+
+
+
   Future<List<String>> getSearchSuggestions(String query) async {
     // Returns a list of suggestions while searching
     var response = await http.get(
@@ -104,16 +110,19 @@ class AppetiteService {
       bool meat: false,
       bool fish: false,
       bool drink: false,
-      bool dessert: false}) async {
+      bool dessert: false,
+      bool alcohol: false,}) async {
     var qSDrink = drink ? '&drink=$drink' : '';
     var qSDessert = dessert ? '&dessert=$dessert' : '';
+    var qSAlcohol = alcohol ? '&alcohol=$alcohol' : '';
     var qS = '?search=$query' +
         '&vegan=$vegan' +
         '&veggie=$veggie' +
         '&meat=$meat' +
         '&fish=$fish' +
         qSDrink +
-        qSDessert;
+        qSDessert +
+        qSAlcohol;
 
     return getRecipesFromUrl('https://abc-cooking.andreasmilants.com/recipes$qS');
   }
