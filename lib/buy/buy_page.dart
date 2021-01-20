@@ -87,11 +87,10 @@ class BuyWidgetState extends State<BuyWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Center(
-                          child: Icon(
-                            Icons.shopping_cart,
-                            size: 250,
-                            color:
-                                Theme.of(context).primaryColor.withAlpha(240),
+                          child: Image.asset(
+                            "assets/cart.gif",
+                            height: 250.0,
+                            width: 250.0,
                           ),
                         ),
                         Text(
