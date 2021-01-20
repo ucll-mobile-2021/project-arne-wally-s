@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:abc_cooking/DB/DB.dart';
 import 'package:abc_cooking/models/recipe.dart';
@@ -130,7 +131,7 @@ class AppetiteService {
   }
 
   void setPeople(int people) {
-    _people = people;
+    _people = min(people, 15);
   }
 
   Future<Map<String, dynamic>> watsonCall(String query) async {

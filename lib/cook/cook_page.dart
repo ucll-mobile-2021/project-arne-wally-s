@@ -18,7 +18,6 @@ class _CookWidgetState extends State<CookWidget> {
       ),
       body: Consumer<MyRecipesService>(builder: (context, service, child) {
         var _recipes = service.myRecipes;
-        print(_recipes.length);
         if (_recipes.length > 0) {
           return RecipeInstanceList(_recipes);
         } else {

@@ -16,7 +16,6 @@ class RecipeInstanceList extends StatelessWidget {
     return ListView.builder(
         itemCount: 1,
         itemBuilder: (context, i) {
-          print(_recipeInstances[i]);
           return SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height - 136,

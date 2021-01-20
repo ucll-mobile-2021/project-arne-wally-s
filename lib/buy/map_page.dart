@@ -11,6 +11,7 @@ class MapPage extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Scaffold(
+        appBar: AppBar(title: Text('Shops nearby'),),
         body: FutureBuilder(
             future: LocationService.getLocation(),
             builder: (context, snapshot) {
