@@ -57,6 +57,11 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
     super.dispose();
   }
 
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("microwave.mp3");
+  }
+
   void _startTimer() {
     _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       var timerService = MyTimersService();
@@ -64,10 +69,7 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
         for (var timer in timerService.myTimers) {
           if (timer.timeLeftInSeconds() <= 0) {
             Vibration.vibrate();
-            Future<AudioPlayer> playLocalAsset() async {
-              AudioCache cache = new AudioCache();
-              return await cache.play("microwave.wav");
-            }
+            playLocalAsset();
             showDialog<void>(
               context: context,
               barrierDismissible: false, // user must tap button!
@@ -97,7 +99,6 @@ class _CookDetailWidgetState extends State<CookDetailWidget> {
           }
         }
       }
-      ;
     });
   }
 
