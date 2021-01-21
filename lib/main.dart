@@ -127,7 +127,8 @@ class MyHomePageState extends State<MyHomePage> {
     _countingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       var timerService = MyTimersService();
       if (timerService.myTimers.length > 0) {
-        for (var timer in timerService.myTimers) {
+        var timers = List.from(timerService.myTimers).map((e) => e).toList();
+        for (var timer in timers) {
           if (timer.timeLeftInSeconds() <= 0) {
             Vibration.vibrate();
             playLocalAsset();
