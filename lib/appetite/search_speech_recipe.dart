@@ -261,7 +261,13 @@ class _SearchRecipeSpeechState extends State<SearchRecipeSpeechWidget> {
         _state = SpeechState.finishedListening;
       });
 
+      print("here");
+
       var r = await AppetiteService().watsonCall(result.recognizedWords);
+
+      if (_state != SpeechState.finishedListening) {
+        return;
+      }
 
       setState(() {
         _state = SpeechState.watsonResponded;
