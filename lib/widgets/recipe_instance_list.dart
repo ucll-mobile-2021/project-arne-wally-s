@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:abc_cooking/models/recipe.dart';
 import 'package:abc_cooking/widgets/recipe_instance_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,8 +25,17 @@ class RecipeInstanceList extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: WaterfallFlow.builder(
                   itemCount: _recipeInstances.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      RecipeInstanceWidget.width(_recipeInstances[index], w),
+                  itemBuilder: (BuildContext context, int index) {
+                    var widget = RecipeInstanceWidget.width(
+                        _recipeInstances[index], w);
+                    if(index == _recipeInstances.length - 1 && Platform.isIOS) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 40.0),
+                        child: widget,
+                      );
+                    }
+                    return widget;
+                  },
                   //cacheExtent: 0.0,
                   padding: EdgeInsets.all(4.0),
                   gridDelegate:

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:abc_cooking/widgets/recipe_detail.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -40,7 +41,7 @@ class RecipeList extends StatelessWidget {
                   child: WaterfallFlow.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return RecipeWidget.tap(
+                      var w = RecipeWidget.tap(
                           snapshot.data[index],
                           _function != null
                               ? () {
@@ -48,6 +49,10 @@ class RecipeList extends StatelessWidget {
                                       [context, snapshot.data[index]]);
                                 }
                               : null);
+                      if (index == snapshot.data.length - 1 && Platform.isIOS) {
+                        return Padding(padding: EdgeInsets.only(bottom: 40), child: w,);
+                      }
+                      return w;
                     },
                     //cacheExtent: 0.0,
                     padding: EdgeInsets.all(4.0),
